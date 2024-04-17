@@ -44,7 +44,7 @@ class _CHomeState extends State<CHome> {
                   print('BANDEJA 1 pressed!');
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: _bandejaSelectedIndexList[0] == 1 ? const Color.fromARGB(255, 138, 201, 140) : const Color.fromARGB(255, 179, 65, 65),
+                  backgroundColor: _bandejaSelectedIndexList[0] == 1 ? const Color.fromARGB(255, 138, 201, 140) : const Color.fromARGB(255, 179, 65, 65),
                 ),
                 child: Text(
                   'BANDEJA 1',
@@ -68,7 +68,7 @@ class _CHomeState extends State<CHome> {
                   print('BANDEJA 2 pressed!');
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: _bandejaSelectedIndexList[1] == 1 ? const Color.fromARGB(255, 138, 201, 140) :  const Color.fromARGB(255, 179, 65, 65),
+                  backgroundColor: _bandejaSelectedIndexList[1] == 1 ? const Color.fromARGB(255, 138, 201, 140) :  const Color.fromARGB(255, 179, 65, 65),
                 ),
                 child: Text(
                   'BANDEJA 2',
@@ -92,7 +92,7 @@ class _CHomeState extends State<CHome> {
                   print('BANDEJA 3 pressed!');
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: _bandejaSelectedIndexList[2] == 1 ? const Color.fromARGB(255, 138, 201, 140) : const Color.fromARGB(255, 179, 65, 65),
+                  backgroundColor: _bandejaSelectedIndexList[2] == 1 ? const Color.fromARGB(255, 138, 201, 140) : const Color.fromARGB(255, 179, 65, 65),
                 ),
                 child: Text(
                   'BANDEJA 3',
