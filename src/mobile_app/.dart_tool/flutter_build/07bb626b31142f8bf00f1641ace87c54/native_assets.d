@@ -1,1 +1,0 @@
- /home/annie/Documentos/Proyecto-Incubadora/src/mobile_app/.dart_tool/flutter_build/07bb626b31142f8bf00f1641ace87c54/native_assets.yaml: 

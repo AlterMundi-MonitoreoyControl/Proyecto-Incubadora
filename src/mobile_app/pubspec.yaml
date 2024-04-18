@@ -33,6 +33,7 @@ dev_dependencies:
 
 
 
+  #mobile_app: any
 flutter:
 
   assets:
