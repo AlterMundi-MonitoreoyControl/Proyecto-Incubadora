@@ -92,6 +92,16 @@ function configurator:load_objects_data(new_config_table)
       status.ssid = incubator.set_new_ssid(tostring(value))
     elseif param == "passwd" then
       status.passwd = incubator.set_passwd(tostring(value))
+    elseif param == "tray_one_date" then
+      status.tray_one_date = incubator.set_tray_one_date(tonumber(value))
+    elseif param == "tray_two_date" then 
+      status.tray_two_date = incubator.set_tray_two_date(tonumber(value))
+    elseif param == "tray_three_date" then
+      status.tray_three_date = incubator.set_tray_three_date(tonumber(value))
+    elseif param == "incubation_period" then
+      status.incubation_period = incubator.set_incubation_period(tonumber(value))
+    elseif param == "hash" then
+      status.hash = incubator.set_hash(tostring(value))
     end
   end
   return status

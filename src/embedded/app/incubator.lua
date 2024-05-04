@@ -273,4 +273,30 @@ function M.set_passwd(new_passwd)
 	end
 end
 
+function M.set_tray_one_date(new_tray_one_date)
+	return true
+	-- TODO
+end
+
+function M.set_tray_two_date(new_tray_one_date)
+	return true
+	-- TODO
+end
+
+function M.set_tray_three_date(new_tray_one_date)
+	return true
+	-- TODO
+end
+
+function M.set_incubation_period(new_incubation_period)
+	return true
+	-- TODO
+end
+
+function M.set_hash(new_hash)
+	return true
+	-- TODO
+end
+
+
 return M
