@@ -88,10 +88,6 @@ function configurator:load_objects_data(new_config_table)
       status.rotation_duration = incubator.set_rotation_duration(tonumber(value))
     elseif param == "rotation_period" then
       status.rotation_period = incubator.set_rotation_period(tonumber(value))
-    elseif param == "ssid" then
-      status.ssid = incubator.set_new_ssid(tostring(value))
-    elseif param == "passwd" then
-      status.passwd = incubator.set_passwd(tostring(value))
     elseif param == "tray_one_date" then
       status.tray_one_date = incubator.set_tray_one_date(tonumber(value))
     elseif param == "tray_two_date" then 
