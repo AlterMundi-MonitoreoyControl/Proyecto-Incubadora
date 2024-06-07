@@ -21,17 +21,20 @@ local M = {
 	humidifier             = false,
 	rotation               = false,
 	temperature            = 99.9, -- integer value of temperature [0.01 C]
-	pressure               = 0,   -- integer value of preassure [Pa]=[0.01 hPa]
-	humidity               = 0,   -- integer value of rel.humidity [0.01 %]
+	pressure               = 0, -- integer value of preassure [Pa]=[0.01 hPa]
+	humidity               = 0, -- integer value of rel.humidity [0.01 %]
 	is_testing             = false,
 	max_temp               = 37.8,
 	min_temp               = 37.3,
 	is_sensorok            = false,
 	is_simulate_temp_local = false,
-	rotation_duration        = 5000, -- time in ms
-	rotation_period      = 3600000, -- time in ms
-	-- ssid = nil, 
-	-- passwd = nil
+	rotation_duration      = 5000, -- time in ms
+	rotation_period        = 3600000, -- time in ms
+	tray_one_date          = 1234567890,
+	tray_two_date          = 1234567890,
+	tray_three_date        = 1234567890,
+	incubation_period      = 1234567890,
+	hash                   = 12345
 }
 
 _G[M.name] = M
@@ -186,9 +189,9 @@ end  -- function end
 -------------------------------------
 function M.set_max_temp(new_max_temp)
 	if new_max_temp ~= nil and new_max_temp < 60
-			and tostring(new_max_temp):sub(1, 1) ~= '-'
-			and type(new_max_temp) == "number"
-			and new_max_temp >= 0 then
+		and tostring(new_max_temp):sub(1, 1) ~= '-'
+		and type(new_max_temp) == "number"
+		and new_max_temp >= 0 then
 		M.max_temp = tonumber(new_max_temp)
 		return true
 	else
@@ -203,9 +206,9 @@ end
 -------------------------------------
 function M.set_min_temp(new_min_temp)
 	if new_min_temp ~= nil and new_min_temp >= 0
-			and new_min_temp <= M.max_temp
-			and tostring(new_min_temp):sub(1, 1) ~= '-'
-			and type(new_min_temp) == "number" then
+		and new_min_temp <= M.max_temp
+		and tostring(new_min_temp):sub(1, 1) ~= '-'
+		and type(new_min_temp) == "number" then
 		M.min_temp = tonumber(new_min_temp)
 		return true
 	else
@@ -220,8 +223,8 @@ end
 -------------------------------------
 function M.set_rotation_period(new_period_time)
 	if new_period_time ~= nil and new_period_time >= 0
-			and tostring(new_period_time):sub(1, 1) ~= '-'
-			and type(new_period_time) == "number" then
+		and tostring(new_period_time):sub(1, 1) ~= '-'
+		and type(new_period_time) == "number" then
 		M.rotation_period = new_period_time
 		return true
 	else
@@ -236,8 +239,8 @@ end
 -------------------------------------
 function M.set_rotation_duration(new_rotation_duration)
 	if new_rotation_duration ~= nil
-			and tostring(new_rotation_duration):sub(1, 1) ~= '-'
-			and type(new_rotation_duration) == "number" then
+		and tostring(new_rotation_duration):sub(1, 1) ~= '-'
+		and type(new_rotation_duration) == "number" then
 		M.rotation_duration = new_rotation_duration
 		return true
 	else
@@ -270,33 +273,69 @@ function M.set_passwd(new_passwd)
 		return true
 	else
 		return false
-	end
-end
+	end -- if end
+end  -- function end
 
+-------------------------------------------------------------------------------------------------
+-- @function set_tray_*_date
+-- Ensures that new_tray_one_date is exactly a string of 10 digits before setting the value.
+-- @param	new_tray_*_date <-- Unix Time format
+-------------------------------------------------------------------------------------------------
 function M.set_tray_one_date(new_tray_one_date)
-	return true
-	-- TODO
-end
+	if type(new_tray_one_date) == "number" and #tostring(new_tray_one_date) == 10 then
+		M.tray_one_date = new_tray_one_date
+		return true
+	else
+		return false
+	end -- if end
+end     -- function end
 
-function M.set_tray_two_date(new_tray_one_date)
-	return true
-	-- TODO
-end
+function M.set_tray_two_date(new_tray_two_date)
+	if type(new_tray_two_date) == "number" and #tostring(new_tray_two_date) == 10 then
+		M.tray_two_date = new_tray_two_date
+		return true
+	else
+		return false
+	end -- if end
+end     -- function end
 
-function M.set_tray_three_date(new_tray_one_date)
-	return true
-	-- TODO
-end
+function M.set_tray_three_date(new_tray_three_date)
+	if type(new_tray_three_date) == "number" and #tostring(new_tray_three_date) == 10 then
+		M.tray_three_date = new_tray_three_date
+		return true
+	else
+		return false
+	end --if end
+end     -- function end
+
+-------------------------------------------------------------------------------------------------
+-- @function set_incubation_period
+-- Ensures that new_tray_one_date is exactly a string of 10 digits before setting the value.
+-- @param	new_tray_*_date <-- Unix Time format
+-------------------------------------------------------------------------------------------------
 
 function M.set_incubation_period(new_incubation_period)
-	return true
-	-- TODO
-end
+	if type(new_incubation_period) == "number" and #tostring(new_incubation_period) == 10 then
+		M.incubation_period = new_incubation_period
+		return true
+	else
+		return false
+	end -- if end
+end     -- function end
+
+-------------------------------------------------------------------------------------------------
+-- @function set_hash
+-- varifies if the input string is at most 20 characters long and sets it as the hash if valid.
+-- @param	new_hash
+-------------------------------------------------------------------------------------------------
 
 function M.set_hash(new_hash)
-	return true
-	-- TODO
-end
-
+	if type(new_hash) == "string" and #new_hash <= 20 then
+		M.hash = new_hash
+		return true
+	else
+		return false
+	end -- if end
+end     -- function end
 
 return M
