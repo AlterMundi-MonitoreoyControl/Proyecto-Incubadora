@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:incubapp_lite/models/actual_model.dart';
@@ -115,6 +116,31 @@ class ApiService {
     } catch (e) {
       print('Error en la llamada a la API: $e');
       log(e.toString());
+    }
+    return null;
+  }
+
+  Future<Config?> updateConfig(Map<String, dynamic> updatedData) async {
+    try {
+      var url = Uri.parse(ApiConstants.baseUrl + ApiConstants.configEndPoint);
+      print('URL de la API: $url');
+      
+      var response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(updatedData),
+      );
+
+      if (response.statusCode == 200) {
+        print('Datos actualizados correctamente en la API');
+        return configFromJson(response.body);
+      } else {
+        print('Respuesta de la API no exitosa: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error en la llamada a la API: $e');
     }
     return null;
   }

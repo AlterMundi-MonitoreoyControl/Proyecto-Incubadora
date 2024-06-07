@@ -4,14 +4,13 @@
 import time
 from flask import Flask, jsonify
 from flask import request
-from flask import Response
 import json
 
 app = Flask(__name__)
 app.debug = True
+app.run(host='0.0.0.0', port=8080)
 
 html_content = """
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -23,21 +22,14 @@ html_content = """
     <h1i>API REST de prueba</h1>
 </body>
 </html>
-
 """
-
-
-
-@app.route("/")
-def hello_world():
-    return html_content
 
 min_temperature = 33
 max_temperature = 38
 rotation_duration = 3500000
 rotation_period = 5000
 ssid = "mimimi"
-passwd = "1234"
+passwd = "12345"
 tray_one_date = 1000000
 tray_two_date = 500000
 tray_three_date = 0
@@ -70,17 +62,47 @@ actual_dict = {
 
 config_json = json.dumps(config_dict)
 actual_json = json.dumps(actual_dict)
-print(config_json)
-print(actual_json)
+
+
+@app.route("/")
+def hello_world():
+    return html_content
 
 
 @app.route("/config", methods=["GET", "POST"])
-def config_geter():
+def config_getter():
+    global config_json
 
     if request.method == "GET":
         return jsonify(json.loads(config_json))
+    elif request.method == "POST":
+        data = request.json
+        # Actualiza los valores de configuración con los datos recibidos en la solicitud POST
+        for key, value in data.items():
+            if key in config_dict:
+                config_dict[key] = value
+        config_json = json.dumps(config_dict)  # Actualiza el JSON después de modificar el diccionario
+        # Devuelve el JSON actualizado
+        return jsonify(json.loads(config_json))
+
+
+
 
 @app.route("/actual", methods=["GET", "POST"])
 def actual_getter():
+    global actual_json
+
     if request.method == "GET":
         return jsonify(json.loads(actual_json))
+    elif request.method == "POST":
+        data = request.json
+        # Actualiza los valores de datos actuales con los datos recibidos en la solicitud POST
+        for key, value in data.items():
+            if key in actual_dict:
+                actual_dict[key] = value
+        actual_json = json.dumps(actual_dict)
+        return jsonify({"message": "Datos actuales actualizados correctamente"})
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
