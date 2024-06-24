@@ -30,8 +30,7 @@ local M = {
 	is_simulate_temp_local = false,
 	rotation_duration        = 5000, -- time in ms
 	rotation_period      = 3600000, -- time in ms
-	-- ssid = nil, 
-	-- passwd = nil
+
 }
 
 _G[M.name] = M
@@ -245,32 +244,6 @@ function M.set_rotation_duration(new_rotation_duration)
 	end
 end
 
--- -----------------------------------
--- @function set_new_ssid	modify the actual ssid WiFi from API
 
--- @param	new_ssid comes from json received from API
--- -----------------------------------
-function M.set_new_ssid(new_ssid)
-	if new_ssid ~= nil then
-		M.ssid = new_ssid
-		return true
-	else
-		return false
-	end
-end
-
--------------------------------------
--- @function set_passwd	modify the actual ssid WiFi from API
---
--- @param	new_passwd comes from json received from API
--------------------------------------
-function M.set_passwd(new_passwd)
-	if new_passwd ~= nil then
-		M.passwd = new_passwd
-		return true
-	else
-		return false
-	end
-end
 
 return M

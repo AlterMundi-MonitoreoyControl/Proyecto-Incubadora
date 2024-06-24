@@ -1,20 +1,62 @@
--- load credentials, 'SSID' and 'PASSWORD' declared and initialize in there
 
 -------------------------------------
 -- global variables come from credentials.lua
 -------------------------------------
+W = {
+	sta_cfg = {},
+	ap_config = {},
+	station_cfg = {},
 
-dofile("credentials.lua")
+}
+
+W.sta_cfg.ip = '192.168.16.10'
+W.sta_cfg.netmask = '255.255.255.0'
+W.sta_cfg.gateway = '192.168.16.1'
+W.sta_cfg.dns = '8.8.8.8'
+
+W.ap_config.ssid = "incubator"
+W.ap_config.pwd = "12345678"
+W.ap_config.auth = wifi.AUTH_WPA2_PSK
+
+W.station_cfg.ssid = ""
+W.station_cfg.pwd = ""
+W.station_cfg.scan_method = "all"
+
+
 ONLINE = 0
 IPADD = nil
 IPGW = nil
 
+
+-- -----------------------------------
+-- @function set_new_ssid	modify the actual ssid WiFi
+-- -----------------------------------
+function W:set_new_ssid(new_ssid)
+	if new_ssid ~= nil then
+		W.station_cfg.ssid = new_ssid 
+		return true
+	else
+		return false
+	end
+end
+
+-------------------------------------
+-- @function set_passwd	modify the actual ssid WiFi 
+-------------------------------------
+function W:set_passwd(new_passwd)
+	if new_passwd ~= nil then
+		W.station_cfg.pwd = new_passwd
+		return true
+	else
+		return false
+	end
+end
 ------------------------------------------------------------------------------------
 -- 
 -- ! @function startup                   opens init.lua if exists, otherwise,
 -- !                                     prints "running"
 --
-------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
 
 function startup()
 	if file.open("init.lua") == nil then
@@ -36,30 +78,17 @@ end -- end if
 --
 ------------------------------------------------------------------------------------
 
-function configwifi()
+function W:init_wifi()
 	print("Running")
 	wifi.sta.on("got_ip", wifi_got_ip_event)
 	wifi.sta.on("connected", wifi_connect_event)
 	wifi.sta.on("disconnected", wifi_disconnect_event)
 	wifi.mode(wifi.STATIONAP)
-	sta_cfg={}
-	sta_cfg.ip='192.168.16.10'
-	sta_cfg.netmask='255.255.255.0'
-	sta_cfg.gateway='192.168.16.1'
-	sta_cfg.dns='8.8.8.8'
-	wifi.ap.setip(sta_cfg)
-	wifi.ap.config({
-		ssid = "incubator",
-		pwd = "12345678",
-		auth=wifi.AUTH_WPA2_PSK
-	},true)
+	wifi.ap.setip(W.sta_cfg)
+	wifi.ap.config(W.ap_config,true)
 	wifi.ap.on("sta_connected", function(event, info) print("MAC_id"..info.mac,"Name"..info.id) end)
 	wifi.start()
-	station_cfg = {}
-	station_cfg.ssid = SSID
-	station_cfg.pwd = PASSWORD
-	station_cfg.scan_method = all
-	wifi.sta.config(station_cfg,true)
+	wifi.sta.config(W.station_cfg,true)
     wifi.sta.sethostname(INICIALES.."-ESP32")
 	wifi.sta.connect()
 end -- end function
@@ -127,6 +156,7 @@ function wifi_disconnect_event (ev, info)
 	print(info)
 	print(info.reason)
 	print(info.ssid)
+
 	if info.reason == 8 then
 		-------------------------------------
 		--the station has disassociated from a previously connected AP
@@ -185,5 +215,17 @@ function wifi_disconnect_event (ev, info)
 	end -- end if
 end -- end function
 
-configwifi()
-print("Connecting to WiFi access point...")
+
+function W:on_change(new_config_table)
+	if new_config_table.ssid ~= W.station_cfg.ssid or
+	new_config_table.passwd ~= new_config_table.passwd then
+		W:set_new_ssid(new_config_table.ssid)
+		W:set_passwd(new_config_table.passwd)
+		W.station_cfg.scan_method = "all"
+		wifi.sta.config(W.station_cfg, true)
+	else
+		return
+	end
+end
+
+return W
