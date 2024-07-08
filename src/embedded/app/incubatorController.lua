@@ -60,6 +60,26 @@ end
 -- ! @param min_temp 							 temperature at which the resistor turns on
 -- ! @param,max_temp 							 temperature at which the resistor turns off
 ------------------------------------------------------------------------------------
+function timer_management_hum(init_time, finish_time)
+    -- epoch to calendar
+    cal_init_time = epoch2cal(init_time)
+    cal_finish_time = epoch2cal(finish_time)
+    -- calendar to mins
+    minutes_hum_on = cal_init_time.min
+    minutes_hum_off = cal_finish_time.min
+
+    if minutes_hum_on + 20 >= minutes_hum_off then
+        incubator.is_twenty = true
+    else
+        incubator.is_twenty = false
+    end
+    incubator.START_TIME_HUM = 0
+    incubator.FINISH_TIME_HUM = 0
+end
+
+
+
+
 function temp_control(temperature, min_temp, max_temp)
     log.trace(" temp " .. temperature .. " min:" .. min_temp .. " max:" .. max_temp)
 
@@ -80,10 +100,27 @@ function temp_control(temperature, min_temp, max_temp)
     end -- end if
 end     -- end function
 
+-----------------------------------------------------------------------------------
+-- ! @function hum_control 	     handles humidity control
+-- ! @param temperature						 overall humidity
+-- ! @param min_temp 							 humidity at which the resistor turns on
+-- ! @param,max_temp 							 humidity at which the resistor turns off
+------------------------------------------------------------------------------------
+function hum_control(hum, hum_min, hum_max)
+    log.trace(" hum " .. humidity .. " min:" .. hum_min .. " max:" .. hum_max)
+    if hum <= hum_min and incubator.is_twenty then
+            incubator.humidifier(true)
+    elseif hum >= hum_max and is_twenty then
+            incubator.humidifier(false)
+    end -- end if
+end-- end function
+
 function read_and_control()
     temp, hum, pres = incubator.get_values()
     log.trace(" t:" .. temp .. " h:" .. hum .. " p:" .. pres)
     temp_control(temp, incubator.min_temp, incubator.max_temp)
+    hum_control(hum, incubator.hum_min, incubator.hum_max)
+
 end -- end function
 
 ------------------------------------------------------------------------------------
@@ -169,3 +206,7 @@ local send_heap_uptime = tmr.create()
 send_heap_uptime:register(30000, tmr.ALARM_AUTO, send_heap_and_uptime_grafana)
 send_heap_uptime:start()
 
+local humidifier_timer = tmr.create()
+humidifier_timer:register(1200000,tmr.ALARM_AUTO, function ()
+    timer_management_hum(incubator.START_TIME_HUM, incubator.FINISH_TIME_HUM)    
+end)

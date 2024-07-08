@@ -30,6 +30,11 @@ local M = {
 	is_simulate_temp_local = false,
 	rotation_duration        = 5000, -- time in ms
 	rotation_period      = 3600000, -- time in ms
+	hum_max = 70,
+	hum_min = 60,
+	START_TIME_HUM = 0,
+	FINISH_TIME_HUM = 0,
+	is_twenty = false
 	-- ssid = nil, 
 	-- passwd = nil
 }
@@ -159,8 +164,16 @@ function M.humidifier(status)
 	humidifier = status
 	if status then
 		gpio.write(14, 0)
+		incubator.START_TIME_HUM = time.get()
+		init_time = time.epoch2cal(incubator.START_TIME_HUM)
+		log.trace("the humidifier was powered at " .. print(string.format("%04d-%02d-%02d %02d:%02d:%02d DST:%d",
+		init_time["year"], init_time["mon"], init_time["day"], init_time["hour"], init_time["min"], init_time["sec"])))
 	else
 		gpio.write(14, 1)
+		incubator.FINISH_TIME_HUM = time.get()
+		end_time = time.epoch2cal(incubator.FINISH_TIME_HUM)
+		log.trace("the humidifier turned off at " .. print(string.format("%04d-%02d-%02d %02d:%02d:%02d DST:%d",
+		end_time["year"], end_time["mon"], end_time["day"], end_time["hour"], end_time["min"], end_time["sec"])))
 	end -- if end
 end  -- function end
 
