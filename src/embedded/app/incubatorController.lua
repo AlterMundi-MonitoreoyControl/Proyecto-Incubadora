@@ -5,7 +5,7 @@
 --  implements part of the core functionality and has some incomplete comments.
 --
 --  javier jorge
---
+--	Jeremias Castro
 --  License:
 -----------------------------------------------------------------------------
 require("credentials")
@@ -35,11 +35,11 @@ function is_temp_changing(temperature)
 	if last_temps_queue:length() < 10 then
 		---les than 9 elements in the queue
 		return true
-	end
+	end -- if end
 	if last_temps_queue:length() > 10 then
 		-- remove one item
 		last_temps_queue:pop_left()
-	end
+	end -- if end
 	local vant = nil
 
 	for i, v in ipairs(last_temps_queue:contents()) do
@@ -47,12 +47,12 @@ function is_temp_changing(temperature)
 		if vant ~= nil and vant ~= v then
 			--everything is fine...
 			return true
-		end
+		end -- if end
 		vant = v
-	end
+	end -- for end
 	--temp is not changin
 	return false
-end
+end -- function end
 
 -----------------------------------------------------------------------------------
 -- ! @function temp_control 	     handles temperature control
@@ -81,36 +81,45 @@ function temp_control(temperature, min_temp, max_temp)
 end  -- end function
 
 -----------------------------------------------------------------------------------
--- ! @function humidifier_timer      timer management humidity control
-------------------------------------------------------------------------------------
-local humidifier_timer = tmr.create()
------------------------------------------------------------------------------------
 -- ! @function hum_control 	     handles humidity control
 -- ! @param temperature						 overall humidity
 -- ! @param min_temp 							 humidity at which the resistor turns on
 -- ! @param,max_temp 							 humidity at which the resistor turns off
 ------------------------------------------------------------------------------------
 function hum_control(hum, hum_min, hum_max)
-	log.trace(" hum " .. hum .. " min:" .. hum_min .. " max:" .. hum_max)
+	log.info("humidity control - Actual: " .. hum .. ", Min: " .. hum_min .. ", Max: " .. hum_max)
+
+	humidifier_start_time = humidifier_start_time or time.get()
+	local current_time = time.get()
+
 	if hum <= hum_min then
-		if not incubator.humidifier then
+		if not incubator.humidifier and (current_time - humidifier_start_time) > incubator.humidifier_cooldown_period then
+			log.trace("Encendiendo humidificador")
 			incubator.humidifier(true)
-			humidifier_timer:register(incubator.humidifier_period, tmr.ALARM_SINGLE, function()
+			humidifier_start_time = current_time
+			safety_timer = tmr.create()
+			safety_timer:register(incubator.max_humidifier_runtime , tmr.ALARM_SINGLE, function()
+				log.trace("Apagando humidificador por tiempo de seguridad")
 				incubator.humidifier(false)
-			end)
-			humidifier_timer:start()
-		end
-	elseif hum >= hum_max and incubator.START_TIME_HUM + 1200 >= incubator.FINISH_TIME_HUM then
+			end) -- timer callback end
+			safety_timer:start()
+		else
+			log.debug("Humidificador no encendido - En periodo de enfriamiento o ya activo")
+		end -- if end
+	elseif hum >= hum_max or (current_time - humidifier_start_time) >=  incubator.max_humidifier_runtime then
+		log.trace("Apagando humidificador - Humedad alcanzada o tiempo máximo")
 		incubator.humidifier(false)
-		humidifier_timer:stop()
-	end -- end if
-end  -- end function
+
+		if safety_timer then
+			safety_timer:stop()
+		end -- if end
+	end -- if end
+end   -- fucntion end
 
 function read_and_control()
 	temp, hum, pres = incubator.get_values()
 	log.trace(" t:" .. temp .. " h:" .. hum .. " p:" .. pres)
 	temp_control(temp, incubator.min_temp, incubator.max_temp)
-	hum_control(hum, incubator.hum_min, incubator.hum_max)
 end -- end function
 
 ------------------------------------------------------------------------------------
@@ -120,20 +129,21 @@ end -- end function
 function read_and_send_data()
 	temp, hum, pres = incubator.get_values()
 	send_data_grafana(incubator.temperature, incubator.humidity, incubator.pressure, INICIALES .. "-bme")
+	hum_control(hum, incubator.hum_min, incubator.hum_max)
 end -- read_and_send_data end
 
 ------------------------------------------------------------------------------------
 -- ! @function stop_rot                     is responsible for turning off the rotation
 ------------------------------------------------------------------------------------
-function stop_rot()
+function stop_rot() 
 	incubator.rotation(false)
 	log.trace("turn rotation off")
 	if rotation_activate == true then
 		log.trace("[#] rotation working")
 	else
 		log.trace("[!] rotation error")
-	end
-end
+	end -- if end
+end  -- function end
 
 ------------------------------------------------------------------------------------
 -- ! @function trigger                    is responsible for checking the proper functioning of the rotation
@@ -144,7 +154,7 @@ function trigger(gpio, _)
 	rotation_activate = true
 	print("[#] rotation working")
 	gpio.trig(gpio, gpio.INTR_DISABLE)
-end
+end -- function end
 
 ------------------------------------------------------------------------------------
 -- ! @function rotate                     is responsible for starting the rotation
@@ -161,7 +171,7 @@ function rotate()
 	stoprotation = tmr.create()
 	stoprotation:register(incubator.rotation_duration, tmr.ALARM_SINGLE, stop_rot)
 	stoprotation:start()
-end
+end -- function end
 
 ------------------------------------------------------------------------------------
 -- ! @function incubator.init_values           start incubator values
@@ -188,7 +198,6 @@ temp_control_timer:register(3000, tmr.ALARM_AUTO, read_and_control)
 temp_control_timer:start()
 
 local rotation = tmr.create()
---rotation:register(20000, tmr.ALARM_AUTO, rotate)
 rotation:register(incubator.rotation_period, tmr.ALARM_AUTO, rotate)
 rotation:start()
 

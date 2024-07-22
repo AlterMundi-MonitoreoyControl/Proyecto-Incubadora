@@ -15,24 +15,25 @@
 credentials = require('credentials')
 
 local M = {
-	name                   = ..., -- module name, upvalue from require('module-name')
-	model                  = nil, -- M model:
-	resistor               = false,
-	humidifier             = false,
-	rotation               = false,
-	temperature            = 99.9, -- integer value of temperature [0.01 C]
-	pressure               = 0, -- integer value of preassure [Pa]=[0.01 hPa]
-	humidity               = 0, -- integer value of rel.humidity [0.01 %]
-	is_testing             = false,
-	max_temp               = 37.8,
-	min_temp               = 37.3,
-	is_sensorok            = false,
-	is_simulate_temp_local = false,
-	rotation_duration      = 5000, 		-- time in ms
-	rotation_period        = 3600000,	-- time in ms
-	humidifier_period      = 1200000, 	-- time in ms
-	hum_max                = 70,
-	hum_min                = 60,
+	name                       = ..., -- module name, upvalue from require('module-name')
+	model                      = nil, -- M model:
+	resistor                   = false,
+	humidifier                 = false,
+	rotation                   = false,
+	temperature                = 99.9, -- integer value of temperature [0.01 C]
+	pressure                   = 0, -- integer value of preassure [Pa]=[0.01 hPa]
+	humidity                   = 0, -- integer value of rel.humidity [0.01 %]
+	is_testing                 = false,
+	max_temp                   = 37.8,
+	min_temp                   = 37.3,
+	is_sensorok                = false,
+	is_simulate_temp_local     = false,
+	rotation_duration          = 5000,   -- time in ms
+	rotation_period            = 3600000, -- time in ms
+	max_humidifier_runtime     = 1200000,
+	humidifier_cooldown_period = 1200000, -- time in ms
+	hum_max                    = 70,
+	hum_min                    = 60,
 	-- ssid = nil,
 	-- passwd = nil
 }
@@ -159,26 +160,14 @@ end   --end fucition
 -- @param status "true" 		  increments humidity, "false" humidity "decrements"
 -------------------------------------
 function M.humidifier(status)
-	humidifier = status
+	M.humidifier = status
 
 	if status then
-		gpio.write(14, 0)
-		incubator.START_TIME_HUM = time.get()
-		init_time = time.epoch2cal(incubator.START_TIME_HUM)
-		log.trace("the humidifier was powered at " ..
-			string.format("%04d-%02d-%02d %02d:%02d:%02d DST:%d",
-				init_time["year"], init_time["mon"], init_time["day"], init_time["hour"], init_time["min"],
-				init_time["sec"]))
+		gpio.write(GPIO_HUMIDIFICADOR, 1)
 	else
-		gpio.write(14, 1)
-		incubator.FINISH_TIME_HUM = time.get()
-		end_time = time.epoch2cal(incubator.FINISH_TIME_HUM)
-		log.trace("the humidifier turned off at " ..
-			string.format("%04d-%02d-%02d %02d:%02d:%02d DST:%d",
-				end_time["year"], end_time["mon"], end_time["day"], end_time["hour"], end_time["min"],
-				end_time["sec"]))
-	end -- if end
-end  -- function end
+		gpio.write(GPIO_HUMIDIFICADOR, 0)
+	end -- id end
+end -- function end
 
 -------------------------------------
 -- @function rotation 			Activates or deactivates rotation
@@ -202,9 +191,9 @@ end  -- function end
 -------------------------------------
 function M.set_max_temp(new_max_temp)
 	if new_max_temp ~= nil and new_max_temp < 60
-		and tostring(new_max_temp):sub(1, 1) ~= '-'
-		and type(new_max_temp) == "number"
-		and new_max_temp >= 0 then
+			and tostring(new_max_temp):sub(1, 1) ~= '-'
+			and type(new_max_temp) == "number"
+			and new_max_temp >= 0 then
 		M.max_temp = tonumber(new_max_temp)
 		return true
 	else
@@ -219,9 +208,9 @@ end
 -------------------------------------
 function M.set_min_temp(new_min_temp)
 	if new_min_temp ~= nil and new_min_temp >= 0
-		and new_min_temp <= M.max_temp
-		and tostring(new_min_temp):sub(1, 1) ~= '-'
-		and type(new_min_temp) == "number" then
+			and new_min_temp <= M.max_temp
+			and tostring(new_min_temp):sub(1, 1) ~= '-'
+			and type(new_min_temp) == "number" then
 		M.min_temp = tonumber(new_min_temp)
 		return true
 	else
@@ -236,8 +225,8 @@ end
 -------------------------------------
 function M.set_rotation_period(new_period_time)
 	if new_period_time ~= nil and new_period_time >= 0
-		and tostring(new_period_time):sub(1, 1) ~= '-'
-		and type(new_period_time) == "number" then
+			and tostring(new_period_time):sub(1, 1) ~= '-'
+			and type(new_period_time) == "number" then
 		M.rotation_period = new_period_time
 		return true
 	else
@@ -252,8 +241,8 @@ end
 -------------------------------------
 function M.set_rotation_duration(new_rotation_duration)
 	if new_rotation_duration ~= nil
-		and tostring(new_rotation_duration):sub(1, 1) ~= '-'
-		and type(new_rotation_duration) == "number" then
+			and tostring(new_rotation_duration):sub(1, 1) ~= '-'
+			and type(new_rotation_duration) == "number" then
 		M.rotation_duration = new_rotation_duration
 		return true
 	else
