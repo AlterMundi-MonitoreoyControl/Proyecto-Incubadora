@@ -1,7 +1,7 @@
 configurator =
 {
-  wifi = {},
-  incubator = {}
+  incubator = {},
+  WiFi = require("wifiinit"),
 
 }
 -------------------------------------------------------------------------------------
@@ -10,29 +10,23 @@ configurator =
 function configurator:init_module(incubator_object)
   local config_table = configurator:read_config_file()
   configurator.incubator = incubator_object
-
   if config_table ~= nil then
     configurator:load_objects_data(config_table)
   end
 end
 
+
 -------------------------------------------------------------------------------------
 --------------------------        CONFIGURATOR       --------------------------------
 -------------------------------------------------------------------------------------
--- @method configurator.set_new_credentials	set the new credentials for wifi
--------------------------------------------------------------------------------------
-function configurator.wifi:set_new_credentials(ssid, passwd)
-  -- TODO
-end
+
 
 -------------------------------------------------------------------------------------
 -- @method configurator:encode_config_file	encode the new config.json
 -------------------------------------------------------------------------------------
 function configurator:encode_config_file(new_config_table)
   local table_to_json = sjson.encode(new_config_table)
-
   local new_config_file = io.open("config.json", "w")
-
   if not new_config_file then
     return false
   else
@@ -88,12 +82,9 @@ function configurator:load_objects_data(new_config_table)
       status.rotation_duration = incubator.set_rotation_duration(tonumber(value))
     elseif param == "rotation_period" then
       status.rotation_period = incubator.set_rotation_period(tonumber(value))
-    elseif param == "ssid" then
-      status.ssid = incubator.set_new_ssid(tostring(value))
-    elseif param == "passwd" then
-      status.passwd = incubator.set_passwd(tostring(value))
     end
   end
+	configurator.WiFi:on_change(new_config_table)
   return status
 end
 
