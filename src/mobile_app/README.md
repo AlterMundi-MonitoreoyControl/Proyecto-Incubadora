@@ -27,11 +27,13 @@ $ sudo apt-get install -y curl git unzip xz-utils zip libglu1-mesa
 To develop Linux apps, use the following command to install these packages:
 clang, cmake, ninja-build, pkg-config, libgtk-3-dev, libstdc++-12-dev
 
+```bash
 $ sudo apt-get install \
         clang cmake git \
         ninja-build pkg-config \
         libgtk-3-dev liblzma-dev \
         libstdc++-12-dev
+```
 
 ### install codium and flutter pluggins
 
@@ -57,6 +59,6 @@ ref: https://docs.flutter.dev/get-started/install/linux/desktop
 ## Launch the app 
 open main.dart 
 Press F5 and enable Linux platform 
-Errors may appear ...
+Errors may appear...
 Press F5 again and vuala 
 

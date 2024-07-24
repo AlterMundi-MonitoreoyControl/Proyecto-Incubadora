@@ -10,8 +10,10 @@ import 'package:incubapp_lite/views/initial_home.dart';
 //import 'package:incubapp_lite/services/api_services.dart';
 //import 'package:incubapp_lite/services/counter_home.dart';
 import 'package:incubapp_lite/views/counter_home.dart';
-// import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import 'package:incubapp_lite/utils/constants.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+
 
 
 
@@ -27,21 +29,30 @@ class _GHomeState extends State<GHome> {
 
   int _selectedIndex = 0; 
 
+  InAppWebViewController? webViewController;
+
   @override
-  
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Visualizador Grafana'),
       ),
-      body: Center(
-        child: Text(
-          'mimimi',
-          style: TextStyle(
-            fontSize: 24.0,
-            fontWeight: FontWeight.bold,
-          ),
+      body: InAppWebView(
+        initialUrlRequest: URLRequest(
+          url: Uri.parse('https://grafana.altermundi.net/d/AUbefq24k/incubadoras-dashboard?orgId=3&from=1720184117758&to=1720205717760'),
         ),
+        onWebViewCreated: (controller) {
+          webViewController = controller;
+        },
+        onLoadStart: (controller, url) {
+          print('Page started loading: $url');
+        },
+        onLoadStop: (controller, url) async {
+          print('Page finished loading: $url');
+        },
+        onLoadError: (controller, url, code, message) {
+          print('Page load error: $code, $message');
+        },
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
