@@ -15,22 +15,26 @@
 credentials = require('credentials')
 
 local M = {
-	name                   = ..., -- module name, upvalue from require('module-name')
-	model                  = nil, -- M model:
-	resistor               = false,
-	humidifier             = false,
-	rotation               = false,
-	temperature            = 99.9, -- integer value of temperature [0.01 C]
-	pressure               = 0,   -- integer value of preassure [Pa]=[0.01 hPa]
-	humidity               = 0,   -- integer value of rel.humidity [0.01 %]
-	is_testing             = false,
-	max_temp               = 37.8,
-	min_temp               = 37.3,
-	is_sensorok            = false,
-	is_simulate_temp_local = false,
-	rotation_duration        = 5000, -- time in ms
-	rotation_period      = 3600000, -- time in ms
-	-- ssid = nil, 
+	name                       = ..., -- module name, upvalue from require('module-name')
+	model                      = nil, -- M model:
+	resistor                   = false,
+	humidifier                 = false,
+	rotation                   = false,
+	temperature                = 99.9, -- integer value of temperature [0.01 C]
+	pressure                   = 0, -- integer value of preassure [Pa]=[0.01 hPa]
+	humidity                   = 0, -- integer value of rel.humidity [0.01 %]
+	is_testing                 = false,
+	max_temp                   = 37.8,
+	min_temp                   = 37.3,
+	is_sensorok                = false,
+	is_simulate_temp_local     = false,
+	rotation_duration          = 5000,   -- time in ms
+	rotation_period            = 3600000, -- time in ms
+	max_humidifier_runtime     = 1200000,
+	humidifier_cooldown_period = 1200000, -- time in ms
+	hum_max                    = 70,
+	hum_min                    = 60,
+	-- ssid = nil,
 	-- passwd = nil
 }
 
@@ -48,15 +52,17 @@ end
 
 function M.init_values()
 	M.startbme()
-	gpio.config({ gpio = { GPIOVOLTEO, GPIORESISTOR, 13, 12 }, dir = gpio.OUT })
+	gpio.config({ gpio = { GPIOVOLTEO, GPIORESISTOR, 13, 12, GPIO_HUMIDIFIER }, dir = gpio.OUT })
 	gpio.set_drive(13, gpio.DRIVE_3)
 	gpio.set_drive(GPIOVOLTEO, gpio.DRIVE_3)
 	gpio.set_drive(GPIORESISTOR, gpio.DRIVE_3)
 	gpio.set_drive(12, gpio.DRIVE_3)
+	gpio.set_drive(GPIO_HUMIDIFIER, gpio.DRIVE_3)
 	gpio.write(13, 1)
 	gpio.write(GPIOVOLTEO, 1)
 	gpio.write(GPIORESISTOR, 1)
 	gpio.write(12, 1)
+	gpio.write(GPIO_HUMIDIFIER, 1)
 end -- end function
 
 -------------------------------------
@@ -156,25 +162,29 @@ end   --end fucition
 -- @param status "true" 		  increments humidity, "false" humidity "decrements"
 -------------------------------------
 function M.humidifier(status)
-	humidifier = status
+	M.humidifier = status
+
 	if status then
-		gpio.write(14, 0)
+		gpio.write(GPIO_HUMIDIFIER, 1)
 	else
-		gpio.write(14, 1)
-	end -- if end
-end  -- function end
+		gpio.write(GPIO_HUMIDIFIER, 0)
+	end -- id end
+end -- function end
 
 -------------------------------------
 -- @function rotation 			Activates or deactivates rotation
 --
 -- @param status "true" activates rotation, "false" stops rotation
+--! rotation is deactivates in this test
 -------------------------------------
 function M.rotation(status)
 	rotation = status
 	if status then
-		gpio.write(GPIOVOLTEO, 0)
+		--gpio.write(GPIOVOLTEO, 0)
+		return
 	else
-		gpio.write(GPIOVOLTEO, 1)
+		--gpio.write(GPIOVOLTEO, 1)
+		return 
 	end -- if end
 	--todo: implement logger for debug
 end  -- function end
