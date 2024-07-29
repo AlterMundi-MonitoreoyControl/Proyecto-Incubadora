@@ -1,0 +1,3 @@
+[submodule "src/embedded/libs/Lua-Arduino-PID-Library"]
+	path = src/embedded/libs/Lua-Arduino-PID-Library
+	url = git@github.com:javierbrk/Lua-Arduino-PID-Library.git

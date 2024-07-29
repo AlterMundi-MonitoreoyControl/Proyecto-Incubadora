@@ -1,6 +1,22 @@
-package.path = package.path .. ";/home/jjorge/Desktop/incubadora/repo/src/app/?.lua".. ";/home/jjorge/Desktop/incubadora/repo/src/libs/?.lua" .. ";/home/jjorge/Desktop/incubadora/repo/src/libs/loglua/?.lua"
+package.path = package.path .. ";../app/?.lua".. ";../libs/?.lua" 
 
 --require ("incubatorController")
+
+_G.node = 
+{
+    uptime = function ()
+        return 1500
+    end,
+    heap = function ()
+        return 999
+    end
+}
+
+_G.sjson={
+    decode = function ()
+        return {}
+    end
+}
 
 _G.http = {
     post = function(url, options, body, callback) 
