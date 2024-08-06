@@ -5,6 +5,7 @@ Config configFromJson(String str) => Config.fromJson(json.decode(str));
 String configToJson(Config data) => json.encode(data.toJson());
 
 class Config {
+    String incubatorName;
     int hash;
     int incubationPeriod;
     int maxTemperature;
@@ -18,6 +19,7 @@ class Config {
     int trayTwoDate;
 
     Config({
+        required this.incubatorName,
         required this.hash,
         required this.incubationPeriod,
         required this.maxTemperature,
@@ -32,6 +34,7 @@ class Config {
     });
 
     factory Config.fromJson(Map<String, dynamic> json) => Config(
+        incubatorName: json["incubator_name"],
         hash: json["hash"],
         incubationPeriod: json["incubation_period"],
         maxTemperature: json["max_temperature"],
@@ -46,6 +49,7 @@ class Config {
     );
 
     Map<String, dynamic> toJson() => {
+        "incubator_name": incubatorName,  
         "hash": hash,
         "incubation_period": incubationPeriod,
         "max_temperature": maxTemperature,

@@ -24,7 +24,7 @@ class _CHomeState extends State<CHome> {
 
   List<int?> _bandejaTimestamps = [0, 0, 0];
 
-  late Config? _configModel = Config(ssid: "SSID", minTemperature: 37, maxTemperature: 39, rotationPeriod: 3600000, rotationDuration: 5000, passwd: "12345678", hash: 1234, incubationPeriod: 18, trayOneDate: 0, trayTwoDate: 0, trayThreeDate: 0);
+  late Config? _configModel = Config(incubatorName: "Nombre", ssid: "SSID", minTemperature: 37, maxTemperature: 39, rotationPeriod: 3600000, rotationDuration: 5000, passwd: "12345678", hash: 1234, incubationPeriod: 18, trayOneDate: 0, trayTwoDate: 0, trayThreeDate: 0);
 
   @override
   void initState() {

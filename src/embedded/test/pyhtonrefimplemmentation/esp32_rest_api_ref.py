@@ -24,19 +24,21 @@ html_content = """
 </html>
 """
 
+incubator_name = "Incu"
 min_temperature = 33
 max_temperature = 38
 rotation_duration = 3500000
 rotation_period = 5000
 ssid = "mimimi"
 passwd = "12345"
-tray_one_date = 1000000
-tray_two_date = 500000
+tray_one_date = 0
+tray_two_date = 0
 tray_three_date = 0
 incubation_period = 18
 hash_value = 12345
 
 config_dict = {
+    "incubator_name": incubator_name,
     "min_temperature": min_temperature,
     "max_temperature": max_temperature,
     "rotation_duration": rotation_duration,
