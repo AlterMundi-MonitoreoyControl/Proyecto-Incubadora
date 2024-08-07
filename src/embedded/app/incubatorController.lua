@@ -81,7 +81,7 @@ function temp_control(temperature, min_temp, max_temp)
 end     -- end function
 
 function hum_control(hum, min, max)
-    log.trace(" Humydity " .. hum .. " min:" .. min .. " max:" .. max)
+    log.trace(" Humydity " .. hum .. " min:" .. min .. " max:" .. max .. " humidifier " .. tostring(incubator.humidifier))
     if hum <= min then
         log.trace("turn hum on")
         incubator.humidifier_switch(true)
@@ -141,7 +141,7 @@ function rotate()
     gpio.config( { gpio={GPIOREEDS}, dir=gpio.IN})
     rotation_activate = false
     --trigger
-    gpio.trig(GPIOREEDS, gpio.INTR_LOW, trigger)
+    --gpio.trig(GPIOREEDS, gpio.INTR_LOW, trigger)
     incubator.rotation_switch(true)
     log.trace("turn rotation on")
     stoprotation = tmr.create()

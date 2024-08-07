@@ -82,7 +82,7 @@ _G.tmr = {
 
 
 --test samples acording to "tescaes humedad ods"
-timesamples = { 0, 120, 1140, 1320, 2460, 2520, 2580, 2640, 2700, 2760, 2820, 3420, 3960, 4560, 5100, 5220, 5340, 5400, 5460 }
+timesamples = { 0, 120, 1140, 1320, 2460, 2520, 2580, 2640, 2700, 2760, 2820, 3420, 3960, 4140, 4260, 5220, 5340, 5400, 5460 }
 hum_readings = { 10, 20, 30, 20, 10, 40, 59, 61, 71, 66, 55, 55, 55, 55, 40, 40, 66, 77, 64 }
 hum_status = { true, true, false, false, true, true, true, true, false, false, true, true, false, false, false, true, true, false, false }
 
@@ -171,13 +171,12 @@ describe('humidity control tests', function()
         for i = 1, 19, 1
         do
             print("------------" .. hum_readings[i] .. " t " .. timesamples[i] .. " bool " .. tostring(hum_status[i]))
-            _G.time = {
-                get = function()
+            incubator.get_uptime_in_sec = function()
                     return timesamples[i]
                 end
-            }
             hum_control(hum_readings[i], incubator.min_hum, incubator.max_hum)
-            assert.are_equal(incubator.humidifier, hum_status[i])
+            --assert.are_equal(expected,passed)
+            assert.are_equal(hum_status[i],incubator.humidifier)
         end
     end)
 end)

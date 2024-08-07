@@ -67,8 +67,11 @@ function send_data_grafana(temperature,humidity,pressure,INICIALES)
 		http.post(M.url, {headers = headers}, data,
 			function(code_return, _)
 				if (code_return ~= 204) then
-					print(" " .. code_return)
+					print("error enviando   " .. code_return)
+        else
+          print("funciona")
 				end
+                    
 		end) -- * post function end
 end -- * send_data_grafana end
 
@@ -84,12 +87,12 @@ function send_heap_and_uptime_grafana()
     ["Content-Type"] = "text/plain",
     ["Authorization"] = "Basic " .. M.token_grafana
   }
-
-  http.post(M.url, {headers = headers}, response, function (code_return, _)
-    if (code ~= 204) then
-      print(" " .. code_return)
-    end -- if end
-  end) -- post function end
+--
+--  http.post(M.url, {headers = headers}, response, function (code_return, _)
+--    if (code ~= 204) then
+--      print(" " .. code_return)
+--    end -- if end
+--  end) -- post function end
 end -- callback end
 
 return M

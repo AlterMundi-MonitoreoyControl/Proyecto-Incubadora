@@ -33,7 +33,7 @@ local M = {
 	humidifier_enabled     = true,
 	max_hum                = 70,
 	min_hum                = 60,
-	humidifier_max_on_time = 15 * 60, -- 18min in sec
+	humidifier_max_on_time = 18 * 60, -- 18min in sec
 	humidifier_off_time    = 5 * 60, -- 19mim in sec
 	hum_turn_on_time       = 0,
 	hum_turn_off_time      = 0
@@ -160,28 +160,35 @@ function M.assert_conditions()
 	end -- if is_testing
 end   --end fucition
 
+function M.get_uptime_in_sec()
+	local high_bytes, _ = node.uptime()
+	return tonumber((high_bytes / 1000000))
+end
+
 -------------------------------------
 -- @function humidifier 			Activates or deactivates humidifier
 --
 -- @param status "true" 		  increments humidity, "false" humidity "decrements"
 -------------------------------------
 function M.humidifier_switch(status)
-	current_time = time.get()
+	local current_time = M.get_uptime_in_sec()
+	log.warn("humidifier current_time ".. current_time)
+
 	if M.humidifier_enabled then
-		log.trace("humidifier enabled")
-		if status then
-			if (not M.humidifier) then
-				log.trace("humidifier was off... turning on ")
+		log.warn("humidifier enabled")
+		if status then -- encender humidifier
+			if (not M.humidifier) then -- estaba apagado
+				log.warn("humidifier was off... turning on ")
 
 				--estaba apagado y lo prendo
 				M.hum_turn_on_time = current_time
 				M.humidifier = status
 			else
 				--estaba pendido y sigue
-				log.trace("humidifier was on... turned on" .. M.hum_turn_on_time)
+				log.warn("humidifier was on... turned on" .. M.hum_turn_on_time)
 
-				log.trace("humidifier was on... turning on.. time transcurred " .. (current_time - M.hum_turn_on_time))
-				log.trace("humidifier was on... turning on.. time left " ..
+				log.warn("humidifier was on... turning on.. time transcurred " .. (current_time - M.hum_turn_on_time))
+				log.warn("humidifier was on... turning on.. time left " ..
 				(M.humidifier_max_on_time - (current_time - M.hum_turn_on_time)))
 				--verificar el tiempo maximo
 				if ((current_time - M.hum_turn_on_time) > M.humidifier_max_on_time) then
@@ -192,15 +199,14 @@ function M.humidifier_switch(status)
 				end
 			end
 		end
-	else
+	else --humidifier disabled
 		log.error("humidifier disabled ")
 		if ((current_time - M.hum_turn_off_time) > M.humidifier_off_time) then
 			M.humidifier_enabled = true
-			log.error("humidifier enabled time out expired")
+			log.warn("humidifier enabled time out expired")
 			if status then
 				if (not M.humidifier) then
-					log.trace("humidifier was off... turning on ")
-
+					log.warn("humidifier was off... turning on ")
 					--estaba apagado y lo prendo
 					M.hum_turn_on_time = current_time
 					M.humidifier = status
@@ -211,9 +217,12 @@ function M.humidifier_switch(status)
 
 	if status and M.humidifier_enabled then
 		gpio.write(GPIOHUMID, 1)
+		log.warn("humidifier pin turned on--------------------")
 	else
 		M.humidifier = false
 		gpio.write(GPIOHUMID, 0)
+		log.warn("humidifier pin turned off--------------------")
+
 	end -- if end
 end  -- function end
 
