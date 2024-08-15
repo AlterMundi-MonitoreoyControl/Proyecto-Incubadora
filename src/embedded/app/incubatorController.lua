@@ -61,7 +61,9 @@ end
 -- ! @param,max_temp 							 temperature at which the resistor turns off
 ------------------------------------------------------------------------------------
 function temp_control(temperature, min_temp, max_temp)
-    log.trace(" temp " .. temperature .. " min:" .. min_temp .. " max:" .. max_temp)
+  log.grafana = false  
+	log.trace(string.format("T: %.1fC° Min T: %.1fC° Max T: %.1fC° ",
+	incubator.temperature,incubator.max_temp,incubator.min_temp))
 
     if temperature <= min_temp then
         if is_temp_changing(temperature) then
@@ -69,6 +71,7 @@ function temp_control(temperature, min_temp, max_temp)
             log.trace("turn resistor on")
             incubator.heater(true)
         else
+						log.grafana = true
             log.error("temperature is not changing")
             alerts.send_alert_to_grafana("temperature is not changing")
             log.trace("turn resistor off")
@@ -81,7 +84,9 @@ function temp_control(temperature, min_temp, max_temp)
 end     -- end function
 
 function hum_control(hum, min, max)
-    log.trace(" Humydity " .. hum .. " min:" .. min .. " max:" .. max)
+	log.trace(string.format("H: %.1fC° Min H: %.1fC° Max H: %.1fC°",
+	hum,min,max))
+
     if hum <= min then
         log.trace("turn hum on")
         incubator.humidifier_switch(true)
@@ -121,16 +126,6 @@ function stop_rot()
     end
 end
 
-------------------------------------------------------------------------------------
--- ! @function trigger                    is responsible for checking the proper functioning of the rotation
---! @param pin                            number of pin to watch
-------------------------------------------------------------------------------------
-
-function trigger(gpio, _)
-    rotation_activate = true
-    print("[#] rotation working")
-    gpio.trig(gpio, gpio.INTR_DISABLE)
-end
 
 ------------------------------------------------------------------------------------
 -- ! @function rotate                     is responsible for starting the rotation

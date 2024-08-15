@@ -50,8 +50,8 @@ function M.startbme()
 		M.is_sensorok = true
 	else
 		M.is_sensorok = false
-	end
-end
+	end -- if end 
+end -- end function 
 
 function M.init_values()
 	M.startbme()
@@ -107,10 +107,8 @@ function M.get_values()
 				M.temperature = 99.9
 				M.humidity = 99.9
 				M.pressure = 99.9
-				print("[!] Failed to read bme, Please check the cables and connections.")
-				alerts.send_alert_to_grafana("[!] Failed to read bme, Please check the cables and connections.")
-				log.error("temperature is not changing")
-				--try to restart bme
+				print("\n\n[WARN] Failed to read BME, Please check the cables and connections \n".. 
+				"[Incubator in simulate mode] \n" .. "Try to restart bme...")
 			else
 				M.temperature = (sensor.temperature / 100)
 				M.humidity = (sensor.humidity / 100)
@@ -120,9 +118,11 @@ function M.get_values()
 			M.temperature = 99.9
 			M.humidity = 99.9
 			M.pressure = 99.9
-			log.error("Failed to start bme, Please check the cables and connections.")
-			alerts.send_alert_to_grafana("[!] Failed to start bme, Please check the cables and connections.")
-			print("[!] Failed to start bme, Please check the cables and connections.")
+			print("\n")
+			print("[WARN] Failed to read BME, Please check the cables and connections \n".. 
+						"[Incubator in simulate mode] \n" .. "Try to restart bme...")
+			print("\n")
+
 		end -- end if
 	end --if end
 
@@ -145,7 +145,10 @@ function M.heater(status --[[bool]])
 end --end function
 
 function M.assert_conditions()
-	log.trace("temp actual ", M.temperature, ", max ", M.max_temp, ",min ", M.min_temp, ",resitor status ", M.resistor)
+	log.grafana = false
+	log.trace(string.format("T: %.1fC° Min T: %.1fC° Max T: %.1fC° Resistor status: %10s",
+	M.temperature,M.max_temp,M.min_temp,tostring(M.resistor)))
+	
 	if M.is_testing then
 		if (M.temperature > M.max_temp and M.resistor) then
 			alerts.send_alert_to_grafana("temperature > max_temp and resistor is on")
@@ -168,11 +171,10 @@ end   --end fucition
 function M.humidifier_switch(status)
 	current_time = time.get()
 	if M.humidifier_enabled then
-		log.trace("humidifier enabled")
+		log.trace("humidifer : " .. tostring(M.humidifier))
 		if status then
 			if (not M.humidifier) then
 				log.trace("humidifier was off... turning on ")
-
 				--estaba apagado y lo prendo
 				M.hum_turn_on_time = current_time
 				M.humidifier = status
@@ -193,6 +195,7 @@ function M.humidifier_switch(status)
 			end
 		end
 	else
+		log.grafana = true
 		log.error("humidifier disabled ")
 		if ((current_time - M.hum_turn_off_time) > M.humidifier_off_time) then
 			M.humidifier_enabled = true
