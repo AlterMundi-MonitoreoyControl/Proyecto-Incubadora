@@ -139,9 +139,16 @@ end
 function rotate()
     rotation_activate = false
     log.trace("turn rotation on-------------------------------")
-    --trigger
-    gpio.trig(GPIOREEDS_UP, gpio.INTR_LOW, trigger_rotation_off)
-    gpio.trig(GPIOREEDS_DOWN, gpio.INTR_LOW, trigger_rotation_off)
+    -- only subscribe to the interrupts if state is up
+    -- Check if both pins are in the "up" state (assuming 1 is "up")
+    if gpio.read(GPIOREEDS_UP) == 1 then
+        -- Subscribe to interrupts
+        gpio.trig(GPIOREEDS_UP, gpio.INTR_DOWN, trigger_rotation_off)
+    end
+
+    if gpio.read(GPIOREEDS_DOWN) == 1 then
+        gpio.trig(GPIOREEDS_DOWN, gpio.INTR_DOWN, trigger_rotation_off)
+    end
 
     incubator.rotation_switch(true)
     log.trace("turn rotation on-------------------------------")
