@@ -70,7 +70,6 @@ function temp_control(temperature, min_temp, max_temp)
             incubator.heater(true)
         else
             log.error("temperature is not changing")
-            alerts.send_alert_to_grafana("temperature is not changing")
             log.trace("turn resistor off")
             incubator.heater(false)
         end
@@ -112,11 +111,12 @@ end -- read_and_send_data end
 -- ! @function stop_rot                     is responsible for turning off the rotation
 ------------------------------------------------------------------------------------
 function stop_rot()
+    incubator.rotation_switch(false)
+    log.trace("turn rotation off")
     if rotation_activate == true then
         log.trace("[#] rotation working")
     else
-        log.error("[!] rotation error ----- ")
-        --send_alert_to_grafana
+        log.trace("[!] rotation error")
     end
 end
 
@@ -125,26 +125,24 @@ end
 --! @param pin                            number of pin to watch
 ------------------------------------------------------------------------------------
 
-function trigger_rotation_off(pin, level)
-    gpio.trig(pin, gpio.INTR_DISABLE)
-    rotation_activate = true
-    print("[#] rotation working")
-    log.fatal("[#] rotation working",pin,level)
-    incubator.rotation_switch(false)
-end
+-- function trigger(gpio, _)
+--     rotation_activate = true
+--     print("[#] rotation working")
+--     gpio.trig(gpio, gpio.INTR_DISABLE)
+-- end
 
 ------------------------------------------------------------------------------------
 -- ! @function rotate                     is responsible for starting the rotation
 ------------------------------------------------------------------------------------
-function rotate()
-    rotation_activate = false
-    log.trace("turn rotation on-------------------------------")
-    --trigger
-    gpio.trig(GPIOREEDS_UP, gpio.INTR_LOW, trigger_rotation_off)
-    gpio.trig(GPIOREEDS_DOWN, gpio.INTR_LOW, trigger_rotation_off)
 
+function rotate()
+    -- config
+    gpio.config( { gpio={GPIOREEDS}, dir=gpio.IN})
+    rotation_activate = false
+    --trigger
+    --gpio.trig(GPIOREEDS, gpio.INTR_LOW, trigger)
     incubator.rotation_switch(true)
-    log.trace("turn rotation on-------------------------------")
+    log.trace("turn rotation on")
     stoprotation = tmr.create()
     stoprotation:register(incubator.rotation_duration, tmr.ALARM_SINGLE, stop_rot)
     stoprotation:start()
@@ -166,20 +164,20 @@ incubator.enable_testing(false)
 ------------------------------------------------------------------------------------
 -- ! timers
 ------------------------------------------------------------------------------------
--- local send_data_timer = tmr.create()
--- send_data_timer:register(10000, tmr.ALARM_AUTO, read_and_send_data)
--- send_data_timer:start()
+local send_data_timer = tmr.create()
+send_data_timer:register(10000, tmr.ALARM_AUTO, read_and_send_data)
+send_data_timer:start()
 
--- local temp_control_timer = tmr.create()
--- temp_control_timer:register(3000, tmr.ALARM_AUTO, read_and_control)
--- temp_control_timer:start()
+local temp_control_timer = tmr.create()
+temp_control_timer:register(3000, tmr.ALARM_AUTO, read_and_control)
+temp_control_timer:start()
 
 local rotation = tmr.create()
 --rotation:register(20000, tmr.ALARM_AUTO, rotate)
 rotation:register(incubator.rotation_period, tmr.ALARM_AUTO, rotate)
 rotation:start()
 
--- local send_heap_uptime = tmr.create()
--- send_heap_uptime:register(30000, tmr.ALARM_AUTO, send_heap_and_uptime_grafana)
--- send_heap_uptime:start()
+local send_heap_uptime = tmr.create()
+send_heap_uptime:register(30000, tmr.ALARM_AUTO, send_heap_and_uptime_grafana)
+send_heap_uptime:start()
 
