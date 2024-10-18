@@ -41,11 +41,24 @@ end
 -------------------------------------------------------------------------------------
 
 function configurator:create_config_file()
-  log.error("Failed to read JSON file, creating a new one")
-  new_file = io.open("config.json", "w")
-  new_file:write(
-    '{"rotation_duration":50000,"rotation_period":360000,"min_temperature":37.3,"max_temperature":37.8,"ssid":"incubator","passwd":"1234554321"}')
-  new_file:close()
+	log.trace("Creating a new config file")
+	local new_file = io.open("config.json", "w")
+			local config = {
+					rotation_duration = 5000,
+					rotation_period = 3600000,
+					min_temperature = 37.3,
+					max_temperature = 37.8,
+					tray_one_date = 0,
+					tray_two_date = 0,
+					tray_three_date = 0,
+					incubation_period = 0,
+					hash = "1234567890",
+					incubator_name = "incubator_1",
+					max_hum = 70,
+					min_hum = 60
+			}
+			new_file:write(sjson.encode(config))
+			new_file:close()
 end
 
 -------------------------------------------------------------------------------------
@@ -82,10 +95,27 @@ function configurator:load_objects_data(new_config_table)
       status.rotation_duration = incubator.set_rotation_duration(tonumber(value))
     elseif param == "rotation_period" then
       status.rotation_period = incubator.set_rotation_period(tonumber(value))
-    end
-  end
+		elseif param == "tray_one_date" then
+			status.tray_one_date = incubator.set_tray_date("one",tonumber(value))
+		elseif param == "tray_two_date" then
+			status.tray_two_date = incubator.set_tray_date("two",tonumber(value))
+		elseif param == "tray_three_date" then
+			status.tray_three_date = incubator.set_tray_date("three",tonumber(value))
+		elseif param == "incubation_period" then 
+			status.incubation_period = incubator.set_incubation_period(tonumber(value))
+		elseif param == "hash" then 
+			status.hash = incubator.set_hash(value)
+    elseif param == "incubator_name" then
+			status.incubator_name = incubator.set_incubator_name(tostring(value))
+		elseif param == "max_hum" then 
+			status.max_hum = incubator.set_max_humidity(tonumber(value))
+		elseif param == "min_hum" then
+			status.min_hum = incubator.set_min_humidity(tonumber(value))
+		end -- if end 
+
+  end -- for end
 	configurator.WiFi:on_change(new_config_table)
   return status
-end
+end -- function end 
 
 return configurator
