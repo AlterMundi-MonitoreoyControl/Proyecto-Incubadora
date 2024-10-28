@@ -5,69 +5,69 @@ Config configFromJson(String str) => Config.fromJson(json.decode(str));
 String configToJson(Config data) => json.encode(data.toJson());
 
 class Config {
-    int hash;
-    int incubationPeriod;
+    String hash;
+    double minTemperature;
+    int minHum;
     String incubatorName;
-    int maxHumidity;
-    int maxTemperature;
-    int minHumidity;
-    int minTemperature;
-    String passwd;
+    int maxHum;
     int rotationDuration;
-    int rotationPeriod;
-    String ssid;
-    int trayOneDate;
     int trayThreeDate;
+    double maxTemperature;
+    int rotationPeriod;
     int trayTwoDate;
+    int trayOneDate;
+    int incubationPeriod;
+    String? passwd;
+    String? ssid;
 
     Config({
         required this.hash,
-        required this.incubationPeriod,
-        required this.incubatorName,
-        required this.maxHumidity,
-        required this.maxTemperature,
-        required this.minHumidity,
         required this.minTemperature,
-        required this.passwd,
+        required this.minHum,
+        required this.incubatorName,
+        required this.maxHum,
         required this.rotationDuration,
-        required this.rotationPeriod,
-        required this.ssid,
-        required this.trayOneDate,
         required this.trayThreeDate,
+        required this.maxTemperature,
+        required this.rotationPeriod,
         required this.trayTwoDate,
+        required this.trayOneDate,
+        required this.incubationPeriod,
+        this.passwd,
+        this.ssid,
     });
 
     factory Config.fromJson(Map<String, dynamic> json) => Config(
         hash: json["hash"],
-        incubationPeriod: json["incubation_period"],
+        minTemperature: json["min_temperature"].toDouble(),
+        minHum: json["min_hum"],
         incubatorName: json["incubator_name"],
-        maxHumidity: json["max_humidity"],
-        maxTemperature: json["max_temperature"],
-        minHumidity: json["min_humidity"],
-        minTemperature: json["min_temperature"],
-        passwd: json["passwd"],
+        maxHum: json["max_hum"],
         rotationDuration: json["rotation_duration"],
-        rotationPeriod: json["rotation_period"],
-        ssid: json["ssid"],
-        trayOneDate: json["tray_one_date"],
         trayThreeDate: json["tray_three_date"],
+        maxTemperature: json["max_temperature"].toDouble(),
+        rotationPeriod: json["rotation_period"],
         trayTwoDate: json["tray_two_date"],
+        trayOneDate: json["tray_one_date"],
+        incubationPeriod: json["incubation_period"],
+        passwd: json["passwd"],
+        ssid: json["ssid"],
     );
 
     Map<String, dynamic> toJson() => {
         "hash": hash,
-        "incubation_period": incubationPeriod,
-        "incubator_name": incubatorName,
-        "max_humidity": maxHumidity,
-        "max_temperature": maxTemperature,
-        "min_humidity": minHumidity,
         "min_temperature": minTemperature,
-        "passwd": passwd,
+        "min_hum": minHum,
+        "incubator_name": incubatorName,
+        "max_hum": maxHum,
         "rotation_duration": rotationDuration,
-        "rotation_period": rotationPeriod,
-        "ssid": ssid,
-        "tray_one_date": trayOneDate,
         "tray_three_date": trayThreeDate,
+        "max_temperature": maxTemperature,
+        "rotation_period": rotationPeriod,
         "tray_two_date": trayTwoDate,
+        "tray_one_date": trayOneDate,
+        "incubation_period": incubationPeriod,
+        "passwd": passwd,
+        "ssid": ssid,
     };
 }

@@ -24,7 +24,7 @@ class _CHomeState extends State<CHome> {
 
   List<int?> _bandejaTimestamps = [0, 0, 0];
 
-  late Config? _configModel = Config(incubatorName: "Nombre", ssid: "SSID", minHumidity: 50, maxHumidity: 70, minTemperature: 37, maxTemperature: 39, rotationPeriod: 3600000, rotationDuration: 5000, passwd: "12345678", hash: 1234, incubationPeriod: 18, trayOneDate: 0, trayTwoDate: 0, trayThreeDate: 0);
+  late Config? _configModel = Config(incubatorName: "Nombre", ssid: "SSID", minHum: 50, maxHum: 70, minTemperature: 37, maxTemperature: 39, rotationPeriod: 3600000, rotationDuration: 5000, passwd: "12345678", hash: "1234", incubationPeriod: 18, trayOneDate: 0, trayTwoDate: 0, trayThreeDate: 0);
 
   @override
   void initState() {
@@ -48,12 +48,12 @@ class _CHomeState extends State<CHome> {
   @override
   Widget build(BuildContext context) {
     
-    int hash = _configModel?.hash ?? 0;
+    String hash = _configModel?.hash ?? "";
     int incubation_period = _configModel?.incubationPeriod ?? 0;
-    int maxtemp = _configModel?.maxTemperature ?? 0;
-    int mintemp = _configModel?.minTemperature ?? 0;
-    int maxhum = _configModel?.maxHumidity ?? 0;
-    int minhum = _configModel?.minHumidity ?? 0;
+    double maxtemp = _configModel?.maxTemperature ?? 0;
+    double mintemp = _configModel?.minTemperature ?? 0;
+    int maxhum = _configModel?.maxHum ?? 0;
+    int minhum = _configModel?.minHum ?? 0;
     String password = _configModel?.passwd ?? "";
     int rotation_duration = _configModel?.rotationDuration ?? 0;
     int rotation_period =_configModel?.rotationPeriod ?? 0;
@@ -85,7 +85,7 @@ class _CHomeState extends State<CHome> {
                       setState(() {
                                 _configModel?.trayOneDate = newTrayOneDate!;
                               });
-                              ApiService().updateConfig({'hash': _configModel?.hash,'incubation_period': _configModel?.incubationPeriod,'max_temperature': _configModel?.maxTemperature,'min_temperature': _configModel?.minTemperature, 'max_humidity': _configModel?.maxHumidity, 'min_humidity': _configModel?.minHumidity, 'passwd': password,'rotation_duration': rotation_duration,'rotation_period': rotation_period,'ssid': ssid,'tray_one_date': newTrayOneDate,'tray_three_date': _configModel?.trayThreeDate,'tray_two_date': _configModel?.trayTwoDate});
+                              ApiService().updateConfig({'hash': _configModel?.hash,'incubation_period': _configModel?.incubationPeriod,'max_temperature': _configModel?.maxTemperature,'min_temperature': _configModel?.minTemperature, 'max_humidity': _configModel?.maxHum, 'min_humidity': _configModel?.minHum, 'passwd': password,'rotation_duration': rotation_duration,'rotation_period': rotation_period,'ssid': ssid,'tray_one_date': newTrayOneDate,'tray_three_date': _configModel?.trayThreeDate,'tray_two_date': _configModel?.trayTwoDate});
                       print('Timestamp: ${_bandejaTimestamps[0]}');
                     }
                   });
@@ -116,7 +116,7 @@ class _CHomeState extends State<CHome> {
                       setState(() {
                                 _configModel?.trayTwoDate = newTrayTwoDate!;
                               });
-                              ApiService().updateConfig({'hash': _configModel?.hash,'incubation_period': _configModel?.incubationPeriod,'max_temperature': _configModel?.maxTemperature,'min_temperature': _configModel?.minTemperature, 'max_humidity': _configModel?.maxHumidity, 'min_humidity': _configModel?.minHumidity, 'passwd': password,'rotation_duration': rotation_duration,'rotation_period': rotation_period,'ssid': ssid,'tray_one_date': _configModel?.trayOneDate,'tray_three_date': _configModel?.trayThreeDate,'tray_two_date': newTrayTwoDate});
+                              ApiService().updateConfig({'hash': _configModel?.hash,'incubation_period': _configModel?.incubationPeriod,'max_temperature': _configModel?.maxTemperature,'min_temperature': _configModel?.minTemperature, 'max_humidity': _configModel?.maxHum, 'min_humidity': _configModel?.minHum, 'passwd': password,'rotation_duration': rotation_duration,'rotation_period': rotation_period,'ssid': ssid,'tray_one_date': _configModel?.trayOneDate,'tray_three_date': _configModel?.trayThreeDate,'tray_two_date': newTrayTwoDate});
                       print('Timestamp: ${_bandejaTimestamps[1]}');
                     }
                   });
@@ -147,7 +147,7 @@ class _CHomeState extends State<CHome> {
                       setState(() {
                                 _configModel?.trayThreeDate = newTrayThreeDate!;
                               });
-                              ApiService().updateConfig({'hash': _configModel?.hash,'incubation_period': _configModel?.incubationPeriod,'max_temperature': _configModel?.maxTemperature,'min_temperature': _configModel?.minTemperature, 'max_humidity': _configModel?.maxHumidity, 'min_humidity': _configModel?.minHumidity, 'passwd': password,'rotation_duration': rotation_duration,'rotation_period': rotation_period,'ssid': ssid,'tray_one_date': _configModel?.trayOneDate,'tray_three_date': newTrayThreeDate,'tray_two_date': _configModel?.trayTwoDate});
+                              ApiService().updateConfig({'hash': _configModel?.hash,'incubation_period': _configModel?.incubationPeriod,'max_temperature': _configModel?.maxTemperature,'min_temperature': _configModel?.minTemperature, 'max_humidity': _configModel?.maxHum, 'min_humidity': _configModel?.minHum, 'passwd': password,'rotation_duration': rotation_duration,'rotation_period': rotation_period,'ssid': ssid,'tray_one_date': _configModel?.trayOneDate,'tray_three_date': newTrayThreeDate,'tray_two_date': _configModel?.trayTwoDate});
                       print('Timestamp: ${_bandejaTimestamps[2]}');
                     }
                   });
@@ -264,15 +264,15 @@ class _CHomeState extends State<CHome> {
               switch (index) {
                 case 0:
                   _configModel?.trayOneDate = _bandejaTimestamps[index]!;
-                  ApiService().updateConfig({'hash': _configModel?.hash,'incubation_period': _configModel?.incubationPeriod,'max_temperature': _configModel?.maxTemperature,'min_temperature': _configModel?.minTemperature,'max_humidity': _configModel?.maxHumidity, 'min_humidity': _configModel?.minHumidity,'passwd': _configModel?.passwd,'rotation_duration': _configModel?.rotationDuration,'rotation_period': _configModel?.rotationPeriod,'ssid': _configModel?.ssid,'tray_one_date': _configModel?.trayOneDate,'tray_three_date': _configModel?.trayThreeDate,'tray_two_date': _configModel?.trayTwoDate});
+                  ApiService().updateConfig({'hash': _configModel?.hash,'incubation_period': _configModel?.incubationPeriod,'max_temperature': _configModel?.maxTemperature,'min_temperature': _configModel?.minTemperature,'max_humidity': _configModel?.maxHum,'min_humidity': _configModel?.minHum,'passwd': _configModel?.passwd,'rotation_duration': _configModel?.rotationDuration,'rotation_period': _configModel?.rotationPeriod,'ssid': _configModel?.ssid,'tray_one_date': _configModel?.trayOneDate,'tray_three_date': _configModel?.trayThreeDate,'tray_two_date': _configModel?.trayTwoDate});
                   break;
                 case 1:
                   _configModel?.trayTwoDate = _bandejaTimestamps[index]!;
-                  ApiService().updateConfig({'hash': _configModel?.hash,'incubation_period': _configModel?.incubationPeriod,'max_temperature': _configModel?.maxTemperature,'min_temperature': _configModel?.minTemperature,'max_humidity': _configModel?.maxHumidity, 'min_humidity': _configModel?.minHumidity,'passwd': _configModel?.passwd,'rotation_duration': _configModel?.rotationDuration,'rotation_period': _configModel?.rotationPeriod,'ssid': _configModel?.ssid,'tray_one_date': _configModel?.trayOneDate,'tray_three_date': _configModel?.trayThreeDate,'tray_two_date': _configModel?.trayTwoDate});
+                  ApiService().updateConfig({'hash': _configModel?.hash,'incubation_period': _configModel?.incubationPeriod,'max_temperature': _configModel?.maxTemperature,'min_temperature': _configModel?.minTemperature,'max_humidity': _configModel?.maxHum,'min_humidity': _configModel?.minHum,'passwd': _configModel?.passwd,'rotation_duration': _configModel?.rotationDuration,'rotation_period': _configModel?.rotationPeriod,'ssid': _configModel?.ssid,'tray_one_date': _configModel?.trayOneDate,'tray_three_date': _configModel?.trayThreeDate,'tray_two_date': _configModel?.trayTwoDate});
                   break;
                 case 2:
                   _configModel?.trayThreeDate = _bandejaTimestamps[index]!;
-                  ApiService().updateConfig({'hash': _configModel?.hash,'incubation_period': _configModel?.incubationPeriod,'max_temperature': _configModel?.maxTemperature,'min_temperature': _configModel?.minTemperature,'max_humidity': _configModel?.maxHumidity, 'min_humidity': _configModel?.minHumidity,'passwd': _configModel?.passwd,'rotation_duration': _configModel?.rotationDuration,'rotation_period': _configModel?.rotationPeriod,'ssid': _configModel?.ssid,'tray_one_date': _configModel?.trayOneDate,'tray_three_date': _configModel?.trayThreeDate,'tray_two_date': _configModel?.trayTwoDate});
+                  ApiService().updateConfig({'hash': _configModel?.hash,'incubation_period': _configModel?.incubationPeriod,'max_temperature': _configModel?.maxTemperature,'min_temperature': _configModel?.minTemperature,'max_humidity': _configModel?.maxHum,'min_humidity': _configModel?.minHum,'passwd': _configModel?.passwd,'rotation_duration': _configModel?.rotationDuration,'rotation_period': _configModel?.rotationPeriod,'ssid': _configModel?.ssid,'tray_one_date': _configModel?.trayOneDate,'tray_three_date': _configModel?.trayThreeDate,'tray_two_date': _configModel?.trayTwoDate});
                   break;
               }
 
