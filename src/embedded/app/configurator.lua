@@ -52,7 +52,7 @@ function configurator:create_config_file()
 					tray_two_date = 0,
 					tray_three_date = 0,
 					incubation_period = 0,
-					hash = "1234567890",
+					hash = "incubator_parameters",
 					incubator_name = string.format("incubadora-%s",wifi.sta.getmac()),
 					max_hum = 70,
 					min_hum = 60

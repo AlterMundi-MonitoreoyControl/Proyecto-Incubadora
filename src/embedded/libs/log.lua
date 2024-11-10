@@ -136,4 +136,22 @@ for i, x in ipairs(modes) do
     end
 end
 
+function log.ntfy(alert)
+	local alert_string = alert
+	local incubator = require("incubator")
+	local url = "http://ntfy.sh/" .. incubator.hash
+	local headers = {
+		["Content-Type"] = "text/plain"}
+
+		http.post(url, {
+			headers = headers
+	}, alert_string, function(code_return, _)
+			if code_return ~= 200 then
+					log.trace("Error al enviar notificación: " .. code_return)
+			else
+					log.trace("Notificación enviada exitosamente")
+			end
+	end)
+end
+
 return log

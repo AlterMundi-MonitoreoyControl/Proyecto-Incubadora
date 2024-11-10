@@ -41,7 +41,7 @@ local M = {
 	tray_two_date = 0,
 	tray_three_date = 0,
 	incubation_period = 0,
-	hash = 1235,
+	hash = "incubator_parameters",
 	incubator_name = string.format("incubadora-%s",wifi.sta.getmac()),
 	rotate_up			   = true
 }
@@ -457,5 +457,7 @@ function M.set_min_humidity(new_min_hum)
 			return false
 		end
 end
+
+
 
 return M

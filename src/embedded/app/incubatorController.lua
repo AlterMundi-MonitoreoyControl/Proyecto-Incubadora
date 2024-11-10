@@ -109,6 +109,14 @@ end -- end function
 function read_and_send_data()
     temp, hum, pres = incubator.get_values()
     send_data_grafana(incubator.temperature, incubator.humidity, incubator.pressure, INICIALES .. "-bme")
+
+		if temp >= incubator.max_temp then
+			log.ntfy("Alerta: La temperatura ah excedido el limite permitido 🔥")
+		end
+
+		if hum >= incubator.max_hum then
+			log.ntfy("Alerta: La humedad ah excedido el limite permitido 💧")
+		end
 end -- read_and_send_data end
 
 ------------------------------------------------------------------------------------
@@ -190,7 +198,7 @@ incubator.enable_testing(false)
 ------------------------------------------------------------------------------------
 local send_data_timer = tmr.create()
 send_data_timer:register(10000, tmr.ALARM_AUTO, read_and_send_data)
---send_data_timer:start()
+send_data_timer:start()
 
 local temp_control_timer = tmr.create()
 temp_control_timer:register(3000, tmr.ALARM_AUTO, read_and_control)
