@@ -27,6 +27,34 @@ W.station_cfg.scan_method = "all"
 IPADD = nil
 IPGW = nil
 
+-- -----------------------------------
+-- @function set_new_ssid	modify the station ssid WiFi
+-- -----------------------------------
+function W:update_ap_name(new_name)
+	if new_name and type(new_name) == "string" then
+			-- rleoad WiFi config
+			W.ap_config.ssid = new_name
+			
+			-- deauth actual clients
+			wifi.mode(wifi.NULLMODE)  -- disable WiFi 
+			tmr.create():alarm(1000, tmr.ALARM_SINGLE, function()
+					-- reconfigure WiFi with new name
+					wifi.mode(wifi.STATIONAP)
+					wifi.ap.config(W.ap_config, true)
+					
+					-- reload ip and reconnect
+					wifi.ap.setip(W.sta_cfg)
+					
+					-- if is connected retry
+					if W.station_cfg.ssid ~= "" then
+							wifi.sta.config(W.station_cfg, true)
+							wifi.sta.connect()
+					end -- if end 
+			end) -- timer end
+			return true
+	end -- if end
+	return false
+end -- function end
 
 -- -----------------------------------
 -- @function set_new_ssid	modify the actual ssid WiFi
@@ -162,52 +190,68 @@ end -- end function
 ------------------------------------------------------------------------------------
 function wifi_disconnect_event(ev, info)
 	W.ONLINE = 0
-	print(info)
-	print(info.reason)
-	print(info.ssid)
+	log.trace("Disconnect event: " .. (info.reason or "unknown reason"))
 
 	if info.reason == 8 then
-		-- the station has disassociated from a previously connected AP
-		return
+			-- the station has disassociated from a previously connected AP
+			return
 	end
 
 	local total_tries = 10
-	log.trace("\nWiFi connection to AP(" .. info.ssid .. ") has failed!")
-	log.trace("Disconnect reason: " .. info.reason)
+	log.trace("\nWiFi connection to AP(" .. (info.ssid or "unknown") .. ") has failed!")
+	log.trace("Disconnect reason: " .. (info.reason or "unknown"))
 
 	if disconnect_ct == nil then
-		disconnect_ct = 1
+			disconnect_ct = 1
 	else
-		disconnect_ct = disconnect_ct + 1
-	end -- if end
+			disconnect_ct = disconnect_ct + 1
+	end
 
 	if disconnect_ct < total_tries then
-		log.trace("Retrying connection...(attempt " .. (disconnect_ct + 1) .. " of " .. total_tries .. ")")
-		wifi.sta.connect()
+			log.trace("Retrying connection...(attempt " .. (disconnect_ct + 1) .. " of " .. total_tries .. ")")
+			local status, err = pcall(wifi.sta.connect)
+			if not status then
+					log.error("Connection retry failed: " .. tostring(err))
+			end
 	else
-		wifi.sta.disconnect()
+			-- Reset disconnect counter
+			disconnect_ct = nil
+			
+			-- Safe mode switch
+			wifi.mode(wifi.NULLMODE)
+			
+			-- Attempt recovery with old credentials if available
+			if W.old_ssid and W.old_passwd then
+					log.trace("Attempting to connect with previous credentials")
+					W:set_new_ssid(W.old_ssid)
+					W:set_passwd(W.old_passwd)
+					station_cfg = {
+							ssid = W.old_ssid,
+							pwd = W.old_passwd,
+							save = true
+					}
+					
+					tmr.create():alarm(1000, tmr.ALARM_SINGLE, function()
+							wifi.mode(wifi.STATIONAP)
+							local status = wifi.sta.config(station_cfg, true)
+							if status then
+									wifi.sta.connect()
+							else
+									log.error("Failed to configure WiFi with old credentials")
+							end
+					end)
+					
+					W.old_ssid = nil
+					W.old_passwd = nil
+			end
 
-		if W.old_ssid and W.old_passwd then
-			log.trace("Attempting to connect with previous credentials")
-			W:set_new_ssid(W.old_ssid)
-			W:set_passwd(W.old_passwd)
-			station_cfg = {
-				ssid = W.old_ssid,
-				pwd = W.old_passwd,
-				save = true
-			}
-			wifi.sta.config(station_cfg)
-			W.old_ssid = nil
-			W.old_passwd = nil
-		end -- if end 
+			log.trace("Reattempting WiFi connection in 10 seconds...")
+			local mytimer = tmr.create()
+			mytimer:register(10000, tmr.ALARM_SINGLE, configwifi)
+			mytimer:start()
+	end
+end
 
-		log.trace("Reattempting WiFi connection in 10 seconds...")
-		mytimer = tmr.create()
-		mytimer:register(10000, tmr.ALARM_SINGLE, configwifi)
-		mytimer:start()
-		disconnect_ct = nil
-	end -- else end
-end -- function end
 
 ------------------------------------------------------------------------------------
 -- ! @function W:on_change
@@ -219,38 +263,65 @@ function W:on_change(new_config_table)
 	local new_passwd = new_config_table.passwd
 	local config_changed = false
 
-	-- Verifica si son diferentes de las actuales
+	-- Verify if credentials are different from current ones
 	if new_ssid and new_ssid ~= W.station_cfg.ssid then
-		W:set_new_ssid(new_ssid)
-		config_changed = true
-	end -- if end 
+			W:set_new_ssid(new_ssid)
+			config_changed = true
+	end
 
 	if new_passwd and new_passwd ~= W.station_cfg.pwd then
-		W:set_passwd(new_passwd)
-		config_changed = true
-	end -- if end
+			W:set_passwd(new_passwd)
+			config_changed = true
+	end
 
 	if config_changed then
-		-- save the actual credentials 
-		W.old_ssid = W.station_cfg.ssid
-		W.old_passwd = W.station_cfg.pwd
+			-- Save the actual credentials 
+			W.old_ssid = W.station_cfg.ssid
+			W.old_passwd = W.station_cfg.pwd
 
-		-- update the config and try connect 
-		wifi.sta.disconnect()
-		station_cfg = {
-			ssid = W.station_cfg.ssid,
-			pwd = W.station_cfg.pwd,
-			save = true
-		}
-		wifi.sta.config(station_cfg)
-		wifi.sta.connect()
-	else
-		-- try reconnect
-		--wifi.sta.disconnect()
-	 	--wifi.sta.connect()
-		--return
-	end -- else end
-end -- function end
+			-- Implement safe disconnect and reconnect
+			local function safe_reconnect()
+					-- Update the config first
+					station_cfg = {
+							ssid = W.station_cfg.ssid,
+							pwd = W.station_cfg.pwd,
+							save = true
+					}
+					
+					-- Set WiFi mode to NULL before reconfiguring
+					wifi.mode(wifi.NULLMODE)
+					
+					-- Wait a brief moment before reconfiguring
+					tmr.create():alarm(1000, tmr.ALARM_SINGLE, function()
+							-- Set mode back to STATIONAP
+							wifi.mode(wifi.STATIONAP)
+							
+							-- Configure AP
+							wifi.ap.config(W.ap_config, true)
+							wifi.ap.setip(W.sta_cfg)
+							
+							-- Configure and connect station
+							local status = wifi.sta.config(station_cfg, true)
+							if status then
+									wifi.sta.connect()
+							else
+									log.error("Failed to configure WiFi station")
+							end
+					end)
+			end
+        -- Attempt safe reconnect with error handling
+        local status, err = pcall(safe_reconnect)
+        if not status then
+            log.error("WiFi reconfiguration failed: " .. tostring(err))
+            -- Attempt recovery by reverting to old credentials if available
+            if W.old_ssid and W.old_passwd then
+                W:set_new_ssid(W.old_ssid)
+                W:set_passwd(W.old_passwd)
+                safe_reconnect()
+            end
+        end
+    end
+end
 
 configwifi()
 log.trace("Connecting to WiFi access point...")

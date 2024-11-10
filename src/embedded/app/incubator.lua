@@ -417,12 +417,24 @@ end     -- function end
 -- @param	new_incubator_name
 -------------------------------------------------------------------------------------------------
 function M.set_incubator_name(new_incubator_name)
-if type(new_incubator_name) == "string" and #new_incubator_name <= 20 then
-		M.incubator_name = new_incubator_name
-		return true
-else
-		return false
-	end -- if end 
+	if type(new_incubator_name) == "string" and #new_incubator_name <= 20 then
+			-- reload name in the interal structuyre
+			M.incubator_name = new_incubator_name
+			
+			-- update WiFi config
+			local wifi = require('wifiinit')
+			if wifi:update_ap_name(new_incubator_name) then
+					local configurator = require('configurator')
+					local config = configurator:read_config_file()
+					config.incubator_name = new_incubator_name
+					
+					-- save the updated config
+					if configurator:encode_config_file(config) then
+							return true
+					end -- if end
+			end -- if end 
+	end -- if end
+	return false
 end -- function end
 
 -------------------------------------------------------------------------------------------------
