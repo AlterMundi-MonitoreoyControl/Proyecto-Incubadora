@@ -27,34 +27,95 @@ W.station_cfg.scan_method = "all"
 IPADD = nil
 IPGW = nil
 
+--------------------------------------
+-- @function W:load_saved_config	modify the station ssid WiFi
+-- -----------------------------------
+function W:load_saved_config()
+	if file.exists("config.json") then
+			local f = io.open("config.json", "r")
+			if f then
+					local config = sjson.decode(f:read("*a"))
+					f:close()
+					-- use default name or create another one
+					W.ap_config.ssid = config.incubator_name or string.format("incubadora-%s", wifi.sta.getmac())
+					-- Guardar la configuración inicial
+					W.ap_config.pwd = "12345678"
+					W.ap_config.auth = wifi.AUTH_WPA2_PSK
+					return true
+			end
+	end
+	-- if file dnt existe 
+	W.ap_config.ssid = string.format("incubadora-%s", wifi.sta.getmac())
+	W.ap_config.pwd = "12345678"
+	W.ap_config.auth = wifi.AUTH_WPA2_PSK
+	return false
+end
+
+W:load_saved_config()
+W.ap_config.pwd = "12345678"
+W.ap_config.auth = wifi.AUTH_WPA2_PSK
+
 -- -----------------------------------
 -- @function set_new_ssid	modify the station ssid WiFi
 -- -----------------------------------
 function W:update_ap_name(new_name)
 	if new_name and type(new_name) == "string" then
-			-- rleoad WiFi config
+			-- Guardar el nombre anterior por si acaso
+			local old_name = W.ap_config.ssid
+			
+			-- Actualizar la configuración
 			W.ap_config.ssid = new_name
 			
-			-- deauth actual clients
-			wifi.mode(wifi.NULLMODE)  -- disable WiFi 
-			tmr.create():alarm(1000, tmr.ALARM_SINGLE, function()
-					-- reconfigure WiFi with new name
+			-- Crear un timer para la reconexión
+			local reconnect_timer = tmr.create()
+			
+			-- Función de reconexión segura
+			local function safe_reconnect()
+					-- Configurar el modo AP
 					wifi.mode(wifi.STATIONAP)
-					wifi.ap.config(W.ap_config, true)
 					
-					-- reload ip and reconnect
-					wifi.ap.setip(W.sta_cfg)
+					-- Mantener la configuración existente y solo actualizar el SSID
+					local ap_config = {
+							ssid = new_name,
+							pwd = W.ap_config.pwd,
+							auth = W.ap_config.auth
+					}
 					
-					-- if is connected retry
-					if W.station_cfg.ssid ~= "" then
-							wifi.sta.config(W.station_cfg, true)
+					-- Aplicar la configuración del AP
+					if not pcall(function()
+							wifi.ap.config(ap_config)
+							wifi.ap.setip(W.sta_cfg)
+					end) then
+							-- Si falla, intentar restaurar la configuración anterior
+							W.ap_config.ssid = old_name
+							wifi.ap.config({
+									ssid = old_name,
+									pwd = W.ap_config.pwd,
+									auth = W.ap_config.auth
+							})
+							return false
+					end
+					
+					-- Si hay una conexión de estación activa, mantenerla
+					if W.station_cfg.ssid and W.station_cfg.ssid ~= "" then
 							wifi.sta.connect()
-					end -- if end 
-			end) -- timer end
+					end
+					
+					return true
+			end
+			
+			-- Desconectar suavemente
+			wifi.mode(wifi.NULLMODE)
+			
+			-- Esperar un momento y reconectar
+			reconnect_timer:alarm(1000, tmr.ALARM_SINGLE, function()
+					return safe_reconnect()
+			end)
+			
 			return true
-	end -- if end
+	end
 	return false
-end -- function end
+end
 
 -- -----------------------------------
 -- @function set_new_ssid	modify the actual ssid WiFi
@@ -105,6 +166,7 @@ end  -- end if
 -- !                                     uses SSID and PASSWORD from credentials.lua
 --
 ------------------------------------------------------------------------------------
+W:load_saved_config()
 
 function configwifi()
 	print("Running")
@@ -112,18 +174,18 @@ function configwifi()
 	wifi.sta.on("connected", wifi_connect_event)
 	wifi.sta.on("disconnected", wifi_disconnect_event)
 	wifi.mode(wifi.STATIONAP)
-	sta_cfg = {}
-	sta_cfg.ip = '192.168.16.10'
-	sta_cfg.netmask = '255.255.255.0'
-	sta_cfg.gateway = '192.168.16.1'
-	sta_cfg.dns = '8.8.8.8'
-	wifi.ap.setip(sta_cfg)
+	
+	-- Use the current AP configuration instead of hardcoded values
+	wifi.ap.setip(W.sta_cfg)
 	wifi.ap.config({
-		ssid = "incubator",
-		pwd = "12345678",
-		auth = wifi.AUTH_WPA2_PSK
+			ssid = W.ap_config.ssid,  -- Use the stored SSID
+			pwd = W.ap_config.pwd,
+			auth = W.ap_config.auth
 	}, true)
-	wifi.ap.on("sta_connected", function(event, info) print("MAC_id" .. info.mac, "Name" .. info.id) end)
+
+	wifi.ap.on("sta_connected", function(event, info) 
+			print("MAC_id" .. info.mac, "Name" .. info.id) 
+	end)
 	wifi.start()
 	station_cfg = {}
 	station_cfg.ssid = SSID
@@ -132,8 +194,7 @@ function configwifi()
 	wifi.sta.config(station_cfg, true)
 	wifi.sta.sethostname(INICIALES .. "-ESP32")
 	wifi.sta.connect()
-end -- end function
-
+end
 ------------------------------------------------------------------------------------
 --
 -- ! @function wifi_connect_event        establishes connection
