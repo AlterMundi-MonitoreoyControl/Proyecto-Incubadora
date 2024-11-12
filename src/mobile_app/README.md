@@ -62,3 +62,15 @@ Press F5 and enable Linux platform
 Errors may appear...
 Press F5 again and vuala 
 
+## Generate the APK
+First add the android device to the app, in VS code we can do that in the bottom right corner.
+
+in the app root folder we run: 
+```bash
+$ flutter build apk --release 
+```
+
+for a develop apk version: 
+```bash
+$ flutter build apk --debug 
+```

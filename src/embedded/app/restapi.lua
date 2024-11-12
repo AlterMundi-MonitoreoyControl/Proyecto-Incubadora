@@ -64,6 +64,50 @@ function restapi.actual_ht(a_temperature, a_humidity, a_pressure)
 	return { status = "200 OK", type = "application/json", body = body_json }
 end
 
+-------------------------------------
+--! @function wifi_scan_get   print the current avaliables networks
+--
+--!	@param req  		      		server request
+-------------------------------------
+local response_data = {
+	message = "error",
+	error_message = err
+}
+
+function restapi.scan_callback(err, arr)
+
+	if err then
+			response_data = {
+			message = "error",
+			error_message = err
+			}
+	else
+			local networks = {}
+			for i, ap in ipairs(arr) do
+					local network_info = {
+							ssid = ap.ssid,
+							rssi = ap.rssi
+					}
+					table.insert(networks, network_info)
+			end
+			response_data = {
+					message = "success",
+					networks = networks
+			}
+	end
+end
+	
+function restapi.wifi_scan_get(req)
+	wifi.sta.scan({ hidden = 1 }, restapi.scan_callback)
+	
+	local response_json = sjson.encode(response_data)
+	return {
+	status = "200 OK",
+	type = "application/json",
+	body = response_json
+	}
+end
+
 function restapi.init_module(incubator_object,configurator_object)
 	-- * start local server
 	restapi.incubator = incubator_object
@@ -90,6 +134,7 @@ function restapi.init_module(incubator_object,configurator_object)
 	httpd.dynamic(httpd.GET, "/config", config_get_handler)
 	httpd.dynamic(httpd.POST, "/config", restapi.change_config_file)
 	httpd.dynamic(httpd.GET, "/actual", restapi.actual_ht)
+	httpd.dynamic(httpd.GET, "/wifi", restapi.wifi_scan_get)
 end
 
 return restapi

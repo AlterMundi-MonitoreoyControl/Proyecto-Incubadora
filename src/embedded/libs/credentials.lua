@@ -9,8 +9,8 @@ IP_ADDR = ""         -- static IP
 NETMASK = ""   -- your subnet
 GATEWAY = ""     -- your gateway
 --16mb board
-GPIOBMESDA = 21
-GPIOBMESCL = 22
+GPIOBMESDA = 32
+GPIOBMESCL = 33
 
 --inputs
 GPIOREEDS_UP = 35
@@ -20,8 +20,8 @@ GPIOREEDS_DOWN = 34
 --GPIOBMESCL = 0
 
 --outputs
-GPIORESISTOR=26
-GPIOHUMID = 33
+GPIORESISTOR=14
+GPIOHUMID = 17
 
 GPIOVOLTEO_UP = 2
 GPIOVOLTEO_DOWN = 15
@@ -34,9 +34,11 @@ SERVER="http://grafana.altermundi.net:8086/write?db=cto"
 gpio.config( { gpio={GPIORESISTOR}, dir=gpio.OUT })
 gpio.set_drive(GPIORESISTOR, gpio.DRIVE_3)
 gpio.write(GPIORESISTOR, 0)
+-- rotation must be disabled
 gpio.config( { gpio={GPIOVOLTEO_EN}, dir=gpio.OUT })
 gpio.set_drive(GPIOVOLTEO_EN, gpio.DRIVE_3)
 gpio.write(GPIOVOLTEO_EN, 0)
+-- humidifier must be turned off
 gpio.config( { gpio={GPIOHUMID}, dir=gpio.OUT })
 gpio.set_drive(GPIOHUMID, gpio.DRIVE_3)
-gpio.write(GPIOHUMID, 0)
+gpio.write(GPIOHUMID, 1)
