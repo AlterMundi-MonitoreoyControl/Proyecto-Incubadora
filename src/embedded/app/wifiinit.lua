@@ -97,10 +97,10 @@ function configwifi()
 	}, true)
 	wifi.ap.on("sta_connected", function(event, info) print("MAC_id" .. info.mac, "Name" .. info.id) end)
 	wifi.start()
-	station_cfg = {}
-	station_cfg.ssid = SSID
-	station_cfg.pwd = PASSWORD
-	station_cfg.scan_method = all
+	W.station_cfg = {}
+	W.station_cfg.ssid = SSID
+	W.station_cfg.pwd = PASSWORD
+	W.station_cfg.scan_method = all
 	wifi.sta.config(W.station_cfg, true)
 	wifi.sta.sethostname(INICIALES .. "-ESP32")
 	wifi.sta.connect()
@@ -191,12 +191,12 @@ function wifi_disconnect_event(ev, info)
 			log.trace("Attempting to connect with previous credentials")
 			W:set_new_ssid(W.old_ssid)
 			W:set_passwd(W.old_passwd)
-			station_cfg = {
+			W.station_cfg = {
 				ssid = W.old_ssid,
 				pwd = W.old_passwd,
 				save = true
 			}
-			wifi.sta.config(station_cfg)
+			wifi.sta.config(W.station_cfg)
 			W.old_ssid = nil
 			W.old_passwd = nil
 		end -- if end 
@@ -237,12 +237,12 @@ function W:on_change(new_config_table)
 
 		-- update the config and try connect 
 		wifi.sta.disconnect()
-		station_cfg = {
+		W.station_cfg = {
 			ssid = W.station_cfg.ssid,
 			pwd = W.station_cfg.pwd,
 			save = true
 		}
-		wifi.sta.config(station_cfg)
+		wifi.sta.config(W.station_cfg)
 		wifi.sta.connect()
 	else
 		-- try reconnect
