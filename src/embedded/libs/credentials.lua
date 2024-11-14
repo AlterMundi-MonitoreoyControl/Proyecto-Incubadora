@@ -27,7 +27,6 @@ GPIOVOLTEO_UP = 2
 GPIOVOLTEO_DOWN = 15
 GPIOVOLTEO_EN = 13
 
-INICIALES = "JC"
 SERVER="http://grafana.altermundi.net:8086/write?db=cto"
 
 --critical configurations resitor must be turned off
