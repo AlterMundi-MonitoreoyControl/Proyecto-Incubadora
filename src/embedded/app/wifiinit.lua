@@ -18,8 +18,8 @@ W.ap_config.ssid = "incubator"
 W.ap_config.pwd = "12345678"
 W.ap_config.auth = wifi.AUTH_WPA2_PSK
 
-W.station_cfg.ssid = ""
-W.station_cfg.pwd = ""
+W.station_cfg.ssid = "default_ssid"
+W.station_cfg.pwd = "default_pwd"
 W.station_cfg.scan_method = "all"
 
 
@@ -101,7 +101,7 @@ function configwifi()
 	station_cfg.ssid = SSID
 	station_cfg.pwd = PASSWORD
 	station_cfg.scan_method = all
-	wifi.sta.config(station_cfg, true)
+	wifi.sta.config(W.station_cfg, true)
 	wifi.sta.sethostname(INICIALES .. "-ESP32")
 	wifi.sta.connect()
 end -- end function
