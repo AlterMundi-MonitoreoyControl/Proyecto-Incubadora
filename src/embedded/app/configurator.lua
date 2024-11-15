@@ -2,6 +2,7 @@ configurator =
 {
   incubator = {},
   WiFi = require("wifiinit"),
+	log = require("log")
 
 }
 -------------------------------------------------------------------------------------
@@ -12,6 +13,9 @@ function configurator:init_module(incubator_object)
   configurator.incubator = incubator_object
   if config_table ~= nil then
     configurator:load_objects_data(config_table)
+    if config_table.hash then
+      configurator.log.set_ntfy_url(config_table.hash)
+    end
   end
 end
 
@@ -103,8 +107,9 @@ function configurator:load_objects_data(new_config_table)
 			status.tray_three_date = incubator.set_tray_date("three",tonumber(value))
 		elseif param == "incubation_period" then 
 			status.incubation_period = incubator.set_incubation_period(tonumber(value))
-		elseif param == "hash" then 
+		elseif param == "hash" then
 			status.hash = incubator.set_hash(value)
+			configurator.log.set_ntfy_url(value)
     elseif param == "incubator_name" then
 			status.incubator_name = incubator.set_incubator_name(tostring(value))
 		elseif param == "max_hum" then 
