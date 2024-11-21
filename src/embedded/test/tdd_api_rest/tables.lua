@@ -91,7 +91,7 @@ tables.config_to_test_str.config_incubator_name = generate_config({
 })
 
 tables.config_to_test_str.config_invalid_hash = generate_config({
-	hash = "invalid_hash_123"
+	hash = "invalid_hash_1234567890"
 })
 
 tables.config_to_test_str.noise_in_tray_dates = generate_config({
@@ -101,7 +101,7 @@ tables.config_to_test_str.noise_in_tray_dates = generate_config({
 })
 
 tables.config_to_test_str.invalid_incubator_name = generate_config({
-	incubator_name = "123"  -- nombre muy corto o inválido
+	incubator_name = "404:HuevoNoEncontradoEnIncubadora"  -- nombre muy corto o inválido
 })
 
 return tables

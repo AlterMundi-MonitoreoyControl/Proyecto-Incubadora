@@ -1,6 +1,6 @@
 http_request_methods = {
 	http = require("socket.http"),
-	apiendpoint = "http://192.168.1.16/", -- <-- default ip
+	apiendpoint = "http://192.168.10.16/", -- <-- default ip
 	JSON = require("JSON"),
 	inspect = require("inspect"),
 	assert = require("luassert"),
@@ -20,7 +20,7 @@ function http_request_methods:get_and_assert_200(attribute)
 end
 
 function http_request_methods:post_and_assert_201(attribute, json_value)
-	delay(2)  
+	delay(4)
 
 	local body, code = self.http.request {
 			url = self.apiendpoint .. attribute,
