@@ -15,35 +15,36 @@
 credentials = require('credentials')
 
 local M = {
-	name                   = ..., -- module name, upvalue from require('module-name')
-	model                  = nil, -- M model:
-	resistor               = false,
-	humidifier             = false,
-	rotation               = false,
-	temperature            = 99.9, -- integer value of temperature [0.01 C]
-	pressure               = 0,   -- integer value of preassure [Pa]=[0.01 hPa]
-	humidity               = 0,   -- integer value of rel.humidity [0.01 %]
-	is_testing             = false,
-	max_temp               = 37.8,
-	min_temp               = 37.3,
-	is_sensorok            = false,
-	is_simulate_temp_local = false,
-	rotation_duration      = 50000, -- time in ms
-	rotation_period        = 3600000, -- time in ms
-	humidifier_enabled     = true,
-	max_hum                = 70,
-	min_hum                = 60,
-	humidifier_max_on_time = 2, --sec
-	humidifier_off_time    = 15, -- sec
-	hum_turn_on_time       = 0,
-	hum_turn_off_time      = 0,
+	name                            = ..., -- module name, upvalue from require('module-name')
+	model                           = nil, -- M model:
+	resistor                        = false,
+	humidifier                      = false,
+	rotation                        = false,
+	temperature                     = 99.9, -- integer value of temperature [0.01 C]
+	pressure                        = 0, -- integer value of preassure [Pa]=[0.01 hPa]
+	humidity                        = 0, -- integer value of rel.humidity [0.01 %]
+	is_testing                      = false,
+	max_temp                        = 37.8,
+	min_temp                        = 37.3,
+	is_sensorok                     = false,
+	is_simulate_temp_local          = false,
+	rotation_switch_deactivate_time = 10000, -- max ammount of time the sensor is down when the incubator is moving
+	rotation_duration               = 50000, -- max ammount of time the rotation should last
+	rotation_period                 = 3600000, -- time in ms
+	humidifier_enabled              = true,
+	max_hum                         = 70,
+	min_hum                         = 60,
+	humidifier_max_on_time          = 2, --sec
+	humidifier_off_time             = 15, -- sec
+	hum_turn_on_time                = 0,
+	hum_turn_off_time               = 0,
 	tray_one_date = 0,
 	tray_two_date = 0,
 	tray_three_date = 0,
 	incubation_period = 0,
 	hash = 1235,
 	incubator_name = string.format("incubadora-%s",wifi.sta.getmac()),
-	rotate_up			   = true
+	rotate_up                       = true
 }
 
 _G[M.name] = M
@@ -60,9 +61,9 @@ end
 
 function M.init_values()
 	M.startbme()
-	gpio.config({ gpio = { GPIORESISTOR, GPIOVOLTEO_UP, GPIOVOLTEO_DOWN, GPIOHUMID, GPIOVOLTEO_EN}, dir = gpio.OUT })
-	-- config inputs 
-  gpio.config( { gpio={GPIOREEDS_DOWN,GPIOREEDS_UP}, dir=gpio.IN,pull = gpio.PULL_UP})
+	gpio.config({ gpio = { GPIORESISTOR, GPIOVOLTEO_UP, GPIOVOLTEO_DOWN, GPIOHUMID, GPIOVOLTEO_EN }, dir = gpio.OUT })
+	-- config inputs
+	gpio.config({ gpio = { GPIOREEDS_DOWN, GPIOREEDS_UP }, dir = gpio.IN, pull = gpio.PULL_UP })
 
 	gpio.set_drive(GPIOVOLTEO_UP, gpio.DRIVE_3)
 	gpio.set_drive(GPIOVOLTEO_DOWN, gpio.DRIVE_3)
@@ -70,16 +71,14 @@ function M.init_values()
 	gpio.set_drive(GPIORESISTOR, gpio.DRIVE_3)
 	gpio.set_drive(GPIOVOLTEO_EN, gpio.DRIVE_3)
 
-	
-	
+
+
 	--revisar estos valores inicliales
 	gpio.write(GPIOVOLTEO_UP, 1)
 	gpio.write(GPIOVOLTEO_DOWN, 1)
 	gpio.write(GPIOHUMID, 1)
 	gpio.write(GPIORESISTOR, 1)
 	gpio.write(GPIOVOLTEO_EN, 0)
-
-	
 end -- end function
 
 -------------------------------------
@@ -185,7 +184,7 @@ end
 -------------------------------------
 function M.humidifier_switch(status)
 	local current_time = M.get_uptime_in_sec()
-	log.warn("humidifier current_time ".. current_time)
+	log.warn("humidifier current_time " .. current_time)
 
 	if not M.humidifier_enabled then
 		--humidifier disabled, check for waiting_off time concluded
@@ -206,7 +205,7 @@ function M.humidifier_switch(status)
 
 	log.warn("humidifier enabled")
 	if status and M.humidifier_enabled then -- encender humidifier
-		if (not M.humidifier) then -- estaba apagado
+		if (not M.humidifier) then       -- estaba apagado
 			log.warn("humidifier was off... turning on ")
 
 			--estaba apagado y lo prendo
@@ -218,7 +217,7 @@ function M.humidifier_switch(status)
 
 			log.warn("humidifier was on... turning on.. time transcurred " .. (current_time - M.hum_turn_on_time))
 			log.warn("humidifier was on... turning on.. time left " ..
-			(M.humidifier_max_on_time - (current_time - M.hum_turn_on_time)))
+				(M.humidifier_max_on_time - (current_time - M.hum_turn_on_time)))
 			--verificar el tiempo maximo de on
 			if ((current_time - M.hum_turn_on_time) > M.humidifier_max_on_time) then
 				M.humidifier_enabled = false
@@ -240,7 +239,6 @@ function M.humidifier_switch(status)
 		-- gpio.write(GPIOHUMID, 0)
 		gpio.write(GPIOHUMID, 1)
 		log.warn("humidifier pin turned off--------------------")
-
 	end -- if end
 end  -- function end
 
@@ -256,30 +254,30 @@ function M.rotation_switch(status)
 		M.rotation_change_dir()
 		if M.rotate_up then
 			log.trace("rotating upppppp")
-			gpio.write(GPIOVOLTEO_UP, 0)
-			gpio.write(GPIOVOLTEO_DOWN, 1)
+			gpio.write(GPIOVOLTEO_UP, 1)
+			gpio.write(GPIOVOLTEO_DOWN, 0)
 		else
 			log.trace("rotating downnn")
 
-			gpio.write(GPIOVOLTEO_UP, 1)
-			gpio.write(GPIOVOLTEO_DOWN, 0)
-		end 
+			gpio.write(GPIOVOLTEO_UP, 0)
+			gpio.write(GPIOVOLTEO_DOWN, 1)
+		end
 		log.trace("rotating turning onnnn")
-		gpio.write(GPIOVOLTEO_EN,1)
+		gpio.write(GPIOVOLTEO_EN, 1)
 	else
-		--switch off 
+		--switch off
 		log.trace("turning offfffffff")
 
 		gpio.write(GPIOVOLTEO_UP, 0)
 		gpio.write(GPIOVOLTEO_DOWN, 0)
-		gpio.write(GPIOVOLTEO_EN,0)
+		gpio.write(GPIOVOLTEO_EN, 0)
 	end
-end  -- function end
+end -- function end
 
 function M.rotation_change_dir()
 	local upvalue = gpio.read(GPIOREEDS_UP)
 	local downvalue = gpio.read(GPIOREEDS_DOWN)
-	log.trace ("gpio reeds values up: ".. upvalue .. " down: " .. downvalue)
+	log.trace("gpio reeds values up: " .. upvalue .. " down: " .. downvalue)
 
 	if (upvalue == 0 and downvalue == 1) then
 		M.rotate_up = false
@@ -287,11 +285,10 @@ function M.rotation_change_dir()
 		M.rotate_up = true
 	else
 		--something is wrong, invert rotation
-		log.error ("gpio reeds not active inverting rotation just in case")
-		M.rotate_up = 	not	M.rotate_up
+		log.error("gpio reeds not active inverting rotation just in case")
+		M.rotate_up = not M.rotate_up
 	end
 end
-
 
 -------------------------------------
 -- @function set_max_temp	modify the actual max_temp from API
@@ -300,9 +297,9 @@ end
 -------------------------------------
 function M.set_max_temp(new_max_temp)
 	if new_max_temp ~= nil and new_max_temp < 60
-			and tostring(new_max_temp):sub(1, 1) ~= '-'
-			and type(new_max_temp) == "number"
-			and new_max_temp >= 0 then
+		and tostring(new_max_temp):sub(1, 1) ~= '-'
+		and type(new_max_temp) == "number"
+		and new_max_temp >= 0 then
 		M.max_temp = tonumber(new_max_temp)
 		return true
 	else
@@ -317,9 +314,9 @@ end -- function end
 -------------------------------------
 function M.set_min_temp(new_min_temp)
 	if new_min_temp ~= nil and new_min_temp >= 0
-			and new_min_temp <= M.max_temp
-			and tostring(new_min_temp):sub(1, 1) ~= '-'
-			and type(new_min_temp) == "number" then
+		and new_min_temp <= M.max_temp
+		and tostring(new_min_temp):sub(1, 1) ~= '-'
+		and type(new_min_temp) == "number" then
 		M.min_temp = tonumber(new_min_temp)
 		return true
 	else
@@ -334,8 +331,8 @@ end -- function end
 -------------------------------------
 function M.set_rotation_period(new_period_time)
 	if new_period_time ~= nil and new_period_time >= 0
-			and tostring(new_period_time):sub(1, 1) ~= '-'
-			and type(new_period_time) == "number" then
+		and tostring(new_period_time):sub(1, 1) ~= '-'
+		and type(new_period_time) == "number" then
 		M.rotation_period = new_period_time
 		return true
 	else
@@ -350,8 +347,8 @@ end -- function end
 -------------------------------------
 function M.set_rotation_duration(new_rotation_duration)
 	if new_rotation_duration ~= nil
-			and tostring(new_rotation_duration):sub(1, 1) ~= '-'
-			and type(new_rotation_duration) == "number" then
+		and tostring(new_rotation_duration):sub(1, 1) ~= '-'
+		and type(new_rotation_duration) == "number" then
 		M.rotation_duration = new_rotation_duration
 		return true
 	else

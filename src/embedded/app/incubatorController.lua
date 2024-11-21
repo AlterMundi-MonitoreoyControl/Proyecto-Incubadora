@@ -25,6 +25,10 @@ configurator = require('configurator')
 --holds the last 10 values
 local last_temps_queue = deque.new()
 
+controlervars = {
+    rotation_enabled=true,
+    rotation_activated = false
+}
 
 -----------------------------------------------------------------------------------
 -- ! @function is_temp_changing 	     verifies if temperature is changing
@@ -43,7 +47,7 @@ function is_temp_changing(temperature)
     local vant = nil
 
     for i, v in ipairs(last_temps_queue:contents()) do
-        log.trace("val:", i, v, vant)
+        log.trace("[T] val:", i, v, vant)
         if vant ~= nil and vant ~= v then
             --everything is fine...
             return true
@@ -61,43 +65,42 @@ end
 -- ! @param,max_temp 							 temperature at which the resistor turns off
 ------------------------------------------------------------------------------------
 function temp_control(temperature, min_temp, max_temp)
-    log.trace(" temp " .. temperature .. " min:" .. min_temp .. " max:" .. max_temp)
+    log.trace("[T] temp " .. temperature .. " min:" .. min_temp .. " max:" .. max_temp)
 
     if temperature <= min_temp then
         if is_temp_changing(temperature) then
-            log.trace("temperature is changing")
-            log.trace("turn resistor on")
+            log.trace("[T] temperature is changing")
+            log.trace("[T] turn resistor on")
             incubator.heater(true)
         else
-            log.error("temperature is not changing")
+            log.error("[T] temperature is not changing")
             alerts.send_alert_to_grafana("temperature is not changing")
-            log.trace("turn resistor off")
+            log.trace("[T] turn resistor off")
             incubator.heater(false)
         end
     elseif temperature >= max_temp then
         incubator.heater(false)
-        log.trace("turn resistor off")
+        log.trace("[T] turn resistor off")
     end -- end if
 end     -- end function
 
 function hum_control(hum, min, max)
-    log.trace(" Humydity " .. hum .. " min:" .. min .. " max:" .. max .. " humidifier " .. tostring(incubator.humidifier))
+    log.trace("[H] Humydity " .. hum .. " min:" .. min .. " max:" .. max .. " humidifier " .. tostring(incubator.humidifier))
     if hum <= min then
-        log.trace("turn hum on")
+        log.trace("[H] turn hum on")
         incubator.humidifier_switch(true)
     elseif hum >= max then
-        log.trace("turn hum off")
+        log.trace("[H] turn hum off")
         incubator.humidifier_switch(false)
-    else 
-        log.trace("volver a llamar")
+    else
+        log.trace("[H] volver a llamar")
         incubator.humidifier_switch(incubator.humidifier)
     end -- end if
 end     -- end function
 
-
 function read_and_control()
     temp, hum, pres = incubator.get_values()
-    log.trace(" t:" .. temp .. " h:" .. hum .. " p:" .. pres)
+    log.trace("[C]  t:" .. temp .. " h:" .. hum .. " p:" .. pres)
     hum_control(hum, incubator.min_hum, incubator.max_hum)
     temp_control(temp, incubator.min_temp, incubator.max_temp)
 end -- end function
@@ -116,10 +119,10 @@ end -- read_and_send_data end
 ------------------------------------------------------------------------------------
 function stop_rot()
     incubator.rotation_switch(false)
-    if rotation_activate == true then
-        log.trace("[#] rotation working :)")
+    if controlervars.rotation_activated == true then
+        log.trace("[R] rotation working :)")
     else
-        log.error("[!] rotation error ----- sensors not activated after rotation")
+        log.error("[R] rotation error ----- sensors not activated after rotation")
         --send_alert_to_grafana
     end
 end
@@ -132,44 +135,89 @@ end
 function trigger_rotation_off(pin, level)
     if(level==0) then
         if gpio.read(pin) == 1 then
-            log.trace("ruidoooo ")
+            log.trace("[R] ruidoooo ")
+            --this function is activated when signal is going down ... it should be 0 
             return
         else
             gpio.trig(pin, gpio.INTR_DISABLE)
-            rotation_activate = true
-            log.trace("[#] rotation working pin activated ",pin,level)
+            controlervars.rotation_activated = true
+            log.trace("[R]  rotation working pin activated ", pin, level)
             incubator.rotation_switch(false)
         end
     end
-   
+end
+
+------------------------------------------------------------------------------------
+-- ! @function enable rotation will be trigered when a switch is deactivated
+------------------------------------------------------------------------------------
+function enable_rotation(pin, level)
+    if (level == 1) then
+        if gpio.read(pin) == 0 then
+            log.trace("[R] noise, not able to enable rotation ")
+            --this function is activated when signal is going up ... it should be 1 
+            return
+        else
+            gpio.trig(pin, gpio.INTR_DISABLE)
+            log.trace("[R] rotation working rotation is active thanks to pin ", pin," level ", level)
+            controlervars.rotation_enabled = true
+        end
+    end
+end
+
+function abortrotation_and_notify()
+    if controlervars.rotation_enabled then
+        return
+    else
+        log.error("[R] Fatalllllllllllllllllllllllllllll")
+        log.error("[R] rotation not working pin not de activated pin DOWN ", gpio.read(GPIOREEDS_DOWN), ",UP ",
+            gpio.read(GPIOREEDS_UP))
+    end
 end
 
 ------------------------------------------------------------------------------------
 -- ! @function rotate                     is responsible for starting the rotation
 ------------------------------------------------------------------------------------
 function rotate()
-    rotation_activate = false
-    log.trace("rotation-------------------------------")
-    -- only subscribe to the interrupts if state is up
-    -- Check if both pins are in the "up" state (assuming 1 is "up")
-    if gpio.read(GPIOREEDS_UP) == 1 then
-        -- Subscribe to interrupts
-        gpio.trig(GPIOREEDS_UP, gpio.INTR_DOWN, trigger_rotation_off)
-    else
-        gpio.trig(GPIOREEDS_UP, gpio.INTR_DISABLE)
-    end
+    log.trace("[R] rotation-------------------------------")
+    if controlervars.rotation_enabled then
+        --will be activated when switch goes down
+        controlervars.rotation_activated = false
 
-    if gpio.read(GPIOREEDS_DOWN) == 1 then
-        gpio.trig(GPIOREEDS_DOWN, gpio.INTR_DOWN, trigger_rotation_off)
-    else
+        
         gpio.trig(GPIOREEDS_DOWN, gpio.INTR_DISABLE)
-    end
+        gpio.trig(GPIOREEDS_UP, gpio.INTR_DISABLE)
+        -- only subscribe to the interrupts if state is up
+        -- Check if both pins are in the "up" state (assuming 1 is "up")
+        if gpio.read(GPIOREEDS_UP) == 1 then
+            -- Subscribe to interrupts, it will go down when sensor is activated
+            gpio.trig(GPIOREEDS_UP, gpio.INTR_DOWN, trigger_rotation_off)
+        else
+            --if switch is down it shuld quickly go up ... if not disable rotation and notify
+            controlervars.rotation_enabled = false
+            gpio.trig(GPIOREEDS_UP, gpio.INTR_UP, enable_rotation)
+        end
 
-    incubator.rotation_switch(true)
-    log.trace("turn rotation on-------------------------------")
-    stoprotation = tmr.create()
-    stoprotation:register(incubator.rotation_duration, tmr.ALARM_SINGLE, stop_rot)
-    stoprotation:start()
+        if gpio.read(GPIOREEDS_DOWN) == 1 then
+            gpio.trig(GPIOREEDS_DOWN, gpio.INTR_DOWN, trigger_rotation_off)
+        else
+            --if switch is down it shuld quickly go up ... if not disable rotation and notify
+            controlervars.rotation_enabled = false
+            gpio.trig(GPIOREEDS_DOWN, gpio.INTR_UP, enable_rotation)
+        end
+
+
+        incubator.rotation_switch(true)
+        log.trace("[R] turn rotation on-------------------------------")
+        stoprotation = tmr.create()
+        abortrotation = tmr.create()
+        -- wait a reasonable ammount of time, but just in case, if everything fails, stop rotation
+        stoprotation:register(incubator.rotation_duration, tmr.ALARM_SINGLE, stop_rot)
+        abortrotation:register(incubator.rotation_switch_deactivate_time, tmr.ALARM_SINGLE, abortrotation_and_notify)
+        stoprotation:start()
+        abortrotation:start()
+    else
+        log.error("[R] rotation disabed, sensors are not working")
+    end
 end
 
 ------------------------------------------------------------------------------------
@@ -182,7 +230,7 @@ end
 
 incubator.init_values()
 configurator.init_module(incubator)
-apiserver.init_module(incubator,configurator)
+apiserver.init_module(incubator, configurator)
 incubator.enable_testing(false)
 
 ------------------------------------------------------------------------------------
