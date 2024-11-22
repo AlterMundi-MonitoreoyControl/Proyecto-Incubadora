@@ -11,6 +11,7 @@ import 'package:incubapp_lite/models/rotation_model.dart';
 import 'package:incubapp_lite/models/wifi_model.dart';
 import 'package:incubapp_lite/models/config_model.dart';
 
+
 // logica para consumo de datos en la api
 
 class ApiService {
@@ -145,5 +146,24 @@ class ApiService {
       print('Error en la llamada a la API: $e');
     }
     return null;
+  }
+
+  Future<void> subscribeToNtfyChannelFromConfig(String topic) async {
+    try {
+      print("Intentando suscribirse al canal: $topic");
+      var url = Uri.parse("https://ntfy.sh/$topic");
+      var request = http.Request("GET", url);
+      var response = await request.send();
+
+      if (response.statusCode == 200) {
+        response.stream.transform(utf8.decoder).listen((data) {
+          print("Notificación recibida: $data");
+        });
+      } else {
+        print("Error al suscribirse al canal: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Excepción al suscribirse: $e");
+    }
   }
 }
