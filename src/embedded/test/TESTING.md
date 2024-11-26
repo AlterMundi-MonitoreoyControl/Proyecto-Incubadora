@@ -51,4 +51,61 @@ describe('foo library tests', function()
     end)
 end)
 ```
+## manual testing
+```lua
+dofile('credentials.lua')
+```
+TODO: Implement as a post-power-on self-test or in a app command
 
+### Test Rotation
+
+Move down:
+```lua
+-- turn on
+gpio.write(GPIOVOLTEO_EN,1)
+gpio.write(GPIOVOLTEO_UP,0)
+gpio.write(GPIOVOLTEO_DOWN,1)
+-- turn off
+gpio.write(GPIOVOLTEO_DOWN,0)
+```
+
+Move up:
+```lua
+gpio.write(GPIOVOLTEO_EN,1)
+gpio.write(GPIOVOLTEO_DOWN,0)
+gpio.write(GPIOVOLTEO_UP,1)
+-- turn off
+gpio.write(GPIOVOLTEO_UP,0)
+```
+
+### Test Sensors
+```lua
+print(gpio.read(GPIOREEDS_UP), gpio.read(GPIOREEDS_DOWN))
+```
+
+When the sensor is near the human, it switches to 0.  
+Test both the upper and lower sensors.
+
+### Test Resistor
+
+Turn on:
+```lua
+gpio.write(GPIORESISTOR,1)
+```
+
+Turn off:
+```lua
+gpio.write(GPIORESISTOR,0)
+```
+
+### Test Humidifier
+
+Turn on:
+```lua
+gpio.write(GPIOHUMID,0)
+```
+
+Turn off:
+```lua
+gpio.write(GPIOHUMID,1)
+```

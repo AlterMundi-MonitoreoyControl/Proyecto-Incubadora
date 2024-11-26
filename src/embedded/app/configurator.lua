@@ -44,7 +44,7 @@ function configurator:create_config_file()
 	log.trace("Creating a new config file")
 	local new_file = io.open("config.json", "w")
 			local config = {
-					rotation_duration = 5000,
+					rotation_duration = 50000,
 					rotation_period = 3600000,
 					min_temperature = 37.3,
 					max_temperature = 37.8,
