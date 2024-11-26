@@ -88,29 +88,29 @@ function configurator:load_objects_data(new_config_table)
 
   for param, value in pairs(new_config_table) do
     if param == "min_temperature" then
-      status.min_temp = incubator.set_min_temp(value)
+      status.min_temp = incubator.set_min_temp(tonumber(value))
     elseif param == "max_temperature" then
-      status.max_temp = incubator.set_max_temp(value)
+      status.max_temp = incubator.set_max_temp(tonumber(value))
     elseif param == "rotation_duration" then
-      status.rotation_duration = incubator.set_rotation_duration(value)
+      status.rotation_duration = incubator.set_rotation_duration(tonumber(value))
     elseif param == "rotation_period" then
-      status.rotation_period = incubator.set_rotation_period(value)
+      status.rotation_period = incubator.set_rotation_period(tonumber(value))
 		elseif param == "tray_one_date" then
-			status.tray_one_date = incubator.set_tray_date("one",value)
+			status.tray_one_date = incubator.set_tray_date("one",tonumber(value))
 		elseif param == "tray_two_date" then
-			status.tray_two_date = incubator.set_tray_date("two",value)
+			status.tray_two_date = incubator.set_tray_date("two",tonumber(value))
 		elseif param == "tray_three_date" then
-			status.tray_three_date = incubator.set_tray_date("three",value)
+			status.tray_three_date = incubator.set_tray_date("three",tonumber(value))
 		elseif param == "incubation_period" then 
-			status.incubation_period = incubator.set_incubation_period(value)
+			status.incubation_period = incubator.set_incubation_period(tonumber(value))
 		elseif param == "hash" then 
 			status.hash = incubator.set_hash(value)
     elseif param == "incubator_name" then
-			status.incubator_name = incubator.set_incubator_name(value)
+			status.incubator_name = incubator.set_incubator_name(tostring(value))
 		elseif param == "max_hum" then 
-			status.max_hum = incubator.set_max_humidity(value)
+			status.max_hum = incubator.set_max_humidity(tonumber(value))
 		elseif param == "min_hum" then
-			status.min_hum = incubator.set_min_humidity(value)
+			status.min_hum = incubator.set_min_humidity(tonumber(value))
 		end -- if end 
 
   end -- for end

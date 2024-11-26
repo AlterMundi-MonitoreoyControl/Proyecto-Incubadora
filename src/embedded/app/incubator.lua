@@ -398,9 +398,9 @@ end     -- function end
 -- varifies if the input string is at most 20 characters long and sets it as the hash if valid.
 -- @param	new_hash
 -------------------------------------------------------------------------------------------------
-
+--! Cambio el numero de 20 a 30 caracteres de incubator_name y hash a peticion de annie para implementacion en la app
 function M.set_hash(new_hash)
-	if type(new_hash) == "string" and #new_hash < 20 then
+	if type(new_hash) == "string" and #new_hash < 30 then
 		M.hash = new_hash
 		return true
 	else
