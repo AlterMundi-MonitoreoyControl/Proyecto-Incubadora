@@ -400,7 +400,7 @@ end     -- function end
 -------------------------------------------------------------------------------------------------
 
 function M.set_hash(new_hash)
-	if type(new_hash) == "string" and #new_hash <= 30 then
+	if type(new_hash) == "string" and #new_hash <= 35 then
 		M.hash = new_hash
 		return true
 	else
@@ -414,7 +414,7 @@ end     -- function end
 -- @param	new_incubator_name
 -------------------------------------------------------------------------------------------------
 function M.set_incubator_name(new_incubator_name)
-if type(new_incubator_name) == "string" and #new_incubator_name <= 30 then
+if type(new_incubator_name) == "string" and #new_incubator_name <= 35 then
 		M.incubator_name = new_incubator_name
 		return true
 else
