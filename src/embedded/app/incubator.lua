@@ -296,7 +296,7 @@ end
 -- @param new_max_temp"	comes from json received from API
 -------------------------------------
 function M.set_max_temp(new_max_temp)
-	if new_max_temp ~= nil and new_max_temp >= 0
+	if new_max_temp ~= nil and new_max_temp < 60
 		and tostring(new_max_temp):sub(1, 1) ~= '-'
 		and type(new_max_temp) == "number"
 		and new_max_temp >= 0 then
@@ -369,7 +369,7 @@ local tray_map = {
 -- @return boolean: true if the date was set successfully, false otherwise
 ---------------------------------------------------------------------------------------------------
 function M.set_tray_date(tray_number, new_tray_date)
-	if type(new_tray_date) == "number" and #tostring(new_tray_date) < 30 then
+	if type(new_tray_date) == "number" and #tostring(new_tray_date) < 20 then
 			local tray_var = tray_map[tray_number]
 			if tray_var then
 					M[tray_var] = new_tray_date
@@ -385,7 +385,7 @@ end
 -------------------------------------------------------------------------------------------------
 
 function M.set_incubation_period(new_incubation_period)
-	if type(new_incubation_period) == "number" and #tostring(new_incubation_period) < 20 then
+	if type(new_incubation_period) == "number" and #tostring(new_incubation_period) < 10 then
 		M.incubation_period = new_incubation_period
 		return true
 	else
@@ -400,7 +400,7 @@ end     -- function end
 -------------------------------------------------------------------------------------------------
 --! Cambio el numero de 20 a 30 caracteres de incubator_name y hash a peticion de annie para implementacion en la app
 function M.set_hash(new_hash)
-	if type(new_hash) == "string" and #new_hash < 30 then
+	if type(new_hash) == "string" and #new_hash <= 20 then
 		M.hash = new_hash
 		return true
 	else
@@ -414,7 +414,7 @@ end     -- function end
 -- @param	new_incubator_name
 -------------------------------------------------------------------------------------------------
 function M.set_incubator_name(new_incubator_name)
-if type(new_incubator_name) == "string" and #new_incubator_name < 30 then
+if type(new_incubator_name) == "string" and #new_incubator_name <= 20 then
 		M.incubator_name = new_incubator_name
 		return true
 else
