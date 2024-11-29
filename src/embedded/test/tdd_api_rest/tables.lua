@@ -91,7 +91,11 @@ incubator_name = "incubator_test_01"
 })
 
 tables.config_to_test_str.config_invalid_hash = generate_config({
+<<<<<<< HEAD
 hash = "invalid_hash_123"
+=======
+	hash = "invalid_hash_123"
+>>>>>>> parent of 2a3086a (Fix incubator_name)
 })
 
 tables.config_to_test_str.noise_in_tray_dates = generate_config({
@@ -101,7 +105,11 @@ tray_three_date = "invalid_date"
 })
 
 tables.config_to_test_str.invalid_incubator_name = generate_config({
+<<<<<<< HEAD
 incubator_name = "123"  -- nombre muy corto o inválido
+=======
+	incubator_name = "123"  -- nombre muy corto o inválido
+>>>>>>> parent of 2a3086a (Fix incubator_name)
 })
 
 return tables
