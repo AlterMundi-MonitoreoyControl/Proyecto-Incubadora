@@ -1,6 +1,7 @@
 -- ! Modules
-require('credentials')
 
+local incubator = require("incubator")
+INICIALES = incubator.incubator_name
 
 local M = {
   token_grafana = "token:e98697797a6a592e6c886277041e6b95",
