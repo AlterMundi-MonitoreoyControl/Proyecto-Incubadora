@@ -385,7 +385,7 @@ end
 -------------------------------------------------------------------------------------------------
 
 function M.set_incubation_period(new_incubation_period)
-	if type(new_incubation_period) == "number" and #tostring(new_incubation_period) < 10 then
+	if type(new_incubation_period) == "number" and #tostring(new_incubation_period) <= 10 then
 		M.incubation_period = new_incubation_period
 		return true
 	else
