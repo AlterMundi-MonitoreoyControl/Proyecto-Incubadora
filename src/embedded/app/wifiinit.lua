@@ -79,6 +79,8 @@ end  -- end if
 ------------------------------------------------------------------------------------
 
 function configwifi()
+	local inc = require("incubator")
+	INICIALES = incubator.incubator_name
 	print("Running")
 	wifi.sta.on("got_ip", wifi_got_ip_event)
 	wifi.sta.on("connected", wifi_connect_event)
@@ -102,7 +104,7 @@ function configwifi()
 	station_cfg.pwd = PASSWORD
 	station_cfg.scan_method = all
 	wifi.sta.config(station_cfg, true)
-	wifi.sta.sethostname(INICIALES .. "-ESP32")
+	wifi.sta.sethostname(INICIALES)
 	wifi.sta.connect()
 end -- end function
 
