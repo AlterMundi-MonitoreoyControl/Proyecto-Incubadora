@@ -16,6 +16,7 @@ apiserver = require("restapi")
 deque = require ('deque')
 log = require ('log')
 configurator = require('configurator')
+ds18b20 = require('ds18b20')
 
 
 --log.level = "debug"
@@ -261,3 +262,28 @@ local send_heap_uptime = tmr.create()
 send_heap_uptime:register(30000, tmr.ALARM_AUTO, send_heap_and_uptime_grafana)
 send_heap_uptime:start()
 
+
+if ds18b20.init(GPIODSSENSORS) then
+    -- Read temperatures every 5 seconds
+    local read_timer = tmr.create()
+    read_timer:register(5000, tmr.ALARM_AUTO, function()
+        ds18b20.read_all_temps(function(temps)
+            if temps then
+                log.trace("Reading and sending:")
+                for i, temp_data in ipairs(temps) do
+                    local addr_str = ""
+                    for j=1,8 do
+                        addr_str = addr_str .. string.format("%02X", temp_data.address:byte(j))
+                    end
+                    log.trace(temp_data.temperature, 60, 900, addr_str)
+                    send_data_grafana(temp_data.temperature, 60, 900, addr_str)
+                end
+            end
+        end)
+    end)
+    
+    read_timer:start()
+    log.trace("DS SENSOR Temperature reading started. ")
+else
+    log.error("Failed to initialize DS18B20 sensors!")
+end
