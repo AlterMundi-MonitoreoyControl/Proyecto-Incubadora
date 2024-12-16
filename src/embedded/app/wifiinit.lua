@@ -79,7 +79,6 @@ end  -- end if
 ------------------------------------------------------------------------------------
 
 function configwifi()
-	local inc = require("incubator")
 	INICIALES = incubator.incubator_name
 	print("Running")
 	wifi.sta.on("got_ip", wifi_got_ip_event)
