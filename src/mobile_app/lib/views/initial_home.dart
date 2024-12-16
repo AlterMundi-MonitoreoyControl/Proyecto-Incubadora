@@ -20,7 +20,7 @@ class IHome extends StatefulWidget {
   _IHomeState createState() => _IHomeState();
 }
 class _IHomeState extends State<IHome> {
-  late Actual? _actualModel = Actual(aHumidity: 60, aTemperature: 37.5);
+  late Actual? _actualModel = Actual(aHumidity: 60, aTemperature: 37.5, wifiStatus: "connected");
   int _selectedIndex = 0;
   @override
   void initState() {
@@ -173,15 +173,20 @@ Widget temperatureTitle(size) {
       style: GoogleFonts.questrial(
           color: Color.fromARGB(255, 255, 255, 255), fontSize: size.height * 0.05));
 }
+
 Widget temperatureValue(size, temperature) {
-  return Text(
-    '$temperature˚C', //max temperature
-    style: GoogleFonts.questrial(
-      color: Tcolor(temperature),
-      fontSize: size.height * 0.13,
+  return FittedBox(
+    fit: BoxFit.scaleDown,
+    child: Text(
+      '$temperature˚C',
+      style: GoogleFonts.questrial(
+        color: Tcolor(temperature),
+        fontSize: size.height * 0.13,
+      ),
     ),
   );
 }
+
 Color Tcolor(temperature) {
   if (temperature <= 0) {
     return Colors.yellow; // -= 0: Verde
@@ -205,12 +210,16 @@ Widget humidityTitle(size) {
       style: GoogleFonts.questrial(
           color: Color.fromARGB(255, 255, 255, 255), fontSize: size.height * 0.05));
 }
+
 Widget humidityValue(size, humidity) {
-  return Text(
-    '$humidity %', //max temperature
-    style: GoogleFonts.questrial(
-      color: Hcolor(humidity),
-      fontSize: size.height * 0.13,
+  return FittedBox(
+    fit: BoxFit.scaleDown,
+    child: Text(
+      '$humidity %',
+      style: GoogleFonts.questrial(
+        color: Hcolor(humidity),
+        fontSize: size.height * 0.13,
+      ),
     ),
   );
 }
