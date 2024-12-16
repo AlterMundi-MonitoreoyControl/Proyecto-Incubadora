@@ -13,14 +13,14 @@ local function delay(seconds)
 end
 
 function http_request_methods:get_and_assert_200(attribute)
-	delay(2) 
+	delay(5) 
 	local body, code = self.http.request(self.apiendpoint .. attribute)
 	self.assert.are.equal(code, 200)
 	return body
 end
 
 function http_request_methods:post_and_assert_201(attribute, json_value)
-	delay(2)  
+	delay(4)  
 
 	local body, code = self.http.request {
 			url = self.apiendpoint .. attribute,
@@ -38,7 +38,7 @@ function http_request_methods:post_and_assert_201(attribute, json_value)
 end
 
 function http_request_methods:post_and_assert_400(attribute, json_value)
-	delay(2)
+	delay(3)
 
 	local body, code = self.http.request {
 			url = self.apiendpoint .. attribute,

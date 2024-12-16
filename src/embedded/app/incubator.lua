@@ -385,7 +385,7 @@ end
 -------------------------------------------------------------------------------------------------
 
 function M.set_incubation_period(new_incubation_period)
-	if type(new_incubation_period) == "number" and #tostring(new_incubation_period) < 10 then
+	if type(new_incubation_period) == "number" and #tostring(new_incubation_period) <= 10 then
 		M.incubation_period = new_incubation_period
 		return true
 	else
@@ -395,12 +395,12 @@ end     -- function end
 
 -------------------------------------------------------------------------------------------------
 -- @function set_hash
--- varifies if the input string is at most 20 characters long and sets it as the hash if valid.
+-- varifies if the input string is at most 30 characters long and sets it as the hash if valid.
 -- @param	new_hash
 -------------------------------------------------------------------------------------------------
 
 function M.set_hash(new_hash)
-	if type(new_hash) == "string" and #new_hash <= 20 then
+	if type(new_hash) == "string" and #new_hash <= 30 then
 		M.hash = new_hash
 		return true
 	else
@@ -414,7 +414,7 @@ end     -- function end
 -- @param	new_incubator_name
 -------------------------------------------------------------------------------------------------
 function M.set_incubator_name(new_incubator_name)
-if type(new_incubator_name) == "string" and #new_incubator_name <= 20 then
+if type(new_incubator_name) == "string" and #new_incubator_name <= 30 then
 		M.incubator_name = new_incubator_name
 		return true
 else

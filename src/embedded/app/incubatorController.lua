@@ -168,9 +168,9 @@ function abortrotation_and_notify()
     if controlervars.rotation_enabled then
         return
     else
-        log.error("[R] Fatalllllllllllllllllllllllllllll")
-        log.error("[R] rotation not working pin not de activated pin DOWN ", gpio.read(GPIOREEDS_DOWN), ",UP ",
-            gpio.read(GPIOREEDS_UP))
+        log.error("[R] Fatalllllllllll rotation not working pin not de activated pin DOWN ",
+        gpio.read(GPIOREEDS_DOWN), ",UP ", gpio.read(GPIOREEDS_UP))
+        incubator.rotation_switch(false)
     end
 end
 
@@ -204,17 +204,21 @@ function rotate()
             controlervars.rotation_enabled = false
             gpio.trig(GPIOREEDS_DOWN, gpio.INTR_UP, enable_rotation)
         end
+        if gpio.read(GPIOREEDS_DOWN) == 0 or gpio.read(GPIOREEDS_UP) == 0 then
+          
+
+        --this timers are registered only once, so any change will be reflected after reset
+            abortrotation:register(incubator.rotation_switch_deactivate_time, tmr.ALARM_SINGLE, abortrotation_and_notify) 
+            abortrotation:start()
+        end
 
 
         incubator.rotation_switch(true)
         log.trace("[R] turn rotation on-------------------------------")
-        stoprotation = tmr.create()
-        abortrotation = tmr.create()
-        -- wait a reasonable ammount of time, but just in case, if everything fails, stop rotation
         stoprotation:register(incubator.rotation_duration, tmr.ALARM_SINGLE, stop_rot)
-        abortrotation:register(incubator.rotation_switch_deactivate_time, tmr.ALARM_SINGLE, abortrotation_and_notify)
+
+        -- wait a reasonable ammount of time, but just in case, if everything fails, stop rotation
         stoprotation:start()
-        abortrotation:start()
     else
         log.error("[R] rotation disabed, sensors are not working")
     end
@@ -236,6 +240,11 @@ incubator.enable_testing(false)
 ------------------------------------------------------------------------------------
 -- ! timers
 ------------------------------------------------------------------------------------
+
+
+stoprotation = tmr.create()
+abortrotation = tmr.create()
+
 local send_data_timer = tmr.create()
 send_data_timer:register(10000, tmr.ALARM_AUTO, read_and_send_data)
 send_data_timer:start()
