@@ -112,6 +112,14 @@ end -- end function
 function read_and_send_data()
     temp, hum, pres = incubator.get_values()
     send_data_grafana(incubator.temperature, incubator.humidity, incubator.pressure, INICIALES .. "-bme")
+
+		if temp >= incubator.max_temp then
+			log.ntfy("Alerta: La temperatura ah excedido el limite permitido 🔥")
+		end
+
+		if hum >= incubator.max_hum then
+			log.ntfy("Alerta: La humedad ah excedido el limite permitido 💧")
+		end
 end -- read_and_send_data end
 
 ------------------------------------------------------------------------------------
