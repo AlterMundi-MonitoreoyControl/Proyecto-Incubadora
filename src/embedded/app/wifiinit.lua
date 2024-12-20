@@ -29,7 +29,7 @@ local w = {
 	},
 	-- State management
 	online = 0,
-	connection_timeout = 10000,   -- 10 seconds
+	connection_timeout = 10000, -- 10 seconds
 	max_retries = 10,
 	current_retry = 0,
 	reconnect_timer = nil,
@@ -37,7 +37,7 @@ local w = {
 	status = {
 		is_transitioning = false,
 		last_change_time = 0,
-		validation_timeout = 30000,     -- 30 seconds to validate new connection
+		validation_timeout = 30000, -- 30 seconds to validate new connection
 		pending_fallback = false
 	}
 }
@@ -243,11 +243,11 @@ function w:on_change(new_config_table)
 		self.ap_config.ssid = new_config_table.incubator_name
 		local success = wifi.ap.config(self.ap_config, true)
 		if not success then
-				log.error("Failed to update AP SSID")
+			log.error("Failed to update AP SSID")
 		else
-				log.trace(string.format("Successfully changed AP SSID to: %s", new_config_table.incubator_name))
+			log.trace(string.format("Successfully changed AP SSID to: %s", new_config_table.incubator_name))
 		end
-end
+	end
 
 	local config_changed = false
 	self.status.is_transitioning = true
@@ -270,7 +270,7 @@ end
 
 	if config_changed then
 		self:reset_state()
-		self.status.is_transitioning = true     -- Reset by connect success or validation timeout
+		self.status.is_transitioning = true -- Reset by connect success or validation timeout
 		self:connect()
 		self:start_validation_timer()
 	else
