@@ -246,21 +246,21 @@ incubator.enable_testing(false)
 stoprotation = tmr.create()
 abortrotation = tmr.create()
 
-local send_data_timer = tmr.create()
-send_data_timer:register(10000, tmr.ALARM_AUTO, read_and_send_data)
-send_data_timer:start()
+--local send_data_timer = tmr.create()
+--send_data_timer:register(10000, tmr.ALARM_AUTO, read_and_send_data)
+--send_data_timer:start()
 
-local temp_control_timer = tmr.create()
-temp_control_timer:register(3000, tmr.ALARM_AUTO, read_and_control)
-temp_control_timer:start()
+--local temp_control_timer = tmr.create()
+--temp_control_timer:register(3000, tmr.ALARM_AUTO, read_and_control)
+--temp_control_timer:start()
 
-local rotation = tmr.create()
-rotation:register(incubator.rotation_period, tmr.ALARM_AUTO, rotate)
-rotation:start()
+--local rotation = tmr.create()
+--rotation:register(incubator.rotation_period, tmr.ALARM_AUTO, rotate)
+--rotation:start()
 
-local send_heap_uptime = tmr.create()
-send_heap_uptime:register(30000, tmr.ALARM_AUTO, send_heap_and_uptime_grafana)
-send_heap_uptime:start()
+--local send_heap_uptime = tmr.create()
+--send_heap_uptime:register(30000, tmr.ALARM_AUTO, send_heap_and_uptime_grafana)
+--send_heap_uptime:start()
 
 
 if ds18b20.init(GPIODSSENSORS) then
@@ -287,3 +287,9 @@ if ds18b20.init(GPIODSSENSORS) then
 else
     log.error("Failed to initialize DS18B20 sensors!")
 end
+
+reboot_timer = tmr.create()
+reboot_timer:register(7200000, tmr.ALARM_SINGLE, function() node.restart() end) --cada dos horas 
+reboot_timer:start()
+
+
