@@ -289,7 +289,7 @@ else
 end
 
 reboot_timer = tmr.create()
-reboot_timer:register(7200000, tmr.ALARM_SINGLE, function() node.restart() end) --cada dos horas 
+reboot_timer:register(7200000, tmr.ALARM_AUTO, function() node.restart() end) --cada dos horas 
 reboot_timer:start()
 
 
