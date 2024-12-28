@@ -26,7 +26,8 @@ GPIOHUMID = 17
 GPIOVOLTEO_UP = 2
 GPIOVOLTEO_DOWN = 15
 GPIOVOLTEO_EN = 13
-
+--! this variable is going to be overwritten
+--! see line 419 incubator.lua
 INICIALES = "JC"
 SERVER="http://grafana.altermundi.net:8086/write?db=cto"
 

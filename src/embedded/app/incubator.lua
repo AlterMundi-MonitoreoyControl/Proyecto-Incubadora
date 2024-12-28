@@ -416,6 +416,7 @@ end     -- function end
 function M.set_incubator_name(new_incubator_name)
 if type(new_incubator_name) == "string" and #new_incubator_name <= 30 then
 		M.incubator_name = new_incubator_name
+		INICIALES = incubator.name
 		return true
 else
 		return false
