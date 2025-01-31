@@ -251,7 +251,15 @@ function w:on_change(new_config_table)
         log.trace("[W]Configuration change already in progress, please wait...")
         return
     end
-    
+    if new_config_table.incubator_name then
+			self.ap_config.ssid = new_config_table.incubator_name
+			local success = wifi.ap.config(self.ap_config, true)
+			if not success then
+				log.error("Failed to update AP SSID")
+			else
+				log.trace(string.format("Successfully changed AP SSID to: %s", new_config_table.incubator_name))
+			end
+		end
     local config_changed = false
     self.status.is_transitioning = true
 
