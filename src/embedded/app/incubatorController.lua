@@ -264,6 +264,7 @@ abortrotation = tmr.create()
 
 
 if ds18b20.init(GPIODSSENSORS) then
+    read_and_send_data()
     -- Read temperatures every 5 seconds
     local read_timer = tmr.create()
     read_timer:register(5000, tmr.ALARM_AUTO, function()
