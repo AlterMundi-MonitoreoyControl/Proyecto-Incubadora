@@ -210,7 +210,7 @@ class _HomeState extends State<Home> {
                                   'min_hum': _configModel?.minHum,
                                   'passwd': password,
                                   'rotation_duration': rotation_duration,
-                                  'rotation_period': rotation_period,
+                                  'rotation_period': _configModel?.rotationPeriod,
                                   'ssid': ssid,
                                   'tray_one_date': tray_one_date,
                                   'tray_three_date': tray_three_date,
@@ -260,7 +260,7 @@ class _HomeState extends State<Home> {
                                   'min_hum': _configModel?.minHum,
                                   'passwd': password,
                                   'rotation_duration': rotation_duration,
-                                  'rotation_period': rotation_period,
+                                  'rotation_period': _configModel?.rotationPeriod,
                                   'ssid': ssid,
                                   'tray_one_date': tray_one_date,
                                   'tray_three_date': tray_three_date,
@@ -310,7 +310,7 @@ class _HomeState extends State<Home> {
                                   'min_hum': _configModel?.minHum,
                                   'passwd': password,
                                   'rotation_duration': rotation_duration,
-                                  'rotation_period': rotation_period,
+                                  'rotation_period': _configModel?.rotationPeriod,
                                   'ssid': ssid,
                                   'tray_one_date': tray_one_date,
                                   'tray_three_date': tray_three_date,
@@ -360,7 +360,7 @@ class _HomeState extends State<Home> {
                                   'min_hum': newMinHum,
                                   'passwd': password,
                                   'rotation_duration': rotation_duration,
-                                  'rotation_period': rotation_period,
+                                  'rotation_period': _configModel?.rotationPeriod,
                                   'ssid': ssid,
                                   'tray_one_date': tray_one_date,
                                   'tray_three_date': tray_three_date,
@@ -420,7 +420,56 @@ class _HomeState extends State<Home> {
                                   'min_hum': _configModel?.minHum,
                                   'passwd': password,
                                   'rotation_duration': rotation_duration,
-                                  'rotation_period': rotation_period,
+                                  'rotation_period': _configModel?.rotationPeriod,
+                                  'ssid': ssid,
+                                  'tray_one_date': tray_one_date,
+                                  'tray_three_date': tray_three_date,
+                                  'tray_two_date': tray_two_date
+                                });
+                              } else {
+                                print('Valor de temperatura no válido');
+                              }
+                            }
+                          },
+                        );
+                      },
+                      icon: Icon(Icons.edit),
+                    ),
+                  ],
+                ),
+              ),
+              ListTile(
+                title: Text('ROTACIÓN (MINUTOS)'),
+                subtitle: Row(
+                  children: [
+                    Text('${(_configModel?.rotationPeriod ?? 0) / 60000}'),
+                    SizedBox(width: 12),
+                    IconButton(
+                      onPressed: () {
+                        _showInputDialog(
+                          context,
+                          'INTERVALO DE ROTACIÓN (en minutos)',
+                          ((_configModel?.rotationPeriod ?? 0) / 60000).toString(),
+                          (newValue) {
+                            if (newValue != null && newValue.isNotEmpty) {
+                              int? newRotPeriod = int.tryParse(newValue);
+
+                              if (newRotPeriod != null) {
+                                int newRotPeriodMs = newRotPeriod * 60000;
+                                setState(() {
+                                  _configModel?.rotationPeriod = newRotPeriodMs;
+                                });
+                                ApiService().updateConfig({
+                                  'incubator_name': _configModel?.incubatorName,
+                                  'hash': _configModel?.hash,
+                                  'incubation_period': _configModel?.incubationPeriod,
+                                  'max_temperature': _configModel?.maxTemperature,
+                                  'min_temperature': _configModel?.minTemperature,
+                                  'max_hum': _configModel?.maxHum,
+                                  'min_hum': _configModel?.minHum,
+                                  'passwd': password,
+                                  'rotation_duration': rotation_duration,
+                                  'rotation_period': newRotPeriodMs,
                                   'ssid': ssid,
                                   'tray_one_date': tray_one_date,
                                   'tray_three_date': tray_three_date,
