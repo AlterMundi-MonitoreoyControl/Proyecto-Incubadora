@@ -2,6 +2,11 @@
 
 Is an innovative project aimed at enhancing the efficiency and productivity of poultry incubators in family farming. Developed by Asociación Civil AlterMundi and CTO, this system integrates advanced monitoring and control technologies to optimize temperature and humidity levels, reducing manual labor and increasing hatch rates. Utilizing free hardware and software, the project promotes sustainable agricultural practices and empowers local communities with technical skills. Join us in revolutionizing family farming with technology!
 
+
+[![](https://img.plantuml.biz/plantuml/svg/ZLF1JW8n4BttAoPSXCCUG43mO20a6WvUnCIB2HdQMMtijfks2_ht3Wj85z2OR3RPwNipxxtEJa947wl2YF2XROaU2r2KOsNYCtt6gT5ljY0RGVABl13MAOBMtCfgXSfvXF5mq08CS2nnvHmskXcVmBWY1CheFBGacOhdmiomWbVRdbhbdLOmBSjEJGi5oopVdQNkAUSHlNJXRrBl8Fp9LMm3DZhNDSJNtq8QLoa-fS95WWNvDNdk-E0nHulxRdLLY2kOEMj9HkriW1N53P5DV0L0gvBPGJIYWIoxI-t0BRpex5wtDQEo_cZCpt3G4OsWJaYz9gbxFUWF6TNPYak5168b2YF2MkF1wxcQtS5FJqzggSWiYNTZPKZgGlFbkqkI_ijaNOjZ88akfJqdQRuWkaF0QJQrxRhCC-RR3RGKHHh4PGJFszzqxlm6lKeNRpVvE71lufTE4zRA_ySt)](https://editor.plantuml.com/uml/ZLF1JW8n4BttAoPSXCCUG43mO20a6WvUnCIB2HdQMMtijfks2_ht3Wj85z2OR3RPwNipxxtEJa947wl2YF2XROaU2r2KOsNYCtt6gT5ljY0RGVABl13MAOBMtCfgXSfvXF5mq08CS2nnvHmskXcVmBWY1CheFBGacOhdmiomWbVRdbhbdLOmBSjEJGi5oopVdQNkAUSHlNJXRrBl8Fp9LMm3DZhNDSJNtq8QLoa-fS95WWNvDNdk-E0nHulxRdLLY2kOEMj9HkriW1N53P5DV0L0gvBPGJIYWIoxI-t0BRpex5wtDQEo_cZCpt3G4OsWJaYz9gbxFUWF6TNPYak5168b2YF2MkF1wxcQtS5FJqzggSWiYNTZPKZgGlFbkqkI_ijaNOjZ88akfJqdQRuWkaF0QJQrxRhCC-RR3RGKHHh4PGJFszzqxlm6lKeNRpVvE71lufTE4zRA_ySt)
+
+Each incubator broadcasts a Wi-Fi network with a name that starts with “incu-” followed by a number. A user who wants to control their incubator can connect to this Wi-Fi network and change the incubator paramteres using the android app. Additionally, each incubator also connects to an external Wi-Fi network to send data over the internet to a remote Grafana server.
+
 ## LibreIncu en los medios
 Aquí encontrarás enlaces a 
 
