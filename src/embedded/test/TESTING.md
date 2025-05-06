@@ -54,6 +54,15 @@ end)
 ## manual testing
 ```lua
 dofile('credentials.lua')
+
+gpio.config( { gpio={GPIOVOLTEO_UP}, dir=gpio.OUT })
+gpio.set_drive(GPIOVOLTEO_UP, gpio.DRIVE_3)
+gpio.write(GPIOVOLTEO_UP, 0)
+
+gpio.config( { gpio={GPIOVOLTEO_DOWN}, dir=gpio.OUT })
+gpio.set_drive(GPIOVOLTEO_DOWN, gpio.DRIVE_3)
+gpio.write(GPIOVOLTEO_UP, 0)
+
 ```
 TODO: Implement as a post-power-on self-test or in a app command
 
