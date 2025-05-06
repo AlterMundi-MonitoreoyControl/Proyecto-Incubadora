@@ -39,6 +39,16 @@ gpio.write(GPIORESISTOR, 0)
 gpio.config( { gpio={GPIOVOLTEO_EN}, dir=gpio.OUT })
 gpio.set_drive(GPIOVOLTEO_EN, gpio.DRIVE_3)
 gpio.write(GPIOVOLTEO_EN, 0)
+
+gpio.config( { gpio={GPIOVOLTEO_UP}, dir=gpio.OUT })
+gpio.set_drive(GPIOVOLTEO_UP, gpio.DRIVE_3)
+gpio.write(GPIOVOLTEO_UP, 0)
+
+gpio.config( { gpio={GPIOVOLTEO_DOWN}, dir=gpio.OUT })
+gpio.set_drive(GPIOVOLTEO_DOWN, gpio.DRIVE_3)
+gpio.write(GPIOVOLTEO_UP, 0)
+
+
 -- humidifier must be turned off
 gpio.config( { gpio={GPIOHUMID}, dir=gpio.OUT })
 gpio.set_drive(GPIOHUMID, gpio.DRIVE_3)
