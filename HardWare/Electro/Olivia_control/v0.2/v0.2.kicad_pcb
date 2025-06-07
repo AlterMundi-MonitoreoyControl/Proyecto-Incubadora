@@ -186,7 +186,7 @@
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor handsolder")
 		(property "Reference" "R2"
-			(at 0 -1.65 0)
+			(at 0.005398 1.74998 0)
 			(layer "F.SilkS")
 			(uuid "d343e975-f9aa-428f-a43a-45e2c32b6a25")
 			(effects
@@ -197,8 +197,8 @@
 			)
 		)
 		(property "Value" "10K"
-			(at 0 1.65 0)
-			(layer "F.Fab")
+			(at -2.576 1.804 0)
+			(layer "F.SilkS")
 			(uuid "638daa40-4b83-4f60-83f7-32bcc56d79ad")
 			(effects
 				(font
@@ -387,7 +387,7 @@
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
 		(tags "capacitor handsolder")
 		(property "Reference" "C5"
-			(at 0 -1.68 0)
+			(at -1.398 -1.862 0)
 			(layer "F.SilkS")
 			(uuid "dc498fe0-150c-4751-b6f6-fc3199acb890")
 			(effects
@@ -398,8 +398,8 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 0 1.68 0)
-			(layer "F.Fab")
+			(at -4.954 -1.862 0)
+			(layer "F.SilkS")
 			(uuid "834ad9ac-2b88-4591-a0b1-bdeab4614d2b")
 			(effects
 				(font
@@ -600,7 +600,7 @@
 		)
 		(property "Value" "10uF"
 			(at 0 1.68 0)
-			(layer "F.Fab")
+			(layer "F.SilkS")
 			(uuid "48ad46fb-b4c6-4222-b32c-c65c0ba2eccc")
 			(effects
 				(font
@@ -789,7 +789,7 @@
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor handsolder")
 		(property "Reference" "R1"
-			(at 0 -1.65 0)
+			(at 0.352 1.648 0)
 			(layer "F.SilkS")
 			(uuid "26229a6c-ca97-4009-8dab-f118895a17a9")
 			(effects
@@ -800,8 +800,8 @@
 			)
 		)
 		(property "Value" "10K"
-			(at 0 1.65 0)
-			(layer "F.Fab")
+			(at -2.188 1.65 0)
+			(layer "F.SilkS")
 			(uuid "15584a60-a1c1-4fff-a13d-f0b9ac6e6b60")
 			(effects
 				(font
@@ -1001,8 +1001,8 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at -0.0375 -3.25 0)
-			(layer "F.Fab")
+			(at -0.0375 2.026 0)
+			(layer "F.SilkS")
 			(uuid "6b4d1759-3c82-453d-8cf3-163dfe9f639a")
 			(effects
 				(font
@@ -1201,9 +1201,9 @@
 				)
 			)
 		)
-		(property "Value" "In12V"
-			(at -6.2 -5.5 90)
-			(layer "F.Fab")
+		(property "Value" "Input 12Vcc max"
+			(at 3.252 -0.316 180)
+			(layer "F.SilkS")
 			(uuid "781ee284-a91b-41b9-a798-c58b220e9652")
 			(effects
 				(font
@@ -1588,7 +1588,7 @@
 		)
 		(property "Value" "10K"
 			(at 0 1.65 0)
-			(layer "F.Fab")
+			(layer "F.SilkS")
 			(uuid "da2697cd-13a8-4923-b043-0b7b2da0c7ef")
 			(effects
 				(font
@@ -1789,7 +1789,7 @@
 		)
 		(property "Value" "ESP32-WROOM-32D"
 			(at 0 11.5 0)
-			(layer "F.Fab")
+			(layer "F.SilkS")
 			(uuid "b411437e-31bd-4eac-b657-daeeb88d3ec2")
 			(effects
 				(font
@@ -2915,7 +2915,7 @@
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor handsolder")
 		(property "Reference" "R4"
-			(at 0 -1.65 0)
+			(at 0 1.668 0)
 			(layer "F.SilkS")
 			(uuid "35eb5051-7eaa-467f-b6bb-286ee2e15432")
 			(effects
@@ -2926,8 +2926,8 @@
 			)
 		)
 		(property "Value" "10K"
-			(at 0 2 0)
-			(layer "F.Fab")
+			(at -3.0665 1.668 0)
+			(layer "F.SilkS")
 			(uuid "9e6f91e1-a40b-46a9-a12c-f904f93a3241")
 			(effects
 				(font
@@ -3116,7 +3116,7 @@
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor handsolder")
 		(property "Reference" "R3"
-			(at 0 -1.65 0)
+			(at 0.003171 1.676848 0)
 			(layer "F.SilkS")
 			(uuid "184cfe2e-156e-420b-8b7f-e4df26ec5b44")
 			(effects
@@ -3127,8 +3127,8 @@
 			)
 		)
 		(property "Value" "10K"
-			(at 0 1.65 0)
-			(layer "F.Fab")
+			(at -2.596 1.65 0)
+			(layer "F.SilkS")
 			(uuid "cade76ec-f30d-4fd1-aba7-c0f0a4f7862b")
 			(effects
 				(font
@@ -3317,7 +3317,7 @@
 		(descr "ACDC-Converter, 10W, Hi-Link, HLK-10Mxx, THT (Script generated with StandardBox.py) (https://h.hlktech.com/download/ACDC%E7%94%B5%E6%BA%90%E6%A8%A1%E5%9D%9710W%E7%B3%BB%E5%88%97/1/%E6%B5%B7%E5%87%8C%E7%A7%9110W%E7%B3%BB%E5%88%97%E7%94%B5%E6%BA%90%E6%A8%A1%E5%9D%97%E8%A7%84%E6%A0%BC%E4%B9%A6V1.8.pdf)")
 		(tags "ACDC-Converter 10W THT Hi-Link board mount module")
 		(property "Reference" "PS1"
-			(at -1.3 -12.39 0)
+			(at 38.0285 -12.774 0)
 			(layer "F.SilkS")
 			(uuid "ce425304-384a-4c35-a958-9dc5f835f5fc")
 			(effects
@@ -3328,8 +3328,8 @@
 			)
 		)
 		(property "Value" "HLK-10M05"
-			(at -8.45 -1.7 0)
-			(layer "F.Fab")
+			(at 31.4245 -12.774 0)
+			(layer "F.SilkS")
 			(uuid "c5a4ea8c-8aa7-40b5-a6a0-2ae62a14dafb")
 			(effects
 				(font
@@ -3595,7 +3595,7 @@
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
 		(tags "capacitor handsolder")
 		(property "Reference" "C2"
-			(at 0 -1.68 0)
+			(at -1.498803 -1.68 0)
 			(layer "F.SilkS")
 			(uuid "e032bb1f-e115-4709-a99c-ad42406bc079")
 			(effects
@@ -3606,8 +3606,8 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 0 1.68 0)
-			(layer "F.Fab")
+			(at -5.004 -1.707953 0)
+			(layer "F.SilkS")
 			(uuid "b05aa2d4-42e0-42ae-98e0-ed1a11e2150b")
 			(effects
 				(font
@@ -3796,7 +3796,7 @@
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
 		(tags "capacitor handsolder")
 		(property "Reference" "C3"
-			(at 0 -1.68 0)
+			(at -1.68726 -1.792 0)
 			(layer "F.SilkS")
 			(uuid "52f111a9-9e35-4f8e-8f90-726d2ad3a0d9")
 			(effects
@@ -3807,8 +3807,8 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 0 1.68 0)
-			(layer "F.Fab")
+			(at -5.104 -1.792 0)
+			(layer "F.SilkS")
 			(uuid "927e803f-f9fb-43e9-9e50-c8888d9207af")
 			(effects
 				(font
@@ -3997,7 +3997,7 @@
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
 		(tags "capacitor handsolder")
 		(property "Reference" "C4"
-			(at 0 -1.68 0)
+			(at -1.548 -1.68 0)
 			(layer "F.SilkS")
 			(uuid "d26ca35d-af8a-4a94-88cb-60136713ceb6")
 			(effects
@@ -4008,8 +4008,8 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 0 1.68 0)
-			(layer "F.Fab")
+			(at -5.104 -1.536 0)
+			(layer "F.SilkS")
 			(uuid "f017cc2f-b53c-4fdd-ba86-36081b10e067")
 			(effects
 				(font
@@ -4211,7 +4211,7 @@
 		)
 		(property "Value" "100nF"
 			(at 0 -1.68 90)
-			(layer "B.Fab")
+			(layer "B.SilkS")
 			(uuid "e4e9a65c-93c0-4ae0-a3cf-1eb3a2e314e4")
 			(effects
 				(font
@@ -4417,7 +4417,7 @@
 		)
 		(property "Value" "220"
 			(at 0 -1.65 0)
-			(layer "B.Fab")
+			(layer "B.SilkS")
 			(uuid "6305843c-2e4e-4c96-914d-8397dd000f81")
 			(effects
 				(font
@@ -4623,7 +4623,7 @@
 		)
 		(property "Value" "BTA16-800B"
 			(at 2.54 -2.5 90)
-			(layer "B.Fab")
+			(layer "B.SilkS")
 			(uuid "35c36f11-7b0d-42d5-9476-a8a20a37c9cf")
 			(effects
 				(font
@@ -4924,7 +4924,7 @@
 		)
 		(property "Value" "LED"
 			(at 2.54 -5.25 90)
-			(layer "B.Fab")
+			(layer "B.SilkS")
 			(uuid "71aff6e4-7847-43f6-92a3-c1566d98e66a")
 			(effects
 				(font
@@ -5436,7 +5436,7 @@
 		)
 		(property "Value" "4N25"
 			(at 0 -4.87 0)
-			(layer "B.Fab")
+			(layer "B.SilkS")
 			(uuid "d89895bd-3c8a-404b-8885-3b4f06fe056f")
 			(effects
 				(font
@@ -5724,7 +5724,7 @@
 		)
 		(property "Value" "BTA16-800B"
 			(at 2.54 -2.5 90)
-			(layer "B.Fab")
+			(layer "B.SilkS")
 			(uuid "1f960816-ba5f-4ecf-a763-62bb0ff08d58")
 			(effects
 				(font
@@ -6024,8 +6024,8 @@
 			)
 		)
 		(property "Value" "TRIAC OUT_B"
-			(at 3.81 -11.2 0)
-			(layer "B.Fab")
+			(at 3.302 4.826 0)
+			(layer "B.SilkS")
 			(uuid "fc80c920-ded2-4016-846e-ddd662fbc86c")
 			(effects
 				(font
@@ -6423,8 +6423,8 @@
 			)
 		)
 		(property "Value" "Input2"
-			(at 1.27 -5.25 90)
-			(layer "B.Fab")
+			(at 1.27 4.7825 90)
+			(layer "B.SilkS")
 			(uuid "022c7e88-b1e8-4c7e-9f57-ffc8713c9310")
 			(effects
 				(font
@@ -6912,7 +6912,7 @@
 		(descr "Molex Stackable Linear Connector, 171971-0004 (compatible alternatives: 171971-0104, 171971-0204), 4 Pins per row (https://www.molex.com/pdm_docs/sd/1719710002_sd.pdf), generated with kicad-footprint-generator")
 		(tags "connector Molex SL vertical")
 		(property "Reference" "J11"
-			(at 3.81 3.75 90)
+			(at 6.822 -5.2 90)
 			(layer "B.SilkS")
 			(uuid "3941bc4e-c30f-47bb-b04e-1f008cafc69a")
 			(effects
@@ -6925,7 +6925,7 @@
 		)
 		(property "Value" "I2C"
 			(at 3.81 -5.25 90)
-			(layer "B.Fab")
+			(layer "B.SilkS")
 			(uuid "6464a4eb-4086-4b36-9653-a49aee9f8f57")
 			(effects
 				(font
@@ -7448,7 +7448,7 @@
 		)
 		(property "Value" "Motor_A"
 			(at 3.81 -5.25 0)
-			(layer "B.Fab")
+			(layer "B.SilkS")
 			(uuid "51983702-d30c-4fdc-a067-db0760701bfe")
 			(effects
 				(font
@@ -7970,8 +7970,8 @@
 			)
 		)
 		(property "Value" "AMS1117-3.3"
-			(at 0 -4.5 90)
-			(layer "B.Fab")
+			(at 7.0505 0.1065 180)
+			(layer "B.SilkS")
 			(uuid "747f9609-3843-443d-a374-874e2b065c36")
 			(effects
 				(font
@@ -8241,7 +8241,7 @@
 		)
 		(property "Value" "220"
 			(at 0 -1.65 0)
-			(layer "B.Fab")
+			(layer "B.SilkS")
 			(uuid "9ce9599a-cd11-48e9-9b20-e21c553ad493")
 			(effects
 				(font
@@ -8447,7 +8447,7 @@
 		)
 		(property "Value" "Motor_B"
 			(at 3.81 -5.25 0)
-			(layer "B.Fab")
+			(layer "B.SilkS")
 			(uuid "32812fea-bf1c-4fc2-8bcc-8216e6a2eca1")
 			(effects
 				(font
@@ -8969,8 +8969,8 @@
 			)
 		)
 		(property "Value" "Input1"
-			(at 1.27 -5.25 90)
-			(layer "B.Fab")
+			(at 0.942 4.8325 90)
+			(layer "B.SilkS")
 			(uuid "335392e5-f1a3-40f2-9c09-a371500ba12c")
 			(effects
 				(font
@@ -9471,7 +9471,7 @@
 		)
 		(property "Value" "500mA"
 			(at 0 -1.82 90)
-			(layer "B.Fab")
+			(layer "B.SilkS")
 			(uuid "8fbe5d83-94a2-4c88-9d72-b57662212f45")
 			(effects
 				(font
@@ -9676,8 +9676,8 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 0 -1.68 0)
-			(layer "B.Fab")
+			(at 0 3.048 0)
+			(layer "B.SilkS")
 			(uuid "8b143ce1-1983-4575-b5f2-00c35ff43f9c")
 			(effects
 				(font
@@ -9872,7 +9872,7 @@
 		(property "Reference" "J16"
 			(at 3.81 3.2 0)
 			(layer "B.SilkS")
-			(uuid "d1d70ec2-2889-4b66-87f5-f1fd6a6afecf")
+			(uuid "d801eb5c-c7a1-46e2-9eeb-083e92510a8f")
 			(effects
 				(font
 					(size 1 1)
@@ -9882,9 +9882,9 @@
 			)
 		)
 		(property "Value" "220V IN"
-			(at 3.81 -11.2 0)
-			(layer "B.Fab")
-			(uuid "df89484d-447e-4de3-8b55-4640f619e208")
+			(at 3.805 4.826 0)
+			(layer "B.SilkS")
+			(uuid "ad7b6065-94b3-46a4-977b-97836e81a542")
 			(effects
 				(font
 					(size 1 1)
@@ -9897,7 +9897,7 @@
 			(at 0 0 0)
 			(layer "B.Fab")
 			(hide yes)
-			(uuid "6c107870-e88b-4497-b2b4-8fdef9c1a55a")
+			(uuid "01749e10-b016-457b-86f2-f77c4bb83649")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9910,7 +9910,7 @@
 			(at 0 0 0)
 			(layer "B.Fab")
 			(hide yes)
-			(uuid "2489466e-9f88-4b39-9ac7-69a31b0820b1")
+			(uuid "5aec4b92-62e8-40df-b61b-1271c140c1e5")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10281,8 +10281,8 @@
 			)
 		)
 		(property "Value" "Input4"
-			(at 1.27 -5.25 90)
-			(layer "B.Fab")
+			(at 0.832 4.82 90)
+			(layer "B.SilkS")
 			(uuid "f7c7e047-c545-43de-a9b0-89c2d5f5cc6b")
 			(effects
 				(font
@@ -10783,7 +10783,7 @@
 		)
 		(property "Value" "120K"
 			(at 0 -1.65 90)
-			(layer "B.Fab")
+			(layer "B.SilkS")
 			(uuid "27b21ae5-87f8-43bc-acb9-171c6ec79935")
 			(effects
 				(font
@@ -11297,8 +11297,8 @@
 			)
 		)
 		(property "Value" "Input3"
-			(at 1.27 -5.25 90)
-			(layer "B.Fab")
+			(at 1.038 4.8325 90)
+			(layer "B.SilkS")
 			(uuid "c5718447-a101-4c4a-91a9-914784edfdf0")
 			(effects
 				(font
@@ -11799,7 +11799,7 @@
 		)
 		(property "Value" "1K"
 			(at 0 -1.65 90)
-			(layer "B.Fab")
+			(layer "B.SilkS")
 			(uuid "e2697b78-1780-4791-a379-1b82a10928bb")
 			(effects
 				(font
@@ -12005,7 +12005,7 @@
 		)
 		(property "Value" "10K"
 			(at 0 -1.65 0)
-			(layer "B.Fab")
+			(layer "B.SilkS")
 			(uuid "f609caa7-7a43-4bc6-ba19-83d8995b8800")
 			(effects
 				(font
@@ -12208,8 +12208,8 @@
 			)
 		)
 		(property "Value" "DB107S"
-			(at -0.530597 -7.607962 90)
-			(layer "B.Fab")
+			(at -0.012599 -5.842 90)
+			(layer "B.SilkS")
 			(uuid "f76dcae2-3531-4be0-adcd-1079502aa238")
 			(effects
 				(font
@@ -12525,7 +12525,7 @@
 		)
 		(property "Value" "MOC3041M"
 			(at 0 -4.87 90)
-			(layer "B.Fab")
+			(layer "B.SilkS")
 			(uuid "97080f3f-2f3a-4405-9a43-0fc8bfe9091f")
 			(effects
 				(font
@@ -12814,8 +12814,7 @@
 		)
 		(property "Value" "1K"
 			(at 0 -1.65 90)
-			(layer "B.Fab")
-			(hide yes)
+			(layer "B.SilkS")
 			(uuid "3ef7a16a-687a-429b-b74c-709e156cca4d")
 			(effects
 				(font
@@ -13021,7 +13020,7 @@
 		)
 		(property "Value" "DAC"
 			(at 2.54 -5.25 90)
-			(layer "B.Fab")
+			(layer "B.SilkS")
 			(uuid "e0188d10-8ec9-4e35-a964-86307d4529ce")
 			(effects
 				(font
@@ -13532,8 +13531,8 @@
 			)
 		)
 		(property "Value" "TRIAC OUT_A"
-			(at 3.81 -11.2 0)
-			(layer "B.Fab")
+			(at 4.064 4.826 0)
+			(layer "B.SilkS")
 			(uuid "767830b4-5ae2-4afa-8daf-d18e5fb7b945")
 			(effects
 				(font
@@ -13932,7 +13931,7 @@
 		)
 		(property "Value" "MOC3041M"
 			(at 0 -4.87 90)
-			(layer "B.Fab")
+			(layer "B.SilkS")
 			(uuid "7940896d-9302-4588-83bb-e46205177d92")
 			(effects
 				(font
@@ -14220,8 +14219,8 @@
 			)
 		)
 		(property "Value" "PROG"
-			(at 1.27 -7.41 90)
-			(layer "B.Fab")
+			(at 1.576158 -7.639089 90)
+			(layer "B.SilkS")
 			(uuid "ff7f2322-abe4-417f-b516-7902e4030b09")
 			(effects
 				(font
@@ -14544,8 +14543,8 @@
 			)
 		)
 		(property "Value" "Reset"
-			(at 0 3.96 90)
-			(layer "B.Fab")
+			(at 0 -5.282 90)
+			(layer "B.SilkS")
 			(uuid "1beef9d7-13b0-41e3-a4df-d957c360efe8")
 			(effects
 				(font
@@ -14805,7 +14804,7 @@
 		)
 		(property "Value" "UART2"
 			(at 2.54 -5.25 90)
-			(layer "B.Fab")
+			(layer "B.SilkS")
 			(uuid "3d6ed2f6-ec1e-4fca-a3c5-41d61d50a70b")
 			(effects
 				(font
@@ -15316,8 +15315,8 @@
 			)
 		)
 		(property "Value" "SPI"
-			(at 0 -15.03 0)
-			(layer "B.Fab")
+			(at 0 -15.344 0)
+			(layer "B.SilkS")
 			(uuid "414b3383-358d-4a47-af1d-e89c09759422")
 			(effects
 				(font
@@ -15621,7 +15620,7 @@
 		)
 		(property "Value" "47uFxx35V"
 			(at 0 -2.55 0)
-			(layer "B.Fab")
+			(layer "B.SilkS")
 			(uuid "318c01ae-8372-44ab-9de3-7f20734e2558")
 			(effects
 				(font
@@ -15846,8 +15845,8 @@
 			)
 		)
 		(property "Value" "22uFx16V"
-			(at 0 -2.55 90)
-			(layer "B.Fab")
+			(at -5.0265 0.0735 180)
+			(layer "B.SilkS")
 			(uuid "531f6357-dc97-4cb0-96bb-c53ebbaf8936")
 			(effects
 				(font
