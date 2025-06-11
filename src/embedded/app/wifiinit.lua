@@ -88,11 +88,14 @@ function w:start_validation_timer()
 					if self.old_ssid then
                         self:set_new_ssid(self.old_ssid)
                         self:set_passwd(self.old_passwd)
+                        log.trace("[W] Reverting to previous configuration, ssid "..self.old_ssid)
                         self.old_ssid = nil
                         self.old_passwd = nil
-                        self:reset_state()
-                        self:connect()
-					end
+					else
+                        log.trace("[W] Not  Reverting, using default configuration")
+                    end
+                    self:reset_state()
+                    self:connect()
 			end
 	end)
 end
