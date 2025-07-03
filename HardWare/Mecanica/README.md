@@ -10,7 +10,7 @@ This repository includes a 3D printable part of the LibreIncu incubator project.
 
 You can download the 3D model file here:
 
-🔗 [`LibreIncu-STL.simple.stl`](./Mecanica/LibreIncu-STL.simple.stl)
+🔗 [`LibreIncu-STL.simple.stl`](./LibreIncu-STL.simple.stl)
 
 ## 🛠️ About the Model
 
