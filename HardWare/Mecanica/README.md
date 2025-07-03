@@ -4,7 +4,7 @@ This repository includes a 3D printable part of the LibreIncu incubator project.
 
 ## 🔍 STL Preview
 
-![LibreIncu 3D Preview](./Mecanica/libreincu.png)
+![LibreIncu 3D Preview](./libreincu.png)
 
 ## 📦 Download STL
 
