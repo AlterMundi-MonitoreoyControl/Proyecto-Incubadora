@@ -1,0 +1,12 @@
+Resumen de Especificaciones para el Pedido
+Layers: 2
+Material: FR-4
+Dimensions: 90x100mm
+PCB Thickness: 1.6mm
+Copper Weight: 1 oz
+Min. Trace/Spacing: 10/10 mil
+Min. Hole Size: 0.2mm
+Solder Mask: Purple
+Silkscreen: White
+Surface Finish: HASL (Lead-Free)
+Quantity: [La cantidad de prototipos que necesites]
