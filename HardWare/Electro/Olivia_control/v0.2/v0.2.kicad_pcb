@@ -82,7 +82,7 @@
 		(allow_soldermask_bridges_in_footprints no)
 		(tenting none)
 		(pcbplotparams
-			(layerselection 0x00000000_00000000_55555555_555555f5)
+			(layerselection 0x00000000_00000000_55555555_555555ff)
 			(plot_on_all_layers_selection 0x00000000_00000000_00000000_02000000)
 			(disableapertmacros no)
 			(usegerberextensions no)
@@ -3390,6 +3390,16 @@
 			(uuid "2da3b508-68cf-4ed0-93b8-71116f06c812")
 		)
 		(fp_line
+			(start -3.56 -5.5)
+			(end -3.56 19.21)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "9d7f83eb-130f-4a71-af7f-fd2a440805da")
+		)
+		(fp_line
 			(start -3.56 -11.41)
 			(end 46.06 -11.41)
 			(stroke
@@ -3400,17 +3410,7 @@
 			(uuid "6ec18796-4085-4229-bc54-59b5894f9f89")
 		)
 		(fp_line
-			(start -3.56 -11.41)
-			(end -3.56 19.21)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "9d7f83eb-130f-4a71-af7f-fd2a440805da")
-		)
-		(fp_line
-			(start -3.8 -8.65)
+			(start -3.8 -9.5)
 			(end -3.8 -11.65)
 			(stroke
 				(width 0.12)
@@ -3501,7 +3501,7 @@
 		)
 		(fp_line
 			(start -2.5 18.15)
-			(end -2.5 -9.35)
+			(end -2.5 -5.5)
 			(stroke
 				(width 0.1)
 				(type solid)
@@ -4776,7 +4776,7 @@
 		(descr "TO-220-3, Vertical, RM 2.54mm, see https://www.vishay.com/docs/66542/to-220-1.pdf")
 		(tags "TO-220-3 Vertical RM 2.54mm")
 		(property "Reference" "Q1"
-			(at 2.54 4.27 90)
+			(at 2.54 4.27 270)
 			(layer "B.SilkS")
 			(uuid "14239bc0-9719-419d-a670-d7255f2fadc3")
 			(effects
@@ -4788,7 +4788,7 @@
 			)
 		)
 		(property "Value" "BTA16-800B"
-			(at 2.54 -2.5 90)
+			(at 2.54 -2.5 270)
 			(layer "B.SilkS")
 			(uuid "35c36f11-7b0d-42d5-9476-a8a20a37c9cf")
 			(effects
@@ -4833,8 +4833,8 @@
 		(sheetfile "v0.2.kicad_sch")
 		(attr through_hole)
 		(fp_line
-			(start 7.66 -1.371)
-			(end -2.58 -1.371)
+			(start 7.66 -1.75)
+			(end -2.58 -1.75)
 			(stroke
 				(width 0.12)
 				(type solid)
@@ -4843,7 +4843,7 @@
 			(uuid "b67f84dd-907e-4844-8356-964f86ae6aa5")
 		)
 		(fp_line
-			(start 7.66 -1.371)
+			(start 7.66 -1.75)
 			(end 7.66 3.27)
 			(stroke
 				(width 0.12)
@@ -4853,7 +4853,7 @@
 			(uuid "4602ebb0-1ce6-4807-b2e1-d9e1caaa401e")
 		)
 		(fp_line
-			(start -2.58 -1.371)
+			(start -2.58 -1.75)
 			(end -2.58 3.27)
 			(stroke
 				(width 0.12)
@@ -4903,8 +4903,8 @@
 			(uuid "2daff4c9-31a9-45a1-9114-e91a81d71df4")
 		)
 		(fp_line
-			(start 7.79 -1.51)
-			(end -2.71 -1.51)
+			(start 7.79 -1.870375)
+			(end -2.71 -1.870375)
 			(stroke
 				(width 0.05)
 				(type solid)
@@ -4913,7 +4913,7 @@
 			(uuid "b165af4d-a206-4e86-8a06-f6bd9a5e4559")
 		)
 		(fp_line
-			(start -2.71 -1.51)
+			(start -2.71 -1.868755)
 			(end -2.71 3.4)
 			(stroke
 				(width 0.05)
@@ -4924,7 +4924,7 @@
 		)
 		(fp_line
 			(start 7.79 3.4)
-			(end 7.79 -1.51)
+			(end 7.79 -1.860422)
 			(stroke
 				(width 0.05)
 				(type solid)
@@ -5013,7 +5013,7 @@
 			(uuid "374c1b97-c6aa-4443-afd7-0f461c1db92c")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 2.54 4.27 90)
+			(at 2.54 4.27 270)
 			(layer "B.Fab")
 			(uuid "4a87aaf3-51e3-466d-905f-3673baa9fc31")
 			(effects
@@ -5877,7 +5877,7 @@
 		(descr "TO-220-3, Vertical, RM 2.54mm, see https://www.vishay.com/docs/66542/to-220-1.pdf")
 		(tags "TO-220-3 Vertical RM 2.54mm")
 		(property "Reference" "Q2"
-			(at 2.54 4.27 90)
+			(at 2.54 4.27 270)
 			(layer "B.SilkS")
 			(uuid "d597f268-f865-41c7-bcf5-25b7ee9b7401")
 			(effects
@@ -5889,7 +5889,7 @@
 			)
 		)
 		(property "Value" "BTA16-800B"
-			(at 2.54 -2.5 90)
+			(at 2.54 -2.5 270)
 			(layer "B.SilkS")
 			(uuid "1f960816-ba5f-4ecf-a763-62bb0ff08d58")
 			(effects
@@ -5934,8 +5934,8 @@
 		(sheetfile "v0.2.kicad_sch")
 		(attr through_hole)
 		(fp_line
-			(start 7.66 -1.371)
-			(end -2.58 -1.371)
+			(start 7.66 -1.75)
+			(end -2.58 -1.75)
 			(stroke
 				(width 0.12)
 				(type solid)
@@ -5944,7 +5944,7 @@
 			(uuid "fdae0938-6e91-4c1b-ac56-4adf627d869b")
 		)
 		(fp_line
-			(start 7.66 -1.371)
+			(start 7.66 -1.75)
 			(end 7.66 3.27)
 			(stroke
 				(width 0.12)
@@ -5954,7 +5954,7 @@
 			(uuid "b36d5b39-3c04-4c15-a4c9-748385d41439")
 		)
 		(fp_line
-			(start -2.58 -1.371)
+			(start -2.58 -1.75)
 			(end -2.58 3.27)
 			(stroke
 				(width 0.12)
@@ -6004,8 +6004,8 @@
 			(uuid "5d3762f7-b7d6-4c3d-88de-beaafda11b8f")
 		)
 		(fp_line
-			(start 7.79 -1.51)
-			(end -2.71 -1.51)
+			(start 7.79 -1.874403)
+			(end -2.71 -1.874403)
 			(stroke
 				(width 0.05)
 				(type solid)
@@ -6014,7 +6014,7 @@
 			(uuid "83d0d7a0-f0be-4dfb-a3ba-d7c1345d7172")
 		)
 		(fp_line
-			(start -2.71 -1.51)
+			(start -2.71 -1.874403)
 			(end -2.71 3.4)
 			(stroke
 				(width 0.05)
@@ -6025,7 +6025,7 @@
 		)
 		(fp_line
 			(start 7.79 3.4)
-			(end 7.79 -1.51)
+			(end 7.79 -1.874403)
 			(stroke
 				(width 0.05)
 				(type solid)
@@ -6114,7 +6114,7 @@
 			(uuid "63269a0f-e12d-44b8-b198-d53769636d8e")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 2.54 4.27 90)
+			(at 2.54 4.27 270)
 			(layer "B.Fab")
 			(uuid "74cd36fd-b3d2-4848-b3fe-ac8dd55b9d3a")
 			(effects
