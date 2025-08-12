@@ -70,62 +70,56 @@ end
 -- ! @param,max_temp 							 temperature at which the resistor turns off
 ------------------------------------------------------------------------------------
 
-temp_history = {0, 0, 0, 0, 0}
+temp_history = {15, 15, 15}
 resistor_on_counter = 0
-resistor_on_tmp = 0
+resistor_on_temp = 0
 resistor_on_derivative = 0  -- Store first derivative when heater was turned ON
 low_derivative_count = 0
 
-function first_precise_centered_derivative()
-    -- f'(t) = (-T[n+2] + 8T[n+1] - 8T[n-1] + T[n-2]) / 12
-    return (-temp_history[5] + 8 * temp_history[4] - 8 * temp_history[2] + temp_history[1]) / 12
-end
 
 function temp_control(temperature, min_temp, max_temp)
-
-    -- Smooth temperature
-    smooth_temp = ( temp_history[4]+ temp_history[5]+ temperature) / 3
-
-    temp_history[1] = temp_history[2]
-    temp_history[2] = temp_history[3]
-    temp_history[3] = temp_history[4]
-    temp_history[4] = temp_history[5]
-    temp_history[5] = smooth_temp
-
-    -- Compute derivatives
-    local temp_rate = first_precise_centered_derivative()
-
-    log.trace("[T] temp " .. temperature .. " min:" .. min_temp .. " max:" .. max_temp ..
-              " count " .. resistor_on_counter .. " resistor on temp " .. resistor_on_tmp..
-              " temp_rate " .. temp_rate)
-
-    if resistor_on_counter == 0 then
-        resistor_on_tmp = temperature
-        resistor_on_derivative = temp_rate  -- Store first derivative when heater was turned ON
-    end
 
     if temperature > max_temp + 4 then
         log.addError("temperature", "[T] temperature too high: " .. temperature)
     end
 
+    -- Smooth temperature
+    temp_history[1] = temp_history[2]
+    temp_history[2] = temp_history[3]
+    temp_history[3] = temperature
+
+    smooth_temp = ( temp_history[1]+ temp_history[2]+ temp_history[3]) / 3
+
+    log.trace("[T] temp " .. temperature .. " min:" .. min_temp .. " max:" .. max_temp ..
+              " count " .. resistor_on_counter .. " resistor on temp " .. resistor_on_temp..
+                " smooth temp " .. smooth_temp)
+
+    if resistor_on_counter == 13 then
+        resistor_on_temp = smooth_temp  -- Store temperature after heater was turned ON
+    end
+
     -- Check if the temperature is increasing effectively
-    local tolerance = 0.002  -- Small tolerance to allow minor fluctuations
-    local low_derivative_limit = 3  -- Require up to 3 consecutive low values before triggering an error
-    
-    if resistor_on_counter == 30 then
-        if temp_rate > (resistor_on_derivative - tolerance) then
+    local tolerance = 0.5
+    if resistor_on_counter == 200 then ---aprox 10 min
+        if resistor_on_temp +tolerance  <  smooth_temp then
             log.trace("[T] temperature is increasing properly !!!!!")
             low_derivative_count = 0  -- Reset the counter if temperature is increasing
         else
-            low_derivative_count = low_derivative_count + 1
-            if low_derivative_count >= low_derivative_limit then
-                log.addError("temperature", "[T] temperature is not increasing enough.. derivative: " ..
-                             temp_rate .. " < " .. resistor_on_derivative)
-                low_derivative_count = 0  -- Reset after logging the error
+            log.warn("[T] temperature too low: " .. smooth_temp)
+            log.warn("[T] temperature is not increasing enough.. derivative: " ..
+            resistor_on_temp +tolerance.."  <  "..smooth_temp )
+
+            if temperature < min_temp - 4 then
+                log.addError("temperature", "[T] temperature too low: " .. temperature)
             end
+            log.addError("temperature", "[T] temperature is not increasing enough..: " ..
+            resistor_on_temp +tolerance.."  <  "..smooth_temp )
+            
         end
-        resistor_on_counter = 0
+        resistor_on_counter = 14 --if resistor is "on" it wont be 0 next time ref temp is kept.
     end
+
+
 
     if incubator.resistor then
         resistor_on_counter=resistor_on_counter+1
@@ -190,35 +184,35 @@ end     -- end function
     
         
 
-hum_on_counter=0
+hum_off_counter=0
 hum_on_hum=0
 
 function hum_control(hum, min, max)
-    log.trace("[H] Humidity " .. hum .. " min:" .. min .. " max:" .. max .. " humidifier " .. tostring(incubator.humidifier) .. " count "  .. hum_on_counter.. " hum old ".. hum_on_hum)
+    log.trace("[H] Humidity " .. hum .. " min:" .. min .. " max:" .. max .. " humidifier " .. tostring(incubator.humidifier) .. " count "  .. hum_off_counter.. " hum old ".. hum_on_hum)
 
     min, max = get_adjusted_humidity_limits(min, max)
 
-    log.trace("[H] Humidity " .. hum .. " min:" .. min .. " max:" .. max .. " humidifier " .. tostring(incubator.humidifier) .. " count "  .. hum_on_counter.. " hum old ".. hum_on_hum)
-    if hum_on_counter == 0 then
+    log.trace("[H] Humidity " .. hum .. " min:" .. min .. " max:" .. max .. " humidifier " .. tostring(incubator.humidifier) .. " count "  .. hum_off_counter.. " hum old ".. hum_on_hum)
+    if hum_off_counter == 0 then
         hum_on_hum = hum
     end
     if (hum > max + 20) then
-        log.addError("humidity","[H] Humidity to hight" .. hum .. " min:" .. min .. " max:" .. max .. " humidifier " .. tostring(incubator.humidifier) .. " count "  .. hum_on_counter.. " hum old ".. hum_on_hum)
+        log.addError("humidity","[H] Humidity to hight" .. hum .. " min:" .. min .. " max:" .. max .. " humidifier " .. tostring(incubator.humidifier) .. " count "  .. hum_off_counter.. " hum old ".. hum_on_hum)
     end
     --if humidity is not increasing after 40 cycles, send an alert
-    if hum_on_counter == 40 then
-        if hum > hum_on_hum+0.2 then
+    if hum_off_counter == 3 then
+        if hum > hum_on_hum+0.5 then
             log.trace("[H] humidity is increasing")
         else
-            log.addError("humidity","[H] humidity is not increasing actual:".. hum .. " min:" .. min .. " max:" .. max  .. " count: "  .. hum_on_counter.. " hum old: ".. hum_on_hum)
+            log.addError("humidity","[H] humidity is not increasing actual:".. hum .. " min:" .. min .. " max:" .. max  .. " count: "  .. hum_off_counter.. " hum old: ".. hum_on_hum)
         end
         resistor_on_counter=0
     end
 
     if incubator.humidifier and incubator.humidifier_enabled then
-        hum_on_counter=hum_on_counter+1
+        hum_off_counter=hum_off_counter+1
     else
-        hum_on_counter=0
+        hum_off_counter=0
     end
 
     if hum <= min then
@@ -247,7 +241,7 @@ end -- end function
 ------------------------------------------------------------------------------------
 function read_and_send_data()
     temp, hum, pres = incubator.get_values()
-    send_data_grafana(incubator.temperature, incubator.humidity, incubator.pressure, INICIALES)
+    send_data_grafana(incubator.temperature, incubator.humidity, incubator.pressure, incubator.hash)
 end -- read_and_send_data end
 
 ------------------------------------------------------------------------------------
