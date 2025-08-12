@@ -222,6 +222,7 @@ function hum_control(hum, min, max)
     end
 
     if hum <= min then
+        log.addError("humidity","[H] Humidity too low: " .. hum .. " min:" .. min .. " max:" .. max .. " humidifier " .. tostring(incubator.humidifier))
         log.trace("[H] turn hum on")
         incubator.humidifier_switch(true)
     elseif hum >= max then
