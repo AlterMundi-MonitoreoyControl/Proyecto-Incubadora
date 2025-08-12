@@ -25,6 +25,9 @@ local M = {
 	rotation_switch_deactivate_time = 10000, -- max amount of time the sensor is down when the incubator is moving in ms
 	rotation_duration               = 50000, -- max amount of time the rotation should last in ms
 	rotation_period                 = 3600000, -- time in ms
+	-- NodeMCU timer maximum limit: 6,844,835 ms (~1.9 hours)
+	-- Use safe maximum of 6,000,000 ms (~1.67 hours) to account for variations
+	MAX_TIMER_PERIOD                = 6000000, -- NodeMCU safe timer limit
 	humidifier_enabled              = true,
 	max_hum                         = 100,
 	min_hum                         = 1,
@@ -327,12 +330,15 @@ end -- function end
 -- @param new_period_time"	comes from json received from API
 -------------------------------------
 function M.set_rotation_period(new_period_time)
-	if new_period_time ~= nil and new_period_time >= 0
+	if new_period_time ~= nil and new_period_time >= 60000 -- minimum 1 minute
+		and new_period_time <= M.MAX_TIMER_PERIOD
 		and tostring(new_period_time):sub(1, 1) ~= '-'
 		and type(new_period_time) == "number" then
 		M.rotation_period = new_period_time
+		log.trace("[R] Rotation period set to: " .. new_period_time .. " ms (" .. math.floor(new_period_time/60000) .. " min)")
 		return true
 	else
+		log.addError("rotation", "[R] Invalid rotation period: " .. tostring(new_period_time) .. " ms. Range: 60000-" .. M.MAX_TIMER_PERIOD .. " ms")
 		return false
 	end -- if end
 end -- function end 
