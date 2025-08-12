@@ -449,8 +449,6 @@ function rotateandgettimes()
             log.trace("[R] Finished rotating half for ...   ", controlervars.half)
             log.trace("[R] Rotation is working ... starting with the rest ", controlervars.half)
             rotation:start()
-            temp_control_timer:start()
-            send_data_timer:start()
         end)
         incubator.rotation_switch(true)
         log.trace("[R] rotating half for ...   ", controlervars.half)
@@ -471,6 +469,12 @@ else
     log.trace("[R] at least one sensor is active not activating rotation")
 end
 --medir tiempos y dejar en la mitad
+-- Start essential services regardless of rotation status
+temp_control_timer:start()
+send_data_timer:start()
+log.trace("[INIT] Essential services (temperature/humidity control and data sending) started")
+
+-- Initialize rotation if sensors are working
 rotateandgettimes_timer = tmr.create()
 rotateandgettimes_timer:register(incubator.rotation_duration+1000, tmr.ALARM_AUTO, rotateandgettimes)
 rotateandgettimes_timer:start()
