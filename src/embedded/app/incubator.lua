@@ -31,6 +31,7 @@ local M = {
 	humidifier_enabled              = true,
 	max_hum                         = 100,
 	min_hum                         = 1,
+	humidifier_min_temp             = 38.0, -- minimum temperature to enable humidifier
 	humidifier_max_on_time          = 2, -- sec !! 
 	humidifier_off_time             = 120, -- sec !! 
 	hum_turn_on_time                = 0,
@@ -196,6 +197,12 @@ function M.humidifier_switch(status)
 
 	log.trace("humidifier enabled")
 	if status and M.humidifier_enabled then -- encender humidifier
+		-- Check minimum temperature before activation
+		if M.temperature < M.humidifier_min_temp then
+			log.trace("[H] Humidifier blocked: temp " .. M.temperature .. " < " .. M.humidifier_min_temp .. "°C")
+			return
+		end
+		
 		if (not M.humidifier) then       -- estaba apagado
 			log.trace("humidifier was off... turning on ")
 
@@ -458,5 +465,23 @@ function M.set_min_humidity(new_min_hum)
 			return false
 		end
 end
+
+-------------------------------------
+-- @function set_humidifier_min_temp	modify the minimum temperature for humidifier activation from API
+--
+-- @param new_temp	new minimum temperature value
+-------------------------------------
+function M.set_humidifier_min_temp(new_temp)
+	if new_temp ~= nil and new_temp >= 30.0 and new_temp <= 45.0
+		and tostring(new_temp):sub(1, 1) ~= '-'
+		and type(new_temp) == "number" then
+		M.humidifier_min_temp = new_temp
+		log.trace("[H] Humidifier min temp set to: " .. new_temp .. "°C")
+		return true
+	else
+		log.addError("humidity", "[H] Invalid humidifier min temp: " .. tostring(new_temp) .. "°C. Range: 30.0-45.0°C")
+		return false
+	end -- if end
+end -- function end 
 
 return M

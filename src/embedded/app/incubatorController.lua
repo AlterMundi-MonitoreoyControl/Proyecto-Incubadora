@@ -216,7 +216,12 @@ function hum_control(hum, min, max)
     end
 
     if hum <= min then
-        log.addError("humidity","[H] Humidity too low: " .. hum .. " min:" .. min .. " max:" .. max .. " humidifier " .. tostring(incubator.humidifier))
+        local error_msg = "[H] Humidity too low: " .. hum .. " min:" .. min .. " max:" .. max .. " humidifier " .. tostring(incubator.humidifier)
+        -- Add temperature blocking info if applicable
+        if incubator.temperature < incubator.humidifier_min_temp then
+            error_msg = error_msg .. " - BLOCKED: temp " .. incubator.temperature .. "°C < " .. incubator.humidifier_min_temp .. "°C target"
+        end
+        log.addError("humidity", error_msg)
         log.trace("[H] turn hum on")
         incubator.humidifier_switch(true)
     elseif hum >= max then
