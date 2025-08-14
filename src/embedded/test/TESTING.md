@@ -6,7 +6,7 @@ We encourage contributors to write [tests](https://en.wikipedia.org/wiki/Unit_te
 
 LibreMesh unit testing is based in the powerful [busted](https://lunarmodules.github.io/busted/) library which has a very good documentation.
 
-## Install required sofotware
+## Install required software
 ```
 apt-get install luarocks
 sudo luarocks install --server=https://luarocks.org/dev ltn12
