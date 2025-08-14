@@ -92,11 +92,17 @@ gpio.write(GPIOVOLTEO_UP,0)
 ```
 
 ### Test Sensors
+Sensors are conected to cpu inputs, inputs are maped to gpio 34 35 36 and 39
+```lua
+gpio.config({ gpio = { 34, 35,36,39 }, dir = gpio.IN, pull = gpio.PULL_UP })
+print(gpio.read(34),gpio.read(35),gpio.read(36),gpio.read(39))
+```
+usually GPIOREEDS_UP and GPIOREEDS_DOWN are 34 and 39
 ```lua
 print(gpio.read(GPIOREEDS_UP), gpio.read(GPIOREEDS_DOWN))
 ```
 
-When the sensor is near the human, it switches to 0.  
+When the sensor is near the himan, it switches to 0.  
 Test both the upper and lower sensors.
 
 ### Test Resistor
