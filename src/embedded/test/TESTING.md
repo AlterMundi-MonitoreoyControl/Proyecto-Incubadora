@@ -102,7 +102,7 @@ usually GPIOREEDS_UP and GPIOREEDS_DOWN are 34 and 39
 print(gpio.read(GPIOREEDS_UP), gpio.read(GPIOREEDS_DOWN))
 ```
 
-When the sensor is near the himan, it switches to 0.  
+When the sensor is near the magnet, it switches to 0.  
 Test both the upper and lower sensors.
 
 ### Test Resistor
