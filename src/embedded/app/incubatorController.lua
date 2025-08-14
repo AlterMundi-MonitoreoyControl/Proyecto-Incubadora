@@ -476,7 +476,7 @@ log.trace("[INIT] Essential services (temperature/humidity control and data send
 
 -- Initialize rotation if sensors are working
 rotateandgettimes_timer = tmr.create()
-rotateandgettimes_timer:register(incubator.rotation_duration+1000, tmr.ALARM_AUTO, rotateandgettimes)
+rotateandgettimes_timer:register(incubator.rotation_duration+5000, tmr.ALARM_AUTO, rotateandgettimes)
 rotateandgettimes_timer:start()
 
 
