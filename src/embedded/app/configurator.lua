@@ -115,6 +115,8 @@ function configurator:load_objects_data(new_config_table)
 			status.max_hum = incubator.set_max_humidity(tonumber(value))
 		elseif param == "min_hum" then
 			status.min_hum = incubator.set_min_humidity(tonumber(value))
+	elseif param == "humidifier_min_temp" then
+		status.humidifier_min_temp = incubator.set_humidifier_min_temp(tonumber(value))
 		end -- if end 
   
   end -- for end
