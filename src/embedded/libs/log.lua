@@ -4,7 +4,8 @@
 -- SPDX-License-Identifier: AGPL-3.0-only
 
 local log = {
-    _version = "0.1.0"
+    _version = "0.1.0",
+    throttle_interval=30 --must be greater than 5 seconds to avoid throttling
 }
 
 -- Initialize the error table
@@ -32,13 +33,15 @@ local function safe_http_post(dest, url, headers, body, on_result)
     end
 
     -- Throttle: prevent sending too frequently
-    local throttle_key = "_last_" .. dest
+    local throttle_key = "_last_" .. body
     log[throttle_key] = log[throttle_key] or 0
     if time.get() - log[throttle_key] < (log.throttle_interval or 15) then
         print(dest .. ": Notification throttled.")
         return
+    else
+        print(dest .. ": not throttled Sending notification. " ..throttle_key)
     end
-    log[throttle_key] = time.get()
+    log[throttle_key] = time.get() + math.random(1, log.throttle_interval-2)
 
     -- Actually send HTTP request
     http.post(url, { headers = headers }, body, function(code_return, data)
