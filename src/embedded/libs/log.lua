@@ -5,7 +5,8 @@
 
 local log = {
     _version = "0.1.0",
-    throttle_interval=30 --must be greater than 5 seconds to avoid throttling
+    throttle_interval=10, --in seconds, must be greater than 5 seconds
+    throttle_type_interval=120  --seconds
 }
 
 -- Initialize the error table
@@ -32,8 +33,8 @@ local function safe_http_post(dest, url, headers, body, on_result)
         return
     end
 
-    -- Throttle: prevent sending too frequently
-    local throttle_key = "_last_" .. body
+    -- Throttle by destination prevent sending too frequently to the same server
+    local throttle_key = "_last_" .. dest
     log[throttle_key] = log[throttle_key] or 0
     if time.get() - log[throttle_key] < (log.throttle_interval or 15) then
         print(dest .. ": Notification throttled.")
@@ -84,6 +85,17 @@ function log.send_to_ntfy(alert)
 end
 
 function log.addError(errorType, message)
+    -- Throttle:by errorType prevent sending too frequently
+    local throttle_key = "_last_" .. errorType
+    log[throttle_key] = log[throttle_key] or 0
+    if time.get() - log[throttle_key] < (log.throttle_type_interval or 15) then
+        print(dest .. ": Notification throttled.")
+        return
+    else
+        print(dest .. ": not throttled registering error. " ..throttle_key)
+    end
+    log[throttle_key] = time.get() + math.random(1, log.throttle_type_interval-2)
+
     log.error(message)
     if log.errors[errorType] ~= nil then
         table.insert(log.errors[errorType], message..","..string.format("%.0f", ((time.get()) * 1000000000)))
@@ -92,7 +104,7 @@ function log.addError(errorType, message)
             table.remove(log.errors[errorType], 1) -- Remove the oldest message
         end
     else
-        log.error("Invalid error type: " .. errorType)
+        log.trace("Invalid error type: " .. errorType)
     end
 end
 
