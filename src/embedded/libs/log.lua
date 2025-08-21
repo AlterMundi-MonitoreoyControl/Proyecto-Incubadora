@@ -80,7 +80,7 @@ function log.send_to_ntfy(alert)
 end
 
 function log.throttle_check(key,throttle_time)
-    -- Throttle:by errorType prevent sending too frequently
+    -- Throttle: prevent sending too frequently
     local throttle_key = "_last_" .. key
     log[throttle_key] = log[throttle_key] or 0
     
@@ -90,11 +90,14 @@ function log.throttle_check(key,throttle_time)
     end
     
     if time_diff < (throttle_time or 15) then
-        print(throttle_key .. ": Notification throttled." .. throttle_time - time.get() - log[throttle_key] .. " seconds left")
+        local remaining = throttle_time - time_diff  -- Calculate remaining time correctly
+        print(throttle_key .. ": Notification throttled. " .. remaining .. " seconds left")
+        print(throttle_key .. ": throttle_time=" .. tostring(throttle_time) .. " time_diff=" .. tostring(time_diff).."time ".. time.get() .." ".. log[throttle_key])
         return false
     else
         print(throttle_key .. ": not throttled registering error. ")
     end
+    
     log[throttle_key] = time.get() + math.random(1,throttle_time-2) -- use random to avoid starvation of other errors 
     return true
 end
