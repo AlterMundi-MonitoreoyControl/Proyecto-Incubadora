@@ -87,18 +87,7 @@ function log.send_to_ntfy(alert)
 end
 
 function log.addError(errorType, message)
-    -- Throttle:by errorType prevent sending too frequently
-    local throttle_key = "_last_" .. errorType
-    log[throttle_key] = log[throttle_key] or 0
-    if time.get() - log[throttle_key] < (log.throttle_type_interval or 15) then
-        print(errorType .. ": Notification throttled." .. time.get() - log[throttle_key] .. " seconds left")
-        return
-    else
-        print(errorType .. ": not throttled registering error. " .. throttle_key)
-    end
-    log[throttle_key] = time.get() + math.random(1, log.throttle_type_interval-2)
-
-    log.error(message)
+    -- register all errors 
     if log.errors[errorType] ~= nil then
         table.insert(log.errors[errorType], message..","..string.format("%.0f", ((time.get()) * 1000000000)))
         -- Keep only the latest two messages
@@ -108,6 +97,19 @@ function log.addError(errorType, message)
     else
         log.trace("Invalid error type: " .. errorType)
     end
+
+    -- Throttle:by errorType prevent sending too frequently
+    local throttle_key = "_last_" .. errorType
+    log[throttle_key] = log[throttle_key] or 0
+    if time.get() - log[throttle_key] < (log.throttle_type_interval or 15) then
+        print(errorType .. ": Notification throttled." .. log.throttle_type_interval - time.get() - log[throttle_key] .. " seconds left")
+        return
+    else
+        print(errorType .. ": not throttled registering error. " .. throttle_key)
+    end
+    log[throttle_key] = time.get() + math.random(1, log.throttle_type_interval-2) -- use random to avoid starvation of other errors 
+    log.error(message)
+
 end
 
 function log.getErrors(errorType)
