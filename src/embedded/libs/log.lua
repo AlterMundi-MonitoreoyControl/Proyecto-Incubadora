@@ -35,16 +35,9 @@ local function safe_http_post(dest, url, headers, body, on_result)
         return
     end
 
-    -- Throttle by destination prevent sending too frequently to the same server
-    local throttle_key = "_last_" .. dest
-    log[throttle_key] = log[throttle_key] or 0
-    if time.get() - log[throttle_key] < (log.throttle_interval or 15) then
-        print(dest .. ": Notification throttled.")
+    if not log.throttle_check(dest, log.throttle_interval) then
         return
-    else
-        print(dest .. ": not throttled Sending notification. " ..throttle_key)
     end
-    log[throttle_key] = time.get() + math.random(1, log.throttle_interval-2)
 
     -- Actually send HTTP request
     http.post(url, { headers = headers }, body, function(code_return, data)
@@ -86,6 +79,26 @@ function log.send_to_ntfy(alert)
     end)
 end
 
+function log.throttle_check(key,throttle_time)
+    -- Throttle:by errorType prevent sending too frequently
+    local throttle_key = "_last_" .. key
+    log[throttle_key] = log[throttle_key] or 0
+    
+    local time_diff = time.get() - log[throttle_key]
+    if time_diff > 3600 then
+        log[throttle_key] = time.get() -- Reset if difference is too large
+    end
+    
+    if time_diff < (throttle_time or 15) then
+        print(throttle_key .. ": Notification throttled." .. throttle_time - time.get() - log[throttle_key] .. " seconds left")
+        return false
+    else
+        print(throttle_key .. ": not throttled registering error. ")
+    end
+    log[throttle_key] = time.get() + math.random(1,throttle_time-2) -- use random to avoid starvation of other errors 
+    return true
+end
+
 function log.addError(errorType, message)
     -- register all errors 
     if log.errors[errorType] ~= nil then
@@ -98,16 +111,11 @@ function log.addError(errorType, message)
         log.trace("Invalid error type: " .. errorType)
     end
 
-    -- Throttle:by errorType prevent sending too frequently
-    local throttle_key = "_last_" .. errorType
-    log[throttle_key] = log[throttle_key] or 0
-    if time.get() - log[throttle_key] < (log.throttle_type_interval or 15) then
-        print(errorType .. ": Notification throttled." .. log.throttle_type_interval - time.get() - log[throttle_key] .. " seconds left")
+    -- Use the extracted throttle method
+    if not log.throttle_check(errorType, log.throttle_type_interval) then
         return
-    else
-        print(errorType .. ": not throttled registering error. " .. throttle_key)
     end
-    log[throttle_key] = time.get() + math.random(1, log.throttle_type_interval-2) -- use random to avoid starvation of other errors 
+
     log.error(message)
 
 end
