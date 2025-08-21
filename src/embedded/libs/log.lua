@@ -7,8 +7,8 @@ local log = {
     _version = "0.1.0",
     throttle_interval=10, --in seconds, must be greater than 5 seconds
     throttle_type_interval=240,  --seconds
-    last_humidity = 240, --initial time to avoid sending humidity errors at the beginning 
-    last_temperature = 900 --initial time to avoid sending temperature errors at the beginning
+    _last_humidity = 240, --initial time to avoid sending humidity errors at the beginning 
+    _last_temperature = 900 --initial time to avoid sending temperature errors at the beginning
 }
 
 -- Initialize the error table
