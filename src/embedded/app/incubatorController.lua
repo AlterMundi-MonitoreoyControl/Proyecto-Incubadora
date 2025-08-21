@@ -81,7 +81,7 @@ function temp_control(temperature, min_temp, max_temp)
 
     if temperature > max_temp + 4 then
         log.addError("temperature", "[T] temperature too high: " .. temperature)
-    else if temperature < min_temp - 10 then
+    elseif temperature < min_temp - 10 then
         log.addError("temperature", "[T] temperature too low: " .. temperature)   
     end
 
