@@ -6,7 +6,9 @@
 local log = {
     _version = "0.1.0",
     throttle_interval=10, --in seconds, must be greater than 5 seconds
-    throttle_type_interval=120  --seconds
+    throttle_type_interval=120,  --seconds
+    last_humidity = 240, --initial time to avoid sending humidity errors at the beginning 
+    last_temperature = 480 --initial time to avoid sending temperature errors at the beginning
 }
 
 -- Initialize the error table
@@ -89,10 +91,10 @@ function log.addError(errorType, message)
     local throttle_key = "_last_" .. errorType
     log[throttle_key] = log[throttle_key] or 0
     if time.get() - log[throttle_key] < (log.throttle_type_interval or 15) then
-        print(dest .. ": Notification throttled.")
+        print(errorType .. ": Notification throttled." .. time.get() - log[throttle_key] .. " seconds left")
         return
     else
-        print(dest .. ": not throttled registering error. " ..throttle_key)
+        print(errorType .. ": not throttled registering error. " .. throttle_key)
     end
     log[throttle_key] = time.get() + math.random(1, log.throttle_type_interval-2)
 
