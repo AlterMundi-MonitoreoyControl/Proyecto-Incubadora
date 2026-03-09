@@ -32,10 +32,11 @@ local M = {
 	max_hum                         = 100,
 	min_hum                         = 1,
 	humidifier_min_temp             = 35.0, -- minimum temperature to enable humidifier
-	humidifier_max_on_time          = 3, -- sec !! 
-	humidifier_off_time             = 120, -- sec !! 
+	humidifier_max_on_time          = 3000, -- ms !!
+	humidifier_off_time             = 120, -- sec !!
 	hum_turn_on_time                = 0,
 	hum_turn_off_time               = 0,
+	humidifier_timer                = nil,  -- tmr object for max-on-time enforcement
 	tray_one_date = 0,
 	tray_two_date = 0,
 	tray_three_date = 0,
@@ -230,9 +231,27 @@ function M.humidifier_switch(status)
 		-- logica negada
 		gpio.write(GPIOHUMID, 0)
 		log.trace("humidifier pin turned on--------------------")
+		if not M.humidifier_timer then
+			M.humidifier_timer = tmr.create()
+		end
+		M.humidifier_timer:alarm(
+			M.humidifier_max_on_time,
+			tmr.ALARM_SINGLE,
+			function()
+				log.warn("humidifier max on time reached, turning off")
+				gpio.write(GPIOHUMID, 1) -- logica negada
+				M.humidifier         = false
+				M.humidifier_enabled = false
+				M.hum_turn_off_time  = M.get_uptime_in_sec()
+			end
+		)
+		M.humidifier = true
 	else
 		M.humidifier = false
 		-- logica negada
+		if M.humidifier_timer then
+			M.humidifier_timer:stop()
+		end
 		gpio.write(GPIOHUMID, 1)
 		log.trace("humidifier pin turned off--------------------")
 	end -- if end
