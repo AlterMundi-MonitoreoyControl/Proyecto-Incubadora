@@ -32,7 +32,7 @@ local M = {
 	max_hum                         = 100,
 	min_hum                         = 1,
 	humidifier_min_temp             = 35.0, -- minimum temperature to enable humidifier
-	humidifier_max_on_time          = 3000, -- ms !!
+	humidifier_max_on_time          = 400, -- ms !!
 	humidifier_off_time             = 120, -- sec !!
 	hum_turn_on_time                = 0,
 	hum_turn_off_time               = 0,
@@ -177,17 +177,17 @@ end
 -------------------------------------
 function M.humidifier_switch(status)
 	local current_time = M.get_uptime_in_sec()
-	log.trace("humidifier current_time " .. current_time)
+	log.trace("[H] humidifier current_time " .. current_time)
 
 	if not M.humidifier_enabled then
 		--humidifier disabled, check for waiting_off time concluded
-		log.warn("humidifier disabled ")
+		log.warn("[H] humidifier disabled ")
 		if ((current_time - M.hum_turn_off_time) > M.humidifier_off_time) then
 			M.humidifier_enabled = true
-			log.trace("humidifier enabled time out expired")
+			log.trace("[H] humidifier enabled time out expired")
 			if status then
 				if (not M.humidifier) then
-					log.trace("humidifier was off... turning on ")
+					log.trace("[H] humidifier was off... turning on ")
 					--estaba apagado y lo prendo
 					M.hum_turn_on_time = current_time
 					M.humidifier = status
@@ -196,7 +196,7 @@ function M.humidifier_switch(status)
 		end
 	end
 
-	log.trace("humidifier enabled")
+	log.trace("[H] humidifier enabled")
 	if status and M.humidifier_enabled then -- encender humidifier
 		-- Check minimum temperature before activation
 		if M.temperature < M.humidifier_min_temp then
@@ -205,24 +205,24 @@ function M.humidifier_switch(status)
 		end
 		
 		if (not M.humidifier) then       -- estaba apagado
-			log.trace("humidifier was off... turning on ")
+			log.trace("[H] humidifier was off... turning on ")
 
 			--estaba apagado y lo prendo
 			M.hum_turn_on_time = current_time
 			M.humidifier = status
 		else
 			--estaba pendido y sigue
-			log.trace("humidifier was on... turned on" .. M.hum_turn_on_time)
+			log.trace("[H] humidifier was on... turned on" .. M.hum_turn_on_time)
 
-			log.trace("humidifier was on... turning on.. time transcurred " .. (current_time - M.hum_turn_on_time))
-			log.trace("humidifier was on... turning on.. time left " ..
-				(M.humidifier_max_on_time - (current_time - M.hum_turn_on_time)))
-			--verificar el tiempo maximo de on
-			if ((current_time - M.hum_turn_on_time) > M.humidifier_max_on_time) then
+			log.trace("[H] humidifier was on... turning on.. time transcurred " .. (current_time - M.hum_turn_on_time))
+			log.trace("[H] humidifier was on... turning on.. time left " ..
+				(M.humidifier_max_on_time / 1000 - (current_time - M.hum_turn_on_time)))
+			--verificar el tiempo maximo de on (fallback: timer is the primary enforcement)
+			if ((current_time - M.hum_turn_on_time) > M.humidifier_max_on_time / 1000) then
 				M.humidifier_enabled = false
 				M.humidifier = false
 				M.hum_turn_off_time = current_time
-				log.warn("humidifier disabled because time greater than max")
+				log.warn("[H] humidifier disabled because time greater than max")
 			end
 		end
 	end
@@ -230,7 +230,7 @@ function M.humidifier_switch(status)
 	if status and M.humidifier_enabled then
 		-- logica negada
 		gpio.write(GPIOHUMID, 0)
-		log.trace("humidifier pin turned on--------------------")
+		log.trace("[H] humidifier pin turned on--------------------")
 		if not M.humidifier_timer then
 			M.humidifier_timer = tmr.create()
 		end
@@ -238,7 +238,7 @@ function M.humidifier_switch(status)
 			M.humidifier_max_on_time,
 			tmr.ALARM_SINGLE,
 			function()
-				log.warn("humidifier max on time reached, turning off")
+				log.warn("[H] humidifier max on time reached, turning off")
 				gpio.write(GPIOHUMID, 1) -- logica negada
 				M.humidifier         = false
 				M.humidifier_enabled = false
@@ -253,7 +253,7 @@ function M.humidifier_switch(status)
 			M.humidifier_timer:stop()
 		end
 		gpio.write(GPIOHUMID, 1)
-		log.trace("humidifier pin turned off--------------------")
+		log.trace("[H] humidifier pin turned off--------------------")
 	end -- if end
 end  -- function end
 
