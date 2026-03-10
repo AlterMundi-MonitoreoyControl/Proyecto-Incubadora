@@ -3115,10 +3115,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Isolator:4N25"
-			(pin_names
-				(offset 1.016)
-			)
+		(symbol "Isolator:TLP185"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -3131,8 +3128,8 @@
 					(justify left)
 				)
 			)
-			(property "Value" "4N25"
-				(at 0 5.08 0)
+			(property "Value" "TLP185"
+				(at -5.08 -5.08 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -3140,18 +3137,17 @@
 					(justify left)
 				)
 			)
-			(property "Footprint" "Package_DIP:DIP-6_W7.62mm"
-				(at -5.08 -5.08 0)
+			(property "Footprint" "Package_SO:SOIC-4_4.55x3.7mm_P2.54mm"
+				(at 0 -7.62 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 						(italic yes)
 					)
-					(justify left)
 					(hide yes)
 				)
 			)
-			(property "Datasheet" "https://www.vishay.com/docs/83725/4n25.pdf"
+			(property "Datasheet" "https://toshiba.semicon-storage.com/info/docget.jsp?did=11791&prodName=TLP185"
 				(at 0 0 0)
 				(effects
 					(font
@@ -3161,7 +3157,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "DC Optocoupler Base Connected, Vce 30V, CTR 20%, Viso 2500V, DIP6"
+			(property "Description" "DC Optocoupler, Vce 80V, CTR 50-100%, SOIC-4-6 (MFSOP-4-6)"
 				(at 0 0 0)
 				(effects
 					(font
@@ -3170,7 +3166,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "NPN DC Optocoupler Base Connected"
+			(property "ki_keywords" "NPN DC Optocoupler"
 				(at 0 0 0)
 				(effects
 					(font
@@ -3179,7 +3175,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_fp_filters" "DIP*W7.62mm*"
+			(property "ki_fp_filters" "SOIC*4.55x3.7mm*P2.54mm*"
 				(at 0 0 0)
 				(effects
 					(font
@@ -3188,7 +3184,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "4N25_0_1"
+			(symbol "TLP185_0_1"
 				(rectangle
 					(start -5.08 3.81)
 					(end 5.08 -3.81)
@@ -3202,19 +3198,7 @@
 				)
 				(polyline
 					(pts
-						(xy -5.08 -2.54) (xy -3.175 -2.54) (xy -3.175 2.54) (xy -5.08 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -3.81 -0.635) (xy -2.54 -0.635)
+						(xy -5.08 -2.54) (xy -2.54 -2.54) (xy -2.54 2.54) (xy -5.08 2.54)
 					)
 					(stroke
 						(width 0.254)
@@ -3226,7 +3210,7 @@
 				)
 				(polyline
 					(pts
-						(xy -3.175 -0.635) (xy -3.81 0.635) (xy -2.54 0.635) (xy -3.175 -0.635)
+						(xy -3.175 -0.635) (xy -1.905 -0.635)
 					)
 					(stroke
 						(width 0.254)
@@ -3238,10 +3222,10 @@
 				)
 				(polyline
 					(pts
-						(xy -0.635 0.508) (xy 0.635 0.508) (xy 0.254 0.381) (xy 0.254 0.635) (xy 0.635 0.508)
+						(xy -2.54 -0.635) (xy -3.175 0.635) (xy -1.905 0.635) (xy -2.54 -0.635)
 					)
 					(stroke
-						(width 0)
+						(width 0.254)
 						(type default)
 					)
 					(fill
@@ -3250,10 +3234,10 @@
 				)
 				(polyline
 					(pts
-						(xy -0.635 -0.508) (xy 0.635 -0.508) (xy 0.254 -0.635) (xy 0.254 -0.381) (xy 0.635 -0.508)
+						(xy -0.508 0.508) (xy 0.762 0.508) (xy 0.381 0.381) (xy 0.381 0.635) (xy 0.762 0.508)
 					)
 					(stroke
-						(width 0)
+						(width 0.254)
 						(type default)
 					)
 					(fill
@@ -3262,10 +3246,10 @@
 				)
 				(polyline
 					(pts
-						(xy 2.667 -0.254) (xy 2.667 -2.286) (xy 2.667 -2.286)
+						(xy -0.508 -0.508) (xy 0.762 -0.508) (xy 0.381 -0.635) (xy 0.381 -0.381) (xy 0.762 -0.508)
 					)
 					(stroke
-						(width 0.3556)
+						(width 0.254)
 						(type default)
 					)
 					(fill
@@ -3274,10 +3258,10 @@
 				)
 				(polyline
 					(pts
-						(xy 2.667 -1.143) (xy 3.81 0)
+						(xy 2.54 1.905) (xy 2.54 -1.905)
 					)
 					(stroke
-						(width 0)
+						(width 0.508)
 						(type default)
 					)
 					(fill
@@ -3286,10 +3270,22 @@
 				)
 				(polyline
 					(pts
-						(xy 2.667 -1.397) (xy 3.81 -2.54)
+						(xy 3.048 -1.651) (xy 3.556 -1.143) (xy 4.064 -2.159) (xy 3.048 -1.651)
 					)
 					(stroke
-						(width 0)
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 5.08 2.54) (xy 4.445 2.54) (xy 2.54 0.635)
+					)
+					(stroke
+						(width 0.254)
 						(type default)
 					)
 					(fill
@@ -3298,46 +3294,10 @@
 				)
 				(polyline
 					(pts
-						(xy 3.683 -2.413) (xy 3.429 -1.905) (xy 3.175 -2.159) (xy 3.683 -2.413)
+						(xy 5.08 -2.54) (xy 4.445 -2.54) (xy 2.54 -0.635)
 					)
 					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 3.81 0) (xy 5.08 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 3.81 -2.54) (xy 5.08 -2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.08 2.54) (xy 1.905 2.54) (xy 1.905 -1.27) (xy 2.54 -1.27)
-					)
-					(stroke
-						(width 0)
+						(width 0.254)
 						(type default)
 					)
 					(fill
@@ -3345,7 +3305,7 @@
 					)
 				)
 			)
-			(symbol "4N25_1_1"
+			(symbol "TLP185_1_1"
 				(pin passive line
 					(at -7.62 2.54 0)
 					(length 2.54)
@@ -3374,25 +3334,6 @@
 							)
 						)
 					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin no_connect line
-					(at -5.08 0 0)
-					(length 2.54)
-					(hide yes)
-					(name "NC"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
 					(number "3"
 						(effects
 							(font
@@ -3412,24 +3353,6 @@
 						)
 					)
 					(number "6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 7.62 0 180)
-					(length 2.54)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -5483,12 +5406,6 @@
 		(uuid "cd050ffe-d3c8-4e4f-978c-b69fb4fe80c5")
 	)
 	(junction
-		(at 175.26 152.4)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "cef86b19-ca11-4b8e-b385-e4f643848e82")
-	)
-	(junction
 		(at 186.69 121.92)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5555,10 +5472,6 @@
 	(no_connect
 		(at 72.39 80.01)
 		(uuid "6952a51c-c5c3-4a43-ac9c-df53c36b5ab8")
-	)
-	(no_connect
-		(at 217.17 148.59)
-		(uuid "d4d628f6-e947-405d-8e9a-81d0d5395eb8")
 	)
 	(no_connect
 		(at 72.39 69.85)
@@ -5656,6 +5569,16 @@
 	)
 	(wire
 		(pts
+			(xy 175.26 152.4) (xy 175.26 153.67)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0d37b61a-7737-4e42-8445-fe387833d2dc")
+	)
+	(wire
+		(pts
 			(xy 179.07 40.64) (xy 179.07 41.91)
 		)
 		(stroke
@@ -5693,16 +5616,6 @@
 			(type default)
 		)
 		(uuid "13b28d18-87e3-43b8-b147-77ac8fb86579")
-	)
-	(wire
-		(pts
-			(xy 217.17 151.13) (xy 226.06 151.13)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "176a32b5-a7d5-4dd5-8ec4-a86781e7e540")
 	)
 	(wire
 		(pts
@@ -6336,16 +6249,6 @@
 	)
 	(wire
 		(pts
-			(xy 175.26 148.59) (xy 175.26 152.4)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5ee69367-ab2a-401c-a5cc-11ec77cf5c92")
-	)
-	(wire
-		(pts
 			(xy 175.26 153.67) (xy 201.93 153.67)
 		)
 		(stroke
@@ -6393,16 +6296,6 @@
 			(type default)
 		)
 		(uuid "69cf1530-060c-48ef-b87a-a23bd65a9e0b")
-	)
-	(wire
-		(pts
-			(xy 175.26 152.4) (xy 175.26 153.67)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6a95696e-b9b6-4b6f-98ac-9f2e9cebc142")
 	)
 	(wire
 		(pts
@@ -7693,6 +7586,16 @@
 			(type default)
 		)
 		(uuid "fd7a9139-8aba-4732-92be-7bef76573672")
+	)
+	(wire
+		(pts
+			(xy 217.17 148.59) (xy 227.33 148.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fdf78a92-1cbc-43a4-bfd6-92c4f662fff2")
 	)
 	(wire
 		(pts
@@ -22597,7 +22500,7 @@
 		(uuid "0552affd-8d3f-4b9c-804c-877ddaf6437d")
 	)
 	(label "ZERO"
-		(at 226.06 151.13 180)
+		(at 227.33 148.59 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -29327,7 +29230,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Isolator:4N25")
+		(lib_id "Isolator:TLP185")
 		(at 209.55 151.13 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -29344,7 +29247,7 @@
 				)
 			)
 		)
-		(property "Value" "4N25"
+		(property "Value" "TLP181"
 			(at 209.55 144.78 0)
 			(effects
 				(font
@@ -29352,18 +29255,17 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_DIP:SMDIP-6_W9.53mm"
-			(at 204.47 156.21 0)
+		(property "Footprint" "Package_SO:SOIC-4_4.55x3.7mm_P2.54mm"
+			(at 209.55 158.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 					(italic yes)
 				)
-				(justify left)
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.vishay.com/docs/83725/4n25.pdf"
+		(property "Datasheet" "https://toshiba.semicon-storage.com/info/docget.jsp?did=11791&prodName=TLP185"
 			(at 209.55 151.13 0)
 			(effects
 				(font
@@ -29373,7 +29275,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "DC Optocoupler Base Connected, Vce 30V, CTR 20%, Viso 2500V, DIP6"
+		(property "Description" "DC Optocoupler, Vce 80V, CTR 50-100%, SOIC-4-6 (MFSOP-4-6)"
 			(at 209.55 151.13 0)
 			(effects
 				(font
@@ -29385,14 +29287,8 @@
 		(pin "3"
 			(uuid "f0b6c89b-63d8-4f46-9b84-37475bbbd23c")
 		)
-		(pin "5"
-			(uuid "e581ba11-a8cd-41db-9035-21fbd185d319")
-		)
 		(pin "1"
 			(uuid "f9226805-fd23-47f7-9893-8db74009c054")
-		)
-		(pin "2"
-			(uuid "53941cf8-4fb8-4e66-b0a5-e7c747b44026")
 		)
 		(pin "6"
 			(uuid "22429047-dd1a-423a-b900-7d0ae12118d0")
