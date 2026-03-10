@@ -4,7 +4,11 @@
 -- SPDX-License-Identifier: AGPL-3.0-only
 
 local log = {
-    _version = "0.1.0"
+    _version = "0.1.0",
+    throttle_interval=10, --in seconds, must be greater than 5 seconds
+    throttle_type_interval=240,  --seconds
+    _last_humidity = 240, --initial time to avoid sending humidity errors at the beginning 
+    _last_temperature = 900 --initial time to avoid sending temperature errors at the beginning
 }
 
 -- Initialize the error table
@@ -16,8 +20,90 @@ log.errors = {
     sensors = {}
 }
 
+
+-- Generalized HTTP send with preflight checks
+local function safe_http_post(dest, url, headers, body, on_result)
+    -- Check available heap
+    if node.heap and node.heap() < (log.min_heap or 20000) then
+        print(dest .. ": Low memory, skipping HTTP request.")
+        return
+    end
+
+    -- Check WiFi connectivity (pseudo-code, adapt as needed)
+    if wifi and wifi.sta and wifi.sta.status and wifi.STA_GOTIP and wifi.sta.status() ~= wifi.STA_GOTIP then
+        print(dest .. ": WiFi not connected, skipping HTTP request.")
+        return
+    end
+
+    if not log.throttle_check(dest, log.throttle_interval) then
+        return
+    end
+
+    -- Actually send HTTP request
+    http.post(url, { headers = headers }, body, function(code_return, data)
+        if on_result then on_result(code_return, data) end
+        -- Clean up
+        headers = nil; body = nil; data = nil
+        collectgarbage("collect")
+    end)
+end
+
+function log.send_to_grafana(message)
+    local alert_string = "log,device=" .. INICIALES .. " message=\"" .. message .. "\" " ..
+        string.format("%.0f", ((time.get()) * 1000000000))
+    local token_grafana = "token:e98697797a6a592e6c886277041e6b95"
+    local url = SERVER
+    local headers = {
+        ["Content-Type"] = "text/plain",
+        ["Authorization"] = "Basic " .. token_grafana
+    }
+    safe_http_post("grafana", url, headers, alert_string, function(code_return)
+        if (code_return ~= 204) then
+            print("error de loggg " .. tostring(code_return))
+        end
+    end)
+end
+
+function log.send_to_ntfy(alert)
+    if not log.ntfy_enabled or not log.ntfy_url then
+        print("NTFY not enabled or URL not set")
+        return
+    end
+    local headers = { ["Content-Type"] = "text/plain" }
+    safe_http_post("ntfy", log.ntfy_url, headers, alert, function(code_return)
+        if code_return ~= 200 then
+            log.trace("Failed to send notification: " .. tostring(code_return))
+        else
+            log.trace("Notification sent successfully")
+        end
+    end)
+end
+
+function log.throttle_check(key,throttle_time)
+    -- Throttle: prevent sending too frequently
+    local throttle_key = "_last_" .. key
+    log[throttle_key] = log[throttle_key] or 0
+    
+    local time_diff = time.get() - log[throttle_key]
+    if time_diff > 3600 then
+        log[throttle_key] = time.get() -- Reset if difference is too large
+    end
+    
+    if time_diff < (throttle_time or 15) then
+        local remaining = throttle_time - time_diff  -- Calculate remaining time correctly
+        print(throttle_key .. ": Notification throttled. " .. remaining .. " seconds left")
+        print(throttle_key .. ": throttle_time=" .. tostring(throttle_time) .. " time_diff=" .. tostring(time_diff).."time ".. time.get() .." ".. log[throttle_key])
+        return false
+    else
+        print(throttle_key .. ": not throttled registering error. ")
+    end
+    
+    log[throttle_key] = time.get() + math.random(1,throttle_time-2) -- use random to avoid starvation of other errors 
+    return true
+end
+
 function log.addError(errorType, message)
-    log.error(message)
+    -- register all errors 
     if log.errors[errorType] ~= nil then
         table.insert(log.errors[errorType], message..","..string.format("%.0f", ((time.get()) * 1000000000)))
         -- Keep only the latest two messages
@@ -25,8 +111,16 @@ function log.addError(errorType, message)
             table.remove(log.errors[errorType], 1) -- Remove the oldest message
         end
     else
-        log.error("Invalid error type: " .. errorType)
+        log.trace("Invalid error type: " .. errorType)
     end
+
+    -- Use the extracted throttle method
+    if not log.throttle_check(errorType, log.throttle_type_interval) then
+        return
+    end
+
+    log.error(message)
+
 end
 
 function log.getErrors(errorType)
@@ -81,51 +175,51 @@ local function fsize(file)
     return size
 end
 
-function log.send_to_grafana(message)
+-- function log.send_to_grafana(message)
 
-    local alert_string = "log,device=" .. INICIALES .. " message=\"" .. message .. "\" " ..
-                             string.format("%.0f", ((time.get()) * 1000000000))
+--     local alert_string = "log,device=" .. INICIALES .. " message=\"" .. message .. "\" " ..
+--                              string.format("%.0f", ((time.get()) * 1000000000))
 
-    local token_grafana = "token:e98697797a6a592e6c886277041e6b95"
-    local url = SERVER
+--     local token_grafana = "token:e98697797a6a592e6c886277041e6b95"
+--     local url = SERVER
 
-    local headers = {
-        ["Content-Type"] = "text/plain",
-        ["Authorization"] = "Basic " .. token_grafana
-    }
+--     local headers = {
+--         ["Content-Type"] = "text/plain",
+--         ["Authorization"] = "Basic " .. token_grafana
+--     }
 
-   http.post(url, {
-       headers = headers
-   }, alert_string, function(code_return, data_return)
-       if (code_return ~= 204) then
-           print("error de loggg " .. code_return)
-       end
-   end) -- * post function end
-end -- * send_data_grafana end
+--    http.post(url, {
+--        headers = headers
+--    }, alert_string, function(code_return, data_return)
+--        if (code_return ~= 204) then
+--            print("error de loggg " .. code_return)
+--        end
+--    end) -- * post function end
+-- end -- * send_data_grafana end
 
--- Function to send notification through NTFY
-function log.send_to_ntfy(alert)
-	-- Check if NTFY is properly configured
-	if not log.ntfy_enabled or not log.ntfy_url then
-		print("NTFY not enabled or URL not set")
-		return
-	end
+-- -- Function to send notification through NTFY
+-- function log.send_to_ntfy(alert)
+-- 	-- Check if NTFY is properly configured
+-- 	if not log.ntfy_enabled or not log.ntfy_url then
+-- 		print("NTFY not enabled or URL not set")
+-- 		return
+-- 	end
 
-	local headers = {
-		["Content-Type"] = "text/plain"
-	}
+-- 	local headers = {
+-- 		["Content-Type"] = "text/plain"
+-- 	}
 
-	-- Send POST request to NTFY
-	http.post(log.ntfy_url, {
-		headers = headers
-	}, alert, function(code_return, _)
-		if code_return ~= 200 then
-			log.trace("Failed to send notification: " .. code_return)
-		else
-			log.trace("Notification sent successfully")
-		end
-	end)
-end
+-- 	-- Send POST request to NTFY
+-- 	http.post(log.ntfy_url, {
+-- 		headers = headers
+-- 	}, alert, function(code_return, _)
+-- 		if code_return ~= 200 then
+-- 			log.trace("Failed to send notification: " .. code_return)
+-- 		else
+-- 			log.trace("Notification sent successfully")
+-- 		end
+-- 	end)
+-- end
 
 local levels = {}
 for i, v in ipairs(modes) do
