@@ -43,10 +43,13 @@ M.response_heap = "esp_status,device=" .. INICIALES .. " up_time=" ..
 ------------------------------------------------------------------------------------
 
 function create_grafana_message(temperature,humidity,pressure,INICIALES,time)
+  local high_bytes, _ = node.uptime()
+	local uptime_secs = high_bytes / 1000000
+  
 	local data = "mediciones,device=" .. INICIALES .. " temp=" ..
 									temperature .. ",hum=" .. humidity .. ",press=" .. 
                   pressure ..",sDOWN="..gpio.read(GPIOREEDS_DOWN)..
-                  ",sUP=".. gpio.read(GPIOREEDS_UP).." " .. time
+                  ",sUP=".. gpio.read(GPIOREEDS_UP).."uptime="..uptime_secs.." " .. time
 	return data
 end
 

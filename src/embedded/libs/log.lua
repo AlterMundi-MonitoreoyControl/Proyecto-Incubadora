@@ -98,7 +98,7 @@ function log.throttle_check(key,throttle_time)
         print(throttle_key .. ": not throttled registering error. ")
     end
     
-    log[throttle_key] = time.get() + math.random(1,throttle_time-2) -- use random to avoid starvation of other errors 
+    log[throttle_key] = time.get() + math.random(1,5) -- use random to avoid starvation of other errors 
     return true
 end
 
