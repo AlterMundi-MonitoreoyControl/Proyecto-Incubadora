@@ -49,7 +49,7 @@ function create_grafana_message(temperature,humidity,pressure,INICIALES,time)
 	local data = "mediciones,device=" .. INICIALES .. " temp=" ..
 									temperature .. ",hum=" .. humidity .. ",press=" .. 
                   pressure ..",sDOWN="..gpio.read(GPIOREEDS_DOWN)..
-                  ",sUP=".. gpio.read(GPIOREEDS_UP).."uptime="..uptime_secs.." " .. time
+                  ",sUP=".. gpio.read(GPIOREEDS_UP)..",uptime="..uptime_secs.." " .. time
 	return data
 end
 
