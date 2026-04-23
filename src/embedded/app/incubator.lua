@@ -25,13 +25,18 @@ local M = {
 	rotation_switch_deactivate_time = 10000, -- max amount of time the sensor is down when the incubator is moving in ms
 	rotation_duration               = 50000, -- max amount of time the rotation should last in ms
 	rotation_period                 = 3600000, -- time in ms
+	-- NodeMCU timer maximum limit: 6,844,835 ms (~1.9 hours)
+	-- Use safe maximum of 6,000,000 ms (~1.67 hours) to account for variations
+	MAX_TIMER_PERIOD                = 6000000, -- NodeMCU safe timer limit
 	humidifier_enabled              = true,
 	max_hum                         = 100,
 	min_hum                         = 1,
-	humidifier_max_on_time          = 2, -- sec !! 
-	humidifier_off_time             = 120, -- sec !! 
+	humidifier_min_temp             = 35.0, -- minimum temperature to enable humidifier
+	humidifier_max_on_time          = 400, -- ms !!
+	humidifier_off_time             = 120, -- sec !!
 	hum_turn_on_time                = 0,
 	hum_turn_off_time               = 0,
+	humidifier_timer                = nil,  -- tmr object for max-on-time enforcement
 	tray_one_date = 0,
 	tray_two_date = 0,
 	tray_three_date = 0,
@@ -172,17 +177,17 @@ end
 -------------------------------------
 function M.humidifier_switch(status)
 	local current_time = M.get_uptime_in_sec()
-	log.trace("humidifier current_time " .. current_time)
+	log.trace("[H] humidifier current_time " .. current_time)
 
 	if not M.humidifier_enabled then
 		--humidifier disabled, check for waiting_off time concluded
-		log.warn("humidifier disabled ")
+		log.warn("[H] humidifier disabled ")
 		if ((current_time - M.hum_turn_off_time) > M.humidifier_off_time) then
 			M.humidifier_enabled = true
-			log.trace("humidifier enabled time out expired")
+			log.trace("[H] humidifier enabled time out expired")
 			if status then
 				if (not M.humidifier) then
-					log.trace("humidifier was off... turning on ")
+					log.trace("[H] humidifier was off... turning on ")
 					--estaba apagado y lo prendo
 					M.hum_turn_on_time = current_time
 					M.humidifier = status
@@ -191,27 +196,33 @@ function M.humidifier_switch(status)
 		end
 	end
 
-	log.trace("humidifier enabled")
+	log.trace("[H] humidifier enabled")
 	if status and M.humidifier_enabled then -- encender humidifier
+		-- Check minimum temperature before activation
+		if M.temperature < M.humidifier_min_temp then
+			log.trace("[H] Humidifier blocked: temp " .. M.temperature .. " < " .. M.humidifier_min_temp .. "°C")
+			return
+		end
+		
 		if (not M.humidifier) then       -- estaba apagado
-			log.trace("humidifier was off... turning on ")
+			log.trace("[H] humidifier was off... turning on ")
 
 			--estaba apagado y lo prendo
 			M.hum_turn_on_time = current_time
 			M.humidifier = status
 		else
 			--estaba pendido y sigue
-			log.trace("humidifier was on... turned on" .. M.hum_turn_on_time)
+			log.trace("[H] humidifier was on... turned on" .. M.hum_turn_on_time)
 
-			log.trace("humidifier was on... turning on.. time transcurred " .. (current_time - M.hum_turn_on_time))
-			log.trace("humidifier was on... turning on.. time left " ..
-				(M.humidifier_max_on_time - (current_time - M.hum_turn_on_time)))
-			--verificar el tiempo maximo de on
-			if ((current_time - M.hum_turn_on_time) > M.humidifier_max_on_time) then
+			log.trace("[H] humidifier was on... turning on.. time transcurred " .. (current_time - M.hum_turn_on_time))
+			log.trace("[H] humidifier was on... turning on.. time left " ..
+				(M.humidifier_max_on_time / 1000 - (current_time - M.hum_turn_on_time)))
+			--verificar el tiempo maximo de on (fallback: timer is the primary enforcement)
+			if ((current_time - M.hum_turn_on_time) > M.humidifier_max_on_time / 1000) then
 				M.humidifier_enabled = false
 				M.humidifier = false
 				M.hum_turn_off_time = current_time
-				log.warn("humidifier disabled because time greater than max")
+				log.warn("[H] humidifier disabled because time greater than max")
 			end
 		end
 	end
@@ -219,12 +230,30 @@ function M.humidifier_switch(status)
 	if status and M.humidifier_enabled then
 		-- logica negada
 		gpio.write(GPIOHUMID, 0)
-		log.trace("humidifier pin turned on--------------------")
+		log.trace("[H] humidifier pin turned on--------------------")
+		if not M.humidifier_timer then
+			M.humidifier_timer = tmr.create()
+		end
+		M.humidifier_timer:alarm(
+			M.humidifier_max_on_time,
+			tmr.ALARM_SINGLE,
+			function()
+				log.warn("[H] humidifier max on time reached, turning off")
+				gpio.write(GPIOHUMID, 1) -- logica negada
+				M.humidifier         = false
+				M.humidifier_enabled = false
+				M.hum_turn_off_time  = M.get_uptime_in_sec()
+			end
+		)
+		M.humidifier = true
 	else
 		M.humidifier = false
 		-- logica negada
+		if M.humidifier_timer then
+			M.humidifier_timer:stop()
+		end
 		gpio.write(GPIOHUMID, 1)
-		log.trace("humidifier pin turned off--------------------")
+		log.trace("[H] humidifier pin turned off--------------------")
 	end -- if end
 end  -- function end
 
@@ -327,12 +356,15 @@ end -- function end
 -- @param new_period_time"	comes from json received from API
 -------------------------------------
 function M.set_rotation_period(new_period_time)
-	if new_period_time ~= nil and new_period_time >= 0
+	if new_period_time ~= nil and new_period_time >= 60000 -- minimum 1 minute
+		and new_period_time <= M.MAX_TIMER_PERIOD
 		and tostring(new_period_time):sub(1, 1) ~= '-'
 		and type(new_period_time) == "number" then
 		M.rotation_period = new_period_time
+		log.trace("[R] Rotation period set to: " .. new_period_time .. " ms (" .. math.floor(new_period_time/60000) .. " min)")
 		return true
 	else
+		log.addError("rotation", "[R] Invalid rotation period: " .. tostring(new_period_time) .. " ms. Range: 60000-" .. M.MAX_TIMER_PERIOD .. " ms")
 		return false
 	end -- if end
 end -- function end 
@@ -452,5 +484,23 @@ function M.set_min_humidity(new_min_hum)
 			return false
 		end
 end
+
+-------------------------------------
+-- @function set_humidifier_min_temp	modify the minimum temperature for humidifier activation from API
+--
+-- @param new_temp	new minimum temperature value
+-------------------------------------
+function M.set_humidifier_min_temp(new_temp)
+	if new_temp ~= nil and new_temp >= 30.0 and new_temp <= 45.0
+		and tostring(new_temp):sub(1, 1) ~= '-'
+		and type(new_temp) == "number" then
+		M.humidifier_min_temp = new_temp
+		log.trace("[H] Humidifier min temp set to: " .. new_temp .. "°C")
+		return true
+	else
+		log.addError("humidity", "[H] Invalid humidifier min temp: " .. tostring(new_temp) .. "°C. Range: 30.0-45.0°C")
+		return false
+	end -- if end
+end -- function end 
 
 return M
