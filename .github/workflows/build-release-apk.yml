@@ -1,0 +1,48 @@
+name: Build and Publish APK Release
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+      
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+          channel: 'stable'
+      
+      - name: Get dependencies
+        working-directory: src/mobile_app
+        run: flutter pub get
+      
+      - name: Build APK (Release)
+        working-directory: src/mobile_app
+        run: flutter build apk --release
+      
+      - name: Upload APK to Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: src/mobile_app/build/app/outputs/apk/release/app-release.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Upload APK as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: apk-release
+          path: src/mobile_app/build/app/outputs/apk/release/app-release.apk
