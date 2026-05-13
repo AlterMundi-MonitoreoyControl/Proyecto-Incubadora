@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:google_fonts/google_fonts.dart' hide Config;
 import 'package:incubapp_lite/models/actual_model.dart';
 import 'package:incubapp_lite/models/config_model.dart';
 import 'package:incubapp_lite/views/home.dart';

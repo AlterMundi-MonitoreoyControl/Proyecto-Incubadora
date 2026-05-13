@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:incubapp_lite/services/api_services.dart';
 import 'package:flutter/material.dart';
 import 'package:incubapp_lite/views/initial_home.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:google_fonts/google_fonts.dart' hide Config;
 import 'package:incubapp_lite/views/wifi_home.dart';
 import 'package:incubapp_lite/views/counter_home.dart';
 import 'package:incubapp_lite/views/graf_home.dart';
