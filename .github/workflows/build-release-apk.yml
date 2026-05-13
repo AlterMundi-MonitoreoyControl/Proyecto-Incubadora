@@ -1,6 +1,9 @@
 name: Build and Publish APK Release
 
 on:
+  push:
+    branches:
+      - fix/flutter-apk-ci-build
   release:
     types: [created]
   workflow_dispatch:
