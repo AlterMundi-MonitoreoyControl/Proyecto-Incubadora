@@ -48,7 +48,7 @@ class _GHomeState extends State<GHome> {
       ),
       body: InAppWebView(
         initialUrlRequest: URLRequest(
-          url: Uri.parse(ApiConstants.getGrafanaUrl(incubadoraId!)),
+          url: WebUri(ApiConstants.getGrafanaUrl(incubadoraId!)),
         ),
         onWebViewCreated: (controller) {
           webViewController = controller;
