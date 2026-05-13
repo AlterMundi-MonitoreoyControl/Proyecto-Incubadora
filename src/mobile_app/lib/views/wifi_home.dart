@@ -3,7 +3,7 @@ import 'package:incubapp_lite/models/actual_model.dart';
 import 'package:incubapp_lite/models/config_model.dart';
 import 'package:incubapp_lite/services/api_services.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:google_fonts/google_fonts.dart' hide Config;
 import 'package:incubapp_lite/views/initial_home.dart';
 import 'package:incubapp_lite/views/home.dart';
 import 'package:incubapp_lite/views/counter_home.dart';
