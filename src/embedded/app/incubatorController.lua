@@ -270,14 +270,30 @@ end
 --! @param pin                            number of pin to watch
 ------------------------------------------------------------------------------------
 
+-- Debounce timers for reed switch GPIO interrupts (one per pin)
+local debounce_timers = {}
+
 function trigger_rotation_off(pin, level)
-    if(level==0) then
-        if gpio.read(pin) == 1 then
-            log.trace("[R] ruidoooo ")
-            --this function is activated when signal is going down ... it should be 0 
-            return
+    if (level == 0) then
+        -- Disable interrupt immediately to prevent re-entrant calls during bounce
+        gpio.trig(pin, gpio.INTR_DISABLE)
+
+        -- Cancel any pending debounce for this pin
+        if debounce_timers[pin] then
+            debounce_timers[pin]:unregister()
         else
-            gpio.trig(pin, gpio.INTR_DISABLE)
+            debounce_timers[pin] = tmr.create()
+        end
+
+        -- Wait 50ms, then confirm the signal is still low before acting
+        debounce_timers[pin]:register(50, tmr.ALARM_SINGLE, function()
+            if gpio.read(pin) == 1 then
+                log.trace("[R] ruidoooo (debounce rejected bounce on pin ", pin, ")")
+                -- Signal bounced back — re-arm interrupt and ignore
+                gpio.trig(pin, gpio.INTR_DOWN, trigger_rotation_off)
+                return
+            end
+
             incubator.rotation_activated = true
             log.trace("[R]  rotation working pin activated ", pin, level)
             incubator.rotation_switch(false)
@@ -300,13 +316,14 @@ function trigger_rotation_off(pin, level)
                     log.trace("GPIOREEDS_DOWN controled vars------------", controlervars.downtime, " ",
                         controlervars.uptime, " ", controlervars.demora)
                 else
-                    log.trace("GPIOREEDS_UP controlled vars------------", controlervars.demora)
+                    log.trace("GPIOREEDS_DOWN controlled vars------------", controlervars.demora)
                 end
             else
                 controlervars.rotation_enabled = false
                 log.addError("rotation","[R] rotation disabled, sensors are not working")
             end
-        end
+        end)
+        debounce_timers[pin]:start()
     end
 end
 
@@ -315,15 +332,28 @@ end
 ------------------------------------------------------------------------------------
 function enable_rotation(pin, level)
     if (level == 1) then
-        if gpio.read(pin) == 0 then
-            log.trace("[R] noise, not able to enable rotation ")
-            --this function is activated when signal is going up ... it should be 1 
-            return
+        -- Disable interrupt immediately to prevent re-entrant calls during bounce
+        gpio.trig(pin, gpio.INTR_DISABLE)
+
+        -- Cancel any pending debounce for this pin
+        if debounce_timers[pin] then
+            debounce_timers[pin]:unregister()
         else
-            gpio.trig(pin, gpio.INTR_DISABLE)
-            log.trace("[R] rotation working rotation is active thanks to pin ", pin," level ", level)
-            incubator.rotation_enabled = true
+            debounce_timers[pin] = tmr.create()
         end
+
+        -- Wait 50ms, then confirm the signal is still high before acting
+        debounce_timers[pin]:register(50, tmr.ALARM_SINGLE, function()
+            if gpio.read(pin) == 0 then
+                log.trace("[R] noise, not able to enable rotation (debounce rejected bounce on pin ", pin, ")")
+                -- Signal bounced back — re-arm interrupt and ignore
+                gpio.trig(pin, gpio.INTR_UP, enable_rotation)
+                return
+            end
+            log.trace("[R] rotation working rotation is active thanks to pin ", pin, " level ", level)
+            incubator.rotation_enabled = true
+        end)
+        debounce_timers[pin]:start()
     end
 end
 
