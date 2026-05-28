@@ -1,0 +1,74 @@
+<svg width="680" height="380" viewBox="0 0 680 380" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <!-- Fondo blanco -->
+  <rect width="680" height="380" fill="#ffffff"/>
+
+  <!-- ── Contenedor Incubadora ── -->
+  <rect x="30" y="28" width="350" height="280" rx="16" fill="#e8f8f2" stroke="#1D9E75" stroke-width="1.2"/>
+  <text x="205" y="55" text-anchor="middle" font-size="14" font-weight="bold" fill="#0F6E56">Incubadora LibreIncu</text>
+
+  <!-- Sensor BME280 -->
+  <rect x="50" y="72" width="150" height="56" rx="8" fill="#9FE1CB" stroke="#1D9E75" stroke-width="0.8"/>
+  <text x="125" y="96" text-anchor="middle" font-size="13" font-weight="bold" fill="#085041">Sensor BME280</text>
+  <text x="125" y="114" text-anchor="middle" font-size="11" fill="#0F6E56">Temperatura, humedad</text>
+
+  <!-- Actuadores -->
+  <rect x="50" y="152" width="150" height="56" rx="8" fill="#F5C4B3" stroke="#D85A30" stroke-width="0.8"/>
+  <text x="125" y="176" text-anchor="middle" font-size="13" font-weight="bold" fill="#4A1B0C">Actuadores</text>
+  <text x="125" y="194" text-anchor="middle" font-size="11" fill="#712B13">Calefactor, bomba, motor</text>
+
+  <!-- Sensores Reed -->
+  <rect x="50" y="228" width="150" height="50" rx="8" fill="#F5C4B3" stroke="#D85A30" stroke-width="0.8"/>
+  <text x="125" y="250" text-anchor="middle" font-size="13" font-weight="bold" fill="#4A1B0C">Sensores Reed</text>
+  <text x="125" y="266" text-anchor="middle" font-size="11" fill="#712B13">Posición de bandejas</text>
+
+  <!-- Flechas → ESP32 -->
+  <line x1="200" y1="100" x2="245" y2="148" stroke="#888" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <line x1="200" y1="180" x2="245" y2="195" stroke="#888" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <line x1="200" y1="253" x2="245" y2="220" stroke="#888" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+  <!-- ESP32 -->
+  <rect x="245" y="140" width="115" height="80" rx="8" fill="#CECBF6" stroke="#534AB7" stroke-width="0.8"/>
+  <text x="302" y="166" text-anchor="middle" font-size="13" font-weight="bold" fill="#26215C">ESP32</text>
+  <text x="302" y="183" text-anchor="middle" font-size="11" fill="#3C3489">Firmware Lua</text>
+  <text x="302" y="198" text-anchor="middle" font-size="11" fill="#3C3489">(NodeMCU)</text>
+
+  <!-- ── App LibrePollo ── -->
+  <rect x="420" y="72" width="220" height="80" rx="8" fill="#CECBF6" stroke="#534AB7" stroke-width="0.8"/>
+  <text x="530" y="100" text-anchor="middle" font-size="13" font-weight="bold" fill="#26215C">App LibrePollo</text>
+  <text x="530" y="117" text-anchor="middle" font-size="11" fill="#3C3489">Android — control remoto</text>
+  <text x="530" y="133" text-anchor="middle" font-size="11" fill="#3C3489">Parámetros en tiempo real</text>
+
+  <!-- Flecha ESP32 → App + etiqueta Wi-Fi -->
+  <line x1="360" y1="172" x2="418" y2="116" stroke="#888" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <text x="393" y="152" text-anchor="middle" font-size="10" fill="#888">Wi-Fi</text>
+
+  <!-- ── Servidor Grafana ── -->
+  <rect x="420" y="210" width="220" height="80" rx="8" fill="#B5D4F4" stroke="#185FA5" stroke-width="0.8"/>
+  <text x="530" y="238" text-anchor="middle" font-size="13" font-weight="bold" fill="#042C53">Servidor Grafana</text>
+  <text x="530" y="255" text-anchor="middle" font-size="11" fill="#0C447C">Monitoreo histórico</text>
+  <text x="530" y="271" text-anchor="middle" font-size="11" fill="#0C447C">Visualización de datos</text>
+
+  <!-- Flecha ESP32 → Grafana + etiqueta Internet -->
+  <line x1="360" y1="195" x2="418" y2="248" stroke="#888" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <text x="393" y="238" text-anchor="middle" font-size="10" fill="#888">Internet</text>
+
+  <!-- ── Leyenda ── -->
+  <text x="36" y="332" font-size="11" font-weight="bold" fill="#444">Componentes:</text>
+  <rect x="36" y="342" width="11" height="11" rx="2" fill="#9FE1CB" stroke="#1D9E75" stroke-width="0.8"/>
+  <text x="52" y="352" font-size="10" fill="#444">Sensores</text>
+  <rect x="108" y="342" width="11" height="11" rx="2" fill="#F5C4B3" stroke="#D85A30" stroke-width="0.8"/>
+  <text x="124" y="352" font-size="10" fill="#444">Actuadores</text>
+  <rect x="196" y="342" width="11" height="11" rx="2" fill="#CECBF6" stroke="#534AB7" stroke-width="0.8"/>
+  <text x="212" y="352" font-size="10" fill="#444">Control / App</text>
+  <rect x="36" y="360" width="11" height="11" rx="2" fill="#B5D4F4" stroke="#185FA5" stroke-width="0.8"/>
+  <text x="52" y="370" font-size="10" fill="#444">Nube</text>
+
+  <!-- Título -->
+  <text x="340" y="375" text-anchor="middle" font-size="10" fill="#aaa">LibreIncu · Arquitectura del sistema · AlterMundi + CTO</text>
+</svg>

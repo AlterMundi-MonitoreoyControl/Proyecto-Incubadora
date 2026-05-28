@@ -1,0 +1,22 @@
+Subsistema,Componente,Cantidad,Especificación,Estado,Referencia / Link,Notas,Responsable
+Alimentación,Fuente switching,1,12V 5A con ventilación FSI-1205-Classic,definido,https://www.mercadolibre.com.ar/fuente-switching-12v-5a-proteccion-ventilada-fsi-1205-clasic/p/MLA308325457,,
+Alimentación,Módulo step down,1,"LM2596 regulable 1,3V–35V 3A",definido,https://articulo.mercadolibre.com.ar/MLA-1249465246-modulo-regulador-fuente-step-down-lm2596s-130v-35v-pack-x10-_JM,,Fabri
+Alimentación,Gabinete plástico,1,25x25 o 20x20 cm IP65,definido,https://www.mercadolibre.com.ar/caja-estanca-plastica-210x310x110-mm-blanca-ip65-color-blanco/p/MLA268881998,,
+Alimentación,Disyuntor diferencial,1,Bipolar 2x 25A,definido,https://articulo.mercadolibre.com.ar/MLA-1548430354-interruptor-diferencial-disyuntor-bipolar-2x-25a-baw-_JM,,
+Control electrónico,PCB (placa de control Olivia),1,Diseño propio LibreIncu,repositorio,https://github.com/AlterMundi-MonitoreoyControl/Proyecto-Incubadora,Ver diseño en repositorio GitHub,
+Control electrónico,Sensor BME280,1,Temperatura / humedad / presión I²C,verificar,,Hay de impresora — averiguar si sirven. 3 dudosos,Pablo
+Control electrónico,Sensores Reed (finales de carrera),2,Sensor magnético para puerta/ventana,definido,https://articulo.mercadolibre.com.ar/MLA-878544727-sensor-magnetico-para-alarma-puerta-y-ventana-seguridad-_JM,Pack x6,
+Control electrónico,Resistencia calefactora,1,200W (tipo panchera industrial),definido,https://myaccount.mercadolibre.com.ar/my_purchases/200000938165593,,Fabri
+Electricidad y protecciones,Interruptor termomagnético,3,Automático miniatura DIN límite 782105,definido,https://articulo.mercadolibre.com.ar/MLA-908151554-interruptor-automatico-miniatura-para-riel-din-sica-limit-782105,,
+Electricidad y protecciones,Llave palanca (interruptor),2,250V on-off 2 contactos,definido,https://articulo.mercadolibre.com.ar/MLA-908151554-llave-palanca-10a-250v-on-off-2-contactos-interruptora-_JM,,
+Electricidad y protecciones,Cable taller tripolar,2,3x2 5 mm²,5 mm²,definido,https://articulo.mercadolibre.com.ar/MLA-912939764-cable-taller-tripolar-3-x-25-mm-x-mts-_JM,Metros según diseño
+Electricidad y protecciones,Cable para sensores,3,Multiconductor fino,definido,,Hay de impresora,Pablo
+Electricidad y protecciones,Prensacables,5,,definido,,,
+Electricidad y protecciones,Enchufe,1,Ficha macho recto salida trasera 10A,definido,https://articulo.mercadolibre.com.ar/MLA-1404782284-pack-x10-ficha-macho-richi-salida-trasera-3-patas_JM,,
+Electricidad y protecciones,Luz LED,1,Proyector reflector LED 10W luz fría,definido,https://articulo.mercadolibre.com.ar/MLA-1400729612-proyector-reflector-led-10w-luz-fria-blanco_JM,,
+Electricidad y protecciones,Resistencia horno (grill),1,36A 53cm — horno eléctrico grill velas,definido,https://articulo.mercadolibre.com.ar/MLA-654604457-resistencia-horno-electrico-grill-velas_JM,,
+Electricidad y protecciones,Cable bipolar 0,5mm,,24AWG rojo-negro LED x10m,definido,https://articulo.mercadolibre.com.ar/MLA-877971472-cable-bipolar-de-05mm-24-awg-rojo-y-negro-tira-led-x10m-_JM,
+Humidificación y mecánica,Bomba de agua,1,"Singflo/SEAFLO 12VCC 4,3 LPM 35 PSI — diafragma con presostato integrado. 3,5A. Salida 3/8"".",definido,https://www.mercadolibre.com.ar/bomba-de-agua-43-lpm-12-v-motorhome-casa-rodante-adrogue/up/MLAU276483609,,
+Humidificación y mecánica,Motorreductor volteo,1,Ignis MR08B-012004 — 12 VCC 4W cupla máx. 88 kgf·cm eje 8mm 17 rpm,definido,https://ignismotor.com/STD-ES/PDF/MR08B-012004.pdf,Volteo automático de bandejas,
+Humidificación y mecánica,Ventilador turbina con rodamiento,1,220 VAC 50Hz — 120x120mm axial con rulemán. Modelo tipo CT4 A7 o similar.,definido,https://articulo.mercadolibre.com.ar/MLA-620399442-turbina-cooler-fan-extractor-220v-ruleman-4-pulgadas-120x38m-_JM,Circulación forzada de aire interior. VT-POWER CT4 o equivalente con rodamiento (no manguito),
+Humidificación y mecánica,Caja estanca 20x25,1,210x310x110mm IP65,definido,https://www.mercadolibre.com.ar/caja-estanca-plastica-210x310x110-mm-blanca-ip65-color-blanco/p/MLA268881998,,
