@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '11'
+          java-version: '17'
       
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -25,10 +25,14 @@ jobs:
           flutter-version: '3.x'
           channel: 'stable'
       
+      - name: Generate Android platform
+        working-directory: src/mobile_app
+        run: flutter create . --platforms android
+
       - name: Get dependencies
         working-directory: src/mobile_app
         run: flutter pub get
-      
+
       - name: Build APK (Release)
         working-directory: src/mobile_app
         run: flutter build apk --release

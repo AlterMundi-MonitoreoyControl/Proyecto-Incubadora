@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:google_fonts/google_fonts.dart' hide Config;
 import 'package:incubapp_lite/views/home.dart';
 import 'package:incubapp_lite/views/wifi_home.dart';
 import 'package:incubapp_lite/views/initial_home.dart';
