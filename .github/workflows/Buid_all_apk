@@ -1,0 +1,537 @@
+name: Build and Publish APK Release
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Forzar recompilación aunque ya exista el APK publicado'
+        required: false
+        default: 'false'
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  # -------------------------------------------------------------------
+  # JOB 1: descubre qué hay que compilar.
+  #   - Lista todos los tags del repo vía API.
+  #   - Chequea para cada uno si ya existe un asset "app-release-<tag>.apk"
+  #     en el release correspondiente.
+  #   - Chequea lo mismo para "main" (tag "main", asset "app-release-main.apk").
+  #   - Emite una matriz JSON con los que faltan.
+  # -------------------------------------------------------------------
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.scan.outputs.matrix }}
+      count: ${{ steps.scan.outputs.count }}
+    steps:
+      - name: Scan tags and main for missing APKs
+        id: scan
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FORCE: ${{ github.event.inputs.force || 'false' }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          # Lista de refs a chequear: todos los tags + "main"
+          # Guardamos pares "name|kind" (kind = tag|branch).
+          TAGS_RAW="$(gh api "repos/$REPO/tags" --paginate --jq '.[].name' 2>/dev/null || true)"
+
+          CANDIDATES=()
+          while IFS= read -r t; do
+            [ -z "$t" ] && continue
+            CANDIDATES+=("$t|tag")
+          done <<< "$TAGS_RAW"
+
+          # ¿Existe la branch main? Si sí, agregarla como candidato.
+          if gh api "repos/$REPO/branches/main" >/dev/null 2>&1; then
+            CANDIDATES+=("main|branch")
+          fi
+
+          echo "Candidatos encontrados: ${#CANDIDATES[@]}"
+
+          MATRIX="["
+          first=1
+          COUNT=0
+
+          for entry in "${CANDIDATES[@]}"; do
+            name="${entry%%|*}"
+            kind="${entry##*|}"
+            asset="app-release-${name}.apk"
+
+            if [ "$FORCE" = "true" ]; then
+              exists="false"
+            else
+              # gh release view falla si no existe el release; lo tratamos como "no existe asset"
+              if gh release view "$name" --repo "$REPO" \
+                   --json assets --jq '.assets[].name' 2>/dev/null \
+                   | grep -qx "$asset"; then
+                exists="true"
+              else
+                exists="false"
+              fi
+            fi
+
+            if [ "$exists" = "true" ]; then
+              echo "  SKIP   $name ($kind) — $asset ya existe"
+              continue
+            fi
+
+            echo "  BUILD  $name ($kind)"
+            if [ "$first" = "1" ]; then
+              first=0
+            else
+              MATRIX="$MATRIX,"
+            fi
+            MATRIX="$MATRIX{\"ref\":\"$name\",\"kind\":\"$kind\"}"
+            COUNT=$((COUNT + 1))
+          done
+
+          MATRIX="$MATRIX]"
+          echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+          echo
+          echo "Matriz final ($COUNT entradas): $MATRIX"
+
+  # -------------------------------------------------------------------
+  # JOB 2: build en paralelo, uno por entrada de la matriz.
+  # -------------------------------------------------------------------
+  build:
+    needs: discover
+    if: needs.discover.outputs.count != '0'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(needs.discover.outputs.matrix) }}
+    steps:
+      - name: Resolve ref
+        id: ref
+        run: |
+          set -euo pipefail
+          echo "ref=${{ matrix.ref }}" >> "$GITHUB_OUTPUT"
+          echo "kind=${{ matrix.kind }}" >> "$GITHUB_OUTPUT"
+          echo "Compilando ref=${{ matrix.ref }} kind=${{ matrix.kind }}"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ matrix.kind == 'tag' && format('refs/tags/{0}', matrix.ref) || matrix.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 1
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.4'
+          channel: 'stable'
+          cache: true
+
+      - name: Patch Flutter SDK — make IconData non-final (needed by font_awesome 10.x)
+        shell: bash
+        run: |
+          set -euo pipefail
+          FLUTTER_ROOT="$(dirname "$(dirname "$(which flutter)")")"
+          ICON_DATA="$FLUTTER_ROOT/packages/flutter/lib/src/widgets/icon_data.dart"
+          if [ ! -f "$ICON_DATA" ]; then
+            echo "icon_data.dart not found at $ICON_DATA" >&2
+            exit 1
+          fi
+          echo "Before:"
+          grep -n 'class IconData' "$ICON_DATA" || true
+          sed -i -E 's/^final[[:space:]]+class[[:space:]]+IconData\b/class IconData/' "$ICON_DATA"
+          echo "After:"
+          grep -n 'class IconData' "$ICON_DATA" || true
+          if grep -qE '^final[[:space:]]+class[[:space:]]+IconData' "$ICON_DATA"; then
+            echo "FAILED to remove final modifier" >&2
+            exit 1
+          fi
+
+      - name: Cache pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            src/mobile_app/.dart_tool
+          key: pub-${{ runner.os }}-${{ matrix.ref }}-${{ hashFiles('src/mobile_app/pubspec.lock') }}
+          restore-keys: |
+            pub-${{ runner.os }}-${{ matrix.ref }}-
+            pub-${{ runner.os }}-
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ matrix.ref }}-${{ hashFiles('src/mobile_app/android/**/*.gradle*') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-${{ matrix.ref }}-
+            gradle-${{ runner.os }}-
+
+      - name: Generate Android platform
+        working-directory: src/mobile_app
+        run: flutter create . --platforms android
+
+      - name: Patch pubspec for Flutter 3.47.4 / Dart 3 compatibility
+        working-directory: src/mobile_app
+        shell: bash
+        run: |
+          set -euo pipefail
+          pubspec="pubspec.yaml"
+
+          if grep -r 'url_launcher' lib/ --include='*.dart' -l 2>/dev/null | grep -q .; then
+            if ! grep -q 'url_launcher' "$pubspec"; then
+              sed -i '/^  flutter:/i\  url_launcher: ^6.3.2' "$pubspec"
+              echo "Added url_launcher: ^6.3.2"
+            fi
+          fi
+
+          if grep -q 'font_awesome_flutter' "$pubspec"; then
+            sed -i 's/^\( *font_awesome_flutter:\).*$/\1 ^10.9.0/' "$pubspec"
+            echo "Set font_awesome_flutter: ^10.9.0"
+          fi
+
+          if grep -q 'google_fonts' "$pubspec"; then
+            sed -i 's/^\( *google_fonts:\).*$/\1 ^6.2.1/' "$pubspec"
+            echo "Set google_fonts: ^6.2.1"
+          fi
+
+          if grep -q 'permission_handler' "$pubspec"; then
+            sed -i 's/^\( *permission_handler:\).*$/\1 ^12.0.0/' "$pubspec"
+            echo "Set permission_handler: ^12.0.0"
+          fi
+
+          python3 - <<'PY'
+          import re
+          pubspec = "pubspec.yaml"
+          with open(pubspec) as f:
+              content = f.read()
+
+          content = re.sub(r'^(\s*youtube_player_flutter:).*$', r'\1 ^9.1.3', content, flags=re.M)
+          content = re.sub(r'^(\s*flutter_inappwebview:).*$', r'\1 ^6.1.5', content, flags=re.M)
+          content = re.sub(r'^(\s*permission_handler:).*$', r'\1 ^12.0.0', content, flags=re.M)
+
+          overrides = {
+              'youtube_player_flutter': '^9.1.3',
+              'flutter_inappwebview': '^6.1.5',
+              'permission_handler': '^12.0.0',
+          }
+          lines = content.splitlines()
+
+          try:
+              idx = next(i for i, l in enumerate(lines) if l.strip() == 'dependency_overrides:')
+          except StopIteration:
+              lines += ['', 'dependency_overrides:'] + [f'  {k}: {v}' for k, v in overrides.items()]
+          else:
+              end = len(lines)
+              for j in range(idx + 1, len(lines)):
+                  if lines[j] and not lines[j][0].isspace() and not lines[j].startswith('#'):
+                      end = j
+                      break
+              body = [l for l in lines[idx + 1:end]
+                      if not re.match(r'\s*(youtube_player_flutter|flutter_inappwebview|permission_handler)\s*:', l)]
+              lines = lines[:idx + 1] + body + [f'  {k}: {v}' for k, v in overrides.items()] + lines[end:]
+
+          with open(pubspec, 'w') as f:
+              f.write('\n'.join(lines) + '\n')
+          print('pubspec patched: youtube_player_flutter ^9.1.3, flutter_inappwebview ^6.1.5, permission_handler ^12.0.0')
+          PY
+
+          echo "pubspec compatibility patch done"
+          grep -E 'url_launcher|font_awesome|google_fonts|youtube_player|flutter_inappwebview|permission_handler' "$pubspec" || true
+
+      - name: Get dependencies
+        working-directory: src/mobile_app
+        run: flutter pub get
+
+      - name: Refetch webview_flutter_android (clean base for patching)
+        working-directory: src/mobile_app
+        shell: bash
+        run: |
+          set -euo pipefail
+          pub_cache="${PUB_CACHE:-$HOME/.pub-cache}"
+          echo "Removing stale webview_flutter_android from pub cache..."
+          rm -rf "$pub_cache"/hosted/pub.dev/webview_flutter_android-* || true
+          echo "Refetching..."
+          flutter pub get
+          ls -d "$pub_cache"/hosted/pub.dev/webview_flutter_android-* || true
+
+      - name: Verify resolved plugin versions (v1 embedding removed)
+        working-directory: src/mobile_app
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          check_min() {
+            local pkg="$1" min_major="$2" min_minor="$3"
+            local ver
+            ver=$(awk -v p="$pkg" '
+              $0 ~ "^  " p ":" {found=1; next}
+              found && /version:/ {gsub(/[" ]/,"",$2); print $2; exit}
+            ' pubspec.lock)
+            echo "$pkg resolved to: ${ver:-<not found>}"
+            if [ -z "$ver" ]; then
+              echo "  $pkg not in pubspec.lock — skipping check"
+              return 0
+            fi
+            local major minor
+            major=$(echo "$ver" | cut -d. -f1)
+            minor=$(echo "$ver" | cut -d. -f2)
+            if [ "$major" -lt "$min_major" ] || \
+               { [ "$major" -eq "$min_major" ] && [ "$minor" -lt "$min_minor" ]; }; then
+              echo "ERROR: $pkg $ver is too old (need >= ${min_major}.${min_minor}.0)" >&2
+              return 1
+            fi
+            echo "  OK: $pkg $ver"
+          }
+
+          check_min "flutter_inappwebview" 6 1
+          check_min "permission_handler_android" 12 6
+
+      - name: Patch Dart 3 API incompatibilities in historical code
+        working-directory: src/mobile_app
+        shell: bash
+        run: |
+          set -euo pipefail
+          find lib/ -name "*.dart" | while read -r f; do
+            if grep -q "package:google_fonts" "$f"; then
+              sed -i \
+                "s|import 'package:google_fonts/google_fonts.dart';|import 'package:google_fonts/google_fonts.dart' hide Config;|g" \
+                "$f"
+              echo "  google_fonts hide Config: $f"
+            fi
+          done
+          echo "Dart 3 compat patches done"
+
+      - name: Patch Dart source for flutter_inappwebview 6.x (Uri → WebUri)
+        working-directory: src/mobile_app
+        shell: bash
+        run: |
+          set -euo pipefail
+          find lib/ -name "*.dart" -type f | while read -r f; do
+            if ! grep -q "package:flutter_inappwebview" "$f"; then
+              continue
+            fi
+            if ! grep -qE '\bUri\.parse\(' "$f"; then
+              continue
+            fi
+            count=$(grep -cE '\bUri\.parse\(' "$f" || true)
+            sed -i -E 's/\bUri\.parse\(/WebUri(/g' "$f"
+            echo "  Uri.parse -> WebUri (${count}x): $f"
+          done
+          echo "flutter_inappwebview 6.x Uri -> WebUri patch done"
+
+      - name: Patch old plugins for AGP 9 compatibility
+        working-directory: src/mobile_app
+        shell: bash
+        run: |
+          set -euo pipefail
+          pub_cache="${PUB_CACHE:-$HOME/.pub-cache}"
+
+          find "$pub_cache/hosted" -path "*/android/build.gradle" -type f | while read -r gradle_file; do
+            if grep -q 'namespace' "$gradle_file"; then continue; fi
+            manifest="$(dirname "$gradle_file")/src/main/AndroidManifest.xml"
+            [ ! -f "$manifest" ] && continue
+            pkg=$(grep -oP 'package="\K[^"]+' "$manifest" || true)
+            [ -z "$pkg" ] && continue
+            sed -i "s|android {|android {\n    namespace '$pkg'|" "$gradle_file"
+            echo "  namespace → $gradle_file ($pkg)"
+          done
+
+          find "$pub_cache/hosted" -path "*/android/build.gradle" -type f \
+            -exec grep -l 'proguard-android\.txt' {} \; | while read -r f; do
+            sed -i 's/proguard-android\.txt/proguard-android-optimize.txt/g' "$f"
+            echo "  proguard → $f"
+          done
+
+          find "$pub_cache/hosted" -path "*/android/build.gradle" -type f | \
+          while read -r f; do
+            if grep -qE 'compileSdkVersion\s+(2[89]|3[0-3])\b|compileSdk\s*=?\s*(2[89]|3[0-3])\b' "$f"; then
+              sed -i -E \
+                -e 's/compileSdkVersion\s+(2[89]|3[0-3])\b/compileSdkVersion 34/g' \
+                -e 's/compileSdk\s*=\s*(2[89]|3[0-3])\b/compileSdk = 34/g' \
+                -e 's/compileSdk\s+(2[89]|3[0-3])\b/compileSdk 34/g' \
+                "$f"
+              echo "  compileSdk → 34 patched: $f"
+            fi
+          done
+
+          find "$pub_cache/hosted" -path "*permission_handler_android*/android/build.gradle" -type f | \
+          while read -r f; do
+            if grep -qE 'compileSdkVersion\s+(33|34)|compileSdk\s*=?\s*(33|34)' "$f"; then
+              sed -i -E \
+                -e 's/compileSdkVersion\s+(33|34)/compileSdkVersion 35/g' \
+                -e 's/compileSdk\s*=\s*(33|34)/compileSdk = 35/g' \
+                -e 's/compileSdk\s+(33|34)/compileSdk 35/g' \
+                "$f"
+              echo "  permission_handler_android compileSdk → 35: $f"
+            fi
+          done
+
+          cat >> android/build.gradle.kts << 'GRADLE_PATCH'
+
+          // Patch: enable BuildConfig for old plugins that use custom fields.
+          subprojects {
+              plugins.withId("com.android.library") {
+                  extensions.configure<com.android.build.gradle.LibraryExtension> {
+                      buildFeatures {
+                          buildConfig = true
+                      }
+                  }
+              }
+          }
+          GRADLE_PATCH
+
+          APP_GRADLE="android/app/build.gradle.kts"
+          if [ -f "$APP_GRADLE" ]; then
+            sed -i -E \
+              -e 's/compileSdk\s*=\s*flutter\.compileSdkVersion/compileSdk = 36/g' \
+              -e 's/compileSdkVersion\s+flutter\.compileSdkVersion/compileSdkVersion 36/g' \
+              "$APP_GRADLE"
+            echo "  app compileSdk → 36: $APP_GRADLE"
+            grep -n 'compileSdk' "$APP_GRADLE" || true
+          fi
+
+          echo "AGP 9 compatibility patches applied (compileSdk bump + BuildConfig)."
+
+      - name: Patch webview_flutter_android to remove v1 embedding references
+        working-directory: src/mobile_app
+        shell: bash
+        run: |
+          set -euo pipefail
+          pub_cache="${PUB_CACHE:-$HOME/.pub-cache}"
+          wv_dir="$(find "$pub_cache/hosted" -maxdepth 2 -type d -name 'webview_flutter_android-*' -print -quit 2>/dev/null || true)"
+          if [ -z "$wv_dir" ]; then
+            echo "webview_flutter_android not found in pub cache — skip"
+            exit 0
+          fi
+          echo "Patching webview_flutter_android at: $wv_dir"
+
+          plugin_file="$wv_dir/android/src/main/java/io/flutter/plugins/webviewflutter/WebViewFlutterPlugin.java"
+          asset_file="$wv_dir/android/src/main/java/io/flutter/plugins/webviewflutter/FlutterAssetManager.java"
+
+          python3 - "$plugin_file" "$asset_file" <<'PY'
+          import sys
+
+          def find_line_start(s, pos):
+              return s.rfind('\n', 0, pos) + 1
+
+          def find_annotation_start(s, line_start):
+              while line_start > 0:
+                  prev_end = line_start - 1
+                  prev_start = s.rfind('\n', 0, prev_end) + 1
+                  prev_line = s[prev_start:prev_end].strip()
+                  if prev_line.startswith('@'):
+                      line_start = prev_start
+                  else:
+                      break
+              return line_start
+
+          def remove_balanced_block(s, marker):
+              idx = s.find(marker)
+              if idx == -1:
+                  return s, False
+              line_start = find_annotation_start(s, find_line_start(s, idx))
+              brace_open = s.find('{', idx)
+              if brace_open == -1:
+                  return s, False
+              depth = 0
+              i = brace_open
+              while i < len(s):
+                  c = s[i]
+                  if c == '{':
+                      depth += 1
+                  elif c == '}':
+                      depth -= 1
+                      if depth == 0:
+                          break
+                  i += 1
+              if depth != 0:
+                  return s, False
+              end = i + 1
+              if end < len(s) and s[end] == '\n':
+                  end += 1
+              return s[:line_start] + s[end:], True
+
+          def patch_file(path, markers):
+              try:
+                  with open(path) as f:
+                      src = f.read()
+              except FileNotFoundError:
+                  print(f"  file not found: {path}")
+                  return
+              changed = False
+              for m in markers:
+                  src, ok = remove_balanced_block(src, m)
+                  if ok:
+                      print(f"  removed block '{m}' from {path}")
+                      changed = True
+                  else:
+                      print(f"  block '{m}' not found in {path} (already patched or absent)")
+              if changed:
+                  with open(path, 'w') as f:
+                      f.write(src)
+
+          patch_file(sys.argv[1], ['public static void registerWith'])
+          patch_file(sys.argv[2], ['class RegistrarFlutterAssetManager'])
+          PY
+
+          echo "Remaining PluginRegistry references in webview_flutter_android:"
+          grep -n 'PluginRegistry' \
+            "$wv_dir"/android/src/main/java/io/flutter/plugins/webviewflutter/*.java || true
+
+          echo "webview_flutter_android v1 embedding patch done"
+
+      - name: Build APK (Release)
+        working-directory: src/mobile_app
+        run: flutter build apk --release --no-tree-shake-icons
+
+      - name: Rename APK con el ref
+        working-directory: src/mobile_app
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          cp build/app/outputs/apk/release/app-release.apk \
+             "dist/app-release-${{ matrix.ref }}.apk"
+
+      - name: Upload APK as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-release-${{ matrix.ref }}
+          path: src/mobile_app/dist/app-release-${{ matrix.ref }}.apk
+
+      - name: Upload APK to Release (tags)
+        if: matrix.kind == 'tag'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ matrix.ref }}
+          files: src/mobile_app/dist/app-release-${{ matrix.ref }}.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Para main no hay release natural. Subimos el APK como artifact del workflow
+      # (ya lo hicimos arriba). Si en algún momento querés publicarlo como release,
+      # descomentá las líneas de abajo y ajustá el tag_name.
+      #
+      # - name: Upload APK to Release (main → tag "latest")
+      #   if: matrix.kind == 'branch'
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #     tag_name: latest
+      #     name: Latest build from main
+      #     files: src/mobile_app/dist/app-release-${{ matrix.ref }}.apk
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
