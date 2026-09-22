@@ -334,6 +334,19 @@ jobs:
           done
           echo "flutter_inappwebview 6.x Uri -> WebUri patch done"
 
+      - name: Patch FontAwesomeIcons .data (font_awesome_flutter 10.x)
+        working-directory: src/mobile_app
+        shell: bash
+        run: |
+          set -euo pipefail
+          find lib/ -name "*.dart" -type f | while read -r f; do
+            if grep -qE 'FontAwesomeIcons\.[A-Za-z0-9_]+\.data' "$f"; then
+              sed -i -E 's/(FontAwesomeIcons\.[A-Za-z0-9_]+)\.data/\1/g' "$f"
+              echo "  stripped .data: $f"
+            fi
+          done
+          echo "FontAwesomeIcons .data patch done"
+
       - name: Patch old plugins for AGP 9 compatibility
         working-directory: src/mobile_app
         shell: bash
