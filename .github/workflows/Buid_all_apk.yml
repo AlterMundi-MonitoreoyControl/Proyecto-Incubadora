@@ -17,11 +17,6 @@ permissions:
 jobs:
   # -------------------------------------------------------------------
   # JOB 1: descubre qué hay que compilar.
-  #   - Lista todos los tags del repo vía API.
-  #   - Chequea para cada uno si ya existe un asset "app-release-<tag>.apk"
-  #     en el release correspondiente.
-  #   - Chequea lo mismo para "main" (tag "main", asset "app-release-main.apk").
-  #   - Emite una matriz JSON con los que faltan.
   # -------------------------------------------------------------------
   discover:
     runs-on: ubuntu-latest
@@ -38,8 +33,6 @@ jobs:
         run: |
           set -euo pipefail
 
-          # Lista de refs a chequear: todos los tags + "main"
-          # Guardamos pares "name|kind" (kind = tag|branch).
           TAGS_RAW="$(gh api "repos/$REPO/tags" --paginate --jq '.[].name' 2>/dev/null || true)"
 
           CANDIDATES=()
@@ -48,7 +41,6 @@ jobs:
             CANDIDATES+=("$t|tag")
           done <<< "$TAGS_RAW"
 
-          # ¿Existe la branch main? Si sí, agregarla como candidato.
           if gh api "repos/$REPO/branches/main" >/dev/null 2>&1; then
             CANDIDATES+=("main|branch")
           fi
@@ -67,7 +59,6 @@ jobs:
             if [ "$FORCE" = "true" ]; then
               exists="false"
             else
-              # gh release view falla si no existe el release; lo tratamos como "no existe asset"
               if gh release view "$name" --repo "$REPO" \
                    --json assets --jq '.assets[].name' 2>/dev/null \
                    | grep -qx "$asset"; then
@@ -185,6 +176,20 @@ jobs:
         working-directory: src/mobile_app
         run: flutter create . --platforms android
 
+      - name: Set app name to LibrePollo
+        working-directory: src/mobile_app
+        shell: bash
+        run: |
+          set -euo pipefail
+          MANIFEST="android/app/src/main/AndroidManifest.xml"
+          if [ ! -f "$MANIFEST" ]; then
+            echo "manifest no encontrado — skip"
+            exit 0
+          fi
+          sed -i 's/android:label="[^"]*"/android:label="LibrePollo"/' "$MANIFEST"
+          echo "Nombre de app:"
+          grep 'android:label' "$MANIFEST"
+
       - name: Patch pubspec for Flutter 3.47.4 / Dart 3 compatibility
         working-directory: src/mobile_app
         shell: bash
@@ -192,6 +197,7 @@ jobs:
           set -euo pipefail
           pubspec="pubspec.yaml"
 
+          # ── url_launcher ─────────────────────────────────────────────────
           if grep -r 'url_launcher' lib/ --include='*.dart' -l 2>/dev/null | grep -q .; then
             if ! grep -q 'url_launcher' "$pubspec"; then
               sed -i '/^  flutter:/i\  url_launcher: ^6.3.2' "$pubspec"
@@ -199,23 +205,28 @@ jobs:
             fi
           fi
 
+          # ── font_awesome_flutter ──────────────────────────────────────────
           if grep -q 'font_awesome_flutter' "$pubspec"; then
             sed -i 's/^\( *font_awesome_flutter:\).*$/\1 ^10.9.0/' "$pubspec"
             echo "Set font_awesome_flutter: ^10.9.0"
           fi
 
+          # ── google_fonts ──────────────────────────────────────────────────
           if grep -q 'google_fonts' "$pubspec"; then
             sed -i 's/^\( *google_fonts:\).*$/\1 ^6.2.1/' "$pubspec"
             echo "Set google_fonts: ^6.2.1"
           fi
 
+          # ── permission_handler ────────────────────────────────────────────
           if grep -q 'permission_handler' "$pubspec"; then
             sed -i 's/^\( *permission_handler:\).*$/\1 ^12.0.0/' "$pubspec"
             echo "Set permission_handler: ^12.0.0"
           fi
 
+          # ── youtube_player_flutter / flutter_inappwebview / overrides ────
           python3 - <<'PY'
           import re
+
           pubspec = "pubspec.yaml"
           with open(pubspec) as f:
               content = f.read()
@@ -250,12 +261,50 @@ jobs:
           print('pubspec patched: youtube_player_flutter ^9.1.3, flutter_inappwebview ^6.1.5, permission_handler ^12.0.0')
           PY
 
+          # ── Icono de LibrePollo ─────────────────────────────────────────
+          # Usamos el assets/icono.png del repo como fuente para regenerar
+          # los ic_launcher.png que flutter create dejó por default.
+          # Usamos printf en vez de heredoc para evitar problemas de
+          # indentación de YAML (el heredoc rompía el parser).
+          if [ -f "assets/icono.png" ]; then
+            # Asegurar dev_dependency
+            if ! grep -q 'flutter_launcher_icons' "$pubspec"; then
+              if grep -q '^dev_dependencies:' "$pubspec"; then
+                sed -i '/^dev_dependencies:/a\  flutter_launcher_icons: ^0.13.1' "$pubspec"
+              else
+                printf '\ndev_dependencies:\n  flutter_launcher_icons: ^0.13.1\n' >> "$pubspec"
+              fi
+              echo "Added flutter_launcher_icons to dev_dependencies"
+            fi
+
+            # Asegurar config de nivel superior
+            if ! grep -q '^flutter_launcher_icons:' "$pubspec"; then
+              printf '\nflutter_launcher_icons:\n  android: "ic_launcher"\n  ios: false\n  image_path: "assets/icono.png"\n  min_sdk_android: 21\n' >> "$pubspec"
+              echo "Added flutter_launcher_icons config"
+            fi
+          else
+            echo "assets/icono.png no existe — no se generará icono custom"
+          fi
+
           echo "pubspec compatibility patch done"
-          grep -E 'url_launcher|font_awesome|google_fonts|youtube_player|flutter_inappwebview|permission_handler' "$pubspec" || true
+          grep -E 'url_launcher|font_awesome|google_fonts|youtube_player|flutter_inappwebview|permission_handler|flutter_launcher_icons' "$pubspec" || true
 
       - name: Get dependencies
         working-directory: src/mobile_app
         run: flutter pub get
+
+      - name: Generate launcher icons (LibrePollo)
+        working-directory: src/mobile_app
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -f "assets/icono.png" ]; then
+            echo "assets/icono.png no existe — skip"
+            exit 0
+          fi
+          dart run flutter_launcher_icons
+          echo "Iconos regenerados:"
+          ls -la android/app/src/main/res/mipmap-*/ic_launcher.png
 
       - name: Refetch webview_flutter_android (clean base for patching)
         working-directory: src/mobile_app
@@ -306,6 +355,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+
+          # ── google_fonts 6.x: hide Config to resolve name clash ─────────────
           find lib/ -name "*.dart" | while read -r f; do
             if grep -q "package:google_fonts" "$f"; then
               sed -i \
@@ -314,6 +365,20 @@ jobs:
               echo "  google_fonts hide Config: $f"
             fi
           done
+
+          # ── font_awesome 10.x: quitar .data ─────────────────────────────────
+          # El código histórico fue escrito contra 11.x, donde FontAwesomeIcons.X
+          # es un FaIconData (wrapper) y .data devuelve el IconData interno.
+          # En 10.x, FontAwesomeIcons.X ya es un IconData — .data no existe.
+          find lib/ -name "*.dart" -type f | while read -r f; do
+            if ! grep -qE 'FontAwesomeIcons\.[a-zA-Z0-9_]+\.data' "$f"; then
+              continue
+            fi
+            count=$(grep -coE 'FontAwesomeIcons\.[a-zA-Z0-9_]+\.data' "$f" || true)
+            sed -i -E 's/(FontAwesomeIcons\.[a-zA-Z0-9_]+)\.data\b/\1/g' "$f"
+            echo "  quitados ${count} .data de FontAwesomeIcons: $f"
+          done
+
           echo "Dart 3 compat patches done"
 
       - name: Patch Dart source for flutter_inappwebview 6.x (Uri → WebUri)
@@ -334,19 +399,6 @@ jobs:
           done
           echo "flutter_inappwebview 6.x Uri -> WebUri patch done"
 
-      - name: Patch FontAwesomeIcons .data (font_awesome_flutter 10.x)
-        working-directory: src/mobile_app
-        shell: bash
-        run: |
-          set -euo pipefail
-          find lib/ -name "*.dart" -type f | while read -r f; do
-            if grep -qE 'FontAwesomeIcons\.[A-Za-z0-9_]+\.data' "$f"; then
-              sed -i -E 's/(FontAwesomeIcons\.[A-Za-z0-9_]+)\.data/\1/g' "$f"
-              echo "  stripped .data: $f"
-            fi
-          done
-          echo "FontAwesomeIcons .data patch done"
-
       - name: Patch old plugins for AGP 9 compatibility
         working-directory: src/mobile_app
         shell: bash
@@ -354,6 +406,7 @@ jobs:
           set -euo pipefail
           pub_cache="${PUB_CACHE:-$HOME/.pub-cache}"
 
+          # 1) Add missing 'namespace' to plugin build.gradle files
           find "$pub_cache/hosted" -path "*/android/build.gradle" -type f | while read -r gradle_file; do
             if grep -q 'namespace' "$gradle_file"; then continue; fi
             manifest="$(dirname "$gradle_file")/src/main/AndroidManifest.xml"
@@ -364,12 +417,14 @@ jobs:
             echo "  namespace → $gradle_file ($pkg)"
           done
 
+          # 2) Fix proguard-android.txt → proguard-android-optimize.txt
           find "$pub_cache/hosted" -path "*/android/build.gradle" -type f \
             -exec grep -l 'proguard-android\.txt' {} \; | while read -r f; do
             sed -i 's/proguard-android\.txt/proguard-android-optimize.txt/g' "$f"
             echo "  proguard → $f"
           done
 
+          # 3) Bump ANY compileSdk < 34 to 34.
           find "$pub_cache/hosted" -path "*/android/build.gradle" -type f | \
           while read -r f; do
             if grep -qE 'compileSdkVersion\s+(2[89]|3[0-3])\b|compileSdk\s*=?\s*(2[89]|3[0-3])\b' "$f"; then
@@ -382,6 +437,7 @@ jobs:
             fi
           done
 
+          # 3b) permission_handler_android requires compileSdk 35.
           find "$pub_cache/hosted" -path "*permission_handler_android*/android/build.gradle" -type f | \
           while read -r f; do
             if grep -qE 'compileSdkVersion\s+(33|34)|compileSdk\s*=?\s*(33|34)' "$f"; then
@@ -394,6 +450,7 @@ jobs:
             fi
           done
 
+          # 4) Enable BuildConfig for all library subprojects.
           cat >> android/build.gradle.kts << 'GRADLE_PATCH'
 
           // Patch: enable BuildConfig for old plugins that use custom fields.
@@ -408,6 +465,7 @@ jobs:
           }
           GRADLE_PATCH
 
+          # 5) Raise app-level compileSdk to 36.
           APP_GRADLE="android/app/build.gradle.kts"
           if [ -f "$APP_GRADLE" ]; then
             sed -i -E \
@@ -517,7 +575,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p dist
-          cp build/app/outputs/apk/release/app-release.apk \
+          cp build/app/outputs/flutter-apk/app-release.apk \
              "dist/app-release-${{ matrix.ref }}.apk"
 
       - name: Upload APK as artifact
@@ -534,17 +592,3 @@ jobs:
           files: src/mobile_app/dist/app-release-${{ matrix.ref }}.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Para main no hay release natural. Subimos el APK como artifact del workflow
-      # (ya lo hicimos arriba). Si en algún momento querés publicarlo como release,
-      # descomentá las líneas de abajo y ajustá el tag_name.
-      #
-      # - name: Upload APK to Release (main → tag "latest")
-      #   if: matrix.kind == 'branch'
-      #   uses: softprops/action-gh-release@v1
-      #   with:
-      #     tag_name: latest
-      #     name: Latest build from main
-      #     files: src/mobile_app/dist/app-release-${{ matrix.ref }}.apk
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
