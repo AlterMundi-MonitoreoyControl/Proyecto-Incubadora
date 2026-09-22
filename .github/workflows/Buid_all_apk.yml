@@ -190,6 +190,42 @@ jobs:
           echo "Nombre de app:"
           grep 'android:label' "$MANIFEST"
 
+      # ─────────────────────────────────────────────────────────────────
+      # Patch AndroidManifest: agregar INTERNET permission y
+      # usesCleartextTraffic. Sin esto, en release:
+      #   - http.get() tira SocketException (EPERM, errno=1)
+      #   - La app muestra "Verifique conexión con incubadora"
+      # ─────────────────────────────────────────────────────────────────
+      - name: Patch AndroidManifest for HTTP + INTERNET permission
+        working-directory: src/mobile_app
+        shell: bash
+        run: |
+          set -euo pipefail
+          MANIFEST="android/app/src/main/AndroidManifest.xml"
+          if [ ! -f "$MANIFEST" ]; then
+            echo "manifest no encontrado — skip"
+            exit 0
+          fi
+
+          # 1) INTERNET permission (no viene en el manifest de release por default)
+          if ! grep -q 'android.permission.INTERNET' "$MANIFEST"; then
+            sed -i 's|<application|<uses-permission android:name="android.permission.INTERNET" />\n    <application|' "$MANIFEST"
+            echo "Added INTERNET permission"
+          else
+            echo "INTERNET permission ya presente"
+          fi
+
+          # 2) usesCleartextTraffic (necesario para HTTP a 192.168.x.x en Android 9+)
+          if ! grep -q 'usesCleartextTraffic' "$MANIFEST"; then
+            sed -i 's|<application|<application android:usesCleartextTraffic="true"|' "$MANIFEST"
+            echo "Added usesCleartextTraffic=true"
+          else
+            echo "usesCleartextTraffic ya presente"
+          fi
+
+          echo "--- resultado ---"
+          grep -nE 'INTERNET|usesCleartextTraffic|<application' "$MANIFEST" || true
+
       - name: Patch pubspec for Flutter 3.47.4 / Dart 3 compatibility
         working-directory: src/mobile_app
         shell: bash
@@ -262,12 +298,7 @@ jobs:
           PY
 
           # ── Icono de LibrePollo ─────────────────────────────────────────
-          # Usamos el assets/icono.png del repo como fuente para regenerar
-          # los ic_launcher.png que flutter create dejó por default.
-          # Usamos printf en vez de heredoc para evitar problemas de
-          # indentación de YAML (el heredoc rompía el parser).
           if [ -f "assets/icono.png" ]; then
-            # Asegurar dev_dependency
             if ! grep -q 'flutter_launcher_icons' "$pubspec"; then
               if grep -q '^dev_dependencies:' "$pubspec"; then
                 sed -i '/^dev_dependencies:/a\  flutter_launcher_icons: ^0.13.1' "$pubspec"
@@ -277,7 +308,6 @@ jobs:
               echo "Added flutter_launcher_icons to dev_dependencies"
             fi
 
-            # Asegurar config de nivel superior
             if ! grep -q '^flutter_launcher_icons:' "$pubspec"; then
               printf '\nflutter_launcher_icons:\n  android: "ic_launcher"\n  ios: false\n  image_path: "assets/icono.png"\n  min_sdk_android: 21\n' >> "$pubspec"
               echo "Added flutter_launcher_icons config"
@@ -367,9 +397,6 @@ jobs:
           done
 
           # ── font_awesome 10.x: quitar .data ─────────────────────────────────
-          # El código histórico fue escrito contra 11.x, donde FontAwesomeIcons.X
-          # es un FaIconData (wrapper) y .data devuelve el IconData interno.
-          # En 10.x, FontAwesomeIcons.X ya es un IconData — .data no existe.
           find lib/ -name "*.dart" -type f | while read -r f; do
             if ! grep -qE 'FontAwesomeIcons\.[a-zA-Z0-9_]+\.data' "$f"; then
               continue
