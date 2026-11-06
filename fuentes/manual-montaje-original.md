@@ -213,3 +213,7 @@ Remover el jumper que normalmente puentea "EnA" en el módulo
        style="width:50%; height:auto;">
   </div> 
 
+
+![chapa_impacto_agua](https://hackmd.io/_uploads/BkWMDjqpGg.jpg)
+
+

@@ -234,3 +234,7 @@ Los finales de carrera interrumpen las señales de mando del puente H:
 3. Cortar las aletas en V sobre las líneas que se van a plegar.
 4. Dar al paño principal una inclinación de **20° hacia abajo**, con pliegues de **60° y 30°**, siguiendo la disposición de las fotografías de la fuente.
 5. Preparar los seis laterales de 15 mm, desbarbar y verificar que el deflector no interfiera con las bandejas ni las paredes.
+
+![Plano acotado de la chapa de impacto del agua, con muesca central y dos pestañas](img/manual/deflector-chapa-impacto-agua.jpg){ width=420 }
+
+*Figura 18. Chapa de impacto del agua. Cotas tal como figuran en la fuente original.*
