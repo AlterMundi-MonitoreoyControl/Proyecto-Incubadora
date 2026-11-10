@@ -7,6 +7,9 @@
 
 -----------------------------------------------------------------------------
 credentials = require('credentials')
+-- fallback si el credentials.lua de la placa no define el nivel del humidificador
+HUMID_ON  = HUMID_ON or 1
+HUMID_OFF = HUMID_OFF or 0
 
 local M = {
 	name                            = ..., -- module name, upvalue from require('module-name')
@@ -23,7 +26,7 @@ local M = {
 	is_sensorok                     = false,
 	is_simulate_temp_local          = false,
 	rotation_switch_deactivate_time = 10000, -- max amount of time the sensor is down when the incubator is moving in ms
-	rotation_duration               = 50000, -- max amount of time the rotation should last in ms
+	rotation_duration               = 180000, -- max amount of time the rotation should last in ms
 	rotation_period                 = 3600000, -- time in ms
 	-- NodeMCU timer maximum limit: 6,844,835 ms (~1.9 hours)
 	-- Use safe maximum of 6,000,000 ms (~1.67 hours) to account for variations
@@ -76,7 +79,7 @@ function M.init_values()
 
 	gpio.write(GPIOVOLTEO_UP, 0)
 	gpio.write(GPIOVOLTEO_DOWN, 0)
-	gpio.write(GPIOHUMID, 1)
+	gpio.write(GPIOHUMID, HUMID_OFF)
 	gpio.write(GPIORESISTOR, 0)
 	gpio.write(GPIOVOLTEO_EN, 0)
 end -- end function
@@ -228,8 +231,7 @@ function M.humidifier_switch(status)
 	end
 
 	if status and M.humidifier_enabled then
-		-- logica negada
-		gpio.write(GPIOHUMID, 0)
+		gpio.write(GPIOHUMID, HUMID_ON)
 		log.trace("[H] humidifier pin turned on--------------------")
 		if not M.humidifier_timer then
 			M.humidifier_timer = tmr.create()
@@ -239,7 +241,7 @@ function M.humidifier_switch(status)
 			tmr.ALARM_SINGLE,
 			function()
 				log.warn("[H] humidifier max on time reached, turning off")
-				gpio.write(GPIOHUMID, 1) -- logica negada
+				gpio.write(GPIOHUMID, HUMID_OFF)
 				M.humidifier         = false
 				M.humidifier_enabled = false
 				M.hum_turn_off_time  = M.get_uptime_in_sec()
@@ -248,11 +250,10 @@ function M.humidifier_switch(status)
 		M.humidifier = true
 	else
 		M.humidifier = false
-		-- logica negada
 		if M.humidifier_timer then
 			M.humidifier_timer:stop()
 		end
-		gpio.write(GPIOHUMID, 1)
+		gpio.write(GPIOHUMID, HUMID_OFF)
 		log.trace("[H] humidifier pin turned off--------------------")
 	end -- if end
 end  -- function end

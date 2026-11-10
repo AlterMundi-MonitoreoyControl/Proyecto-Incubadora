@@ -121,10 +121,10 @@ gpio.write(GPIORESISTOR,0)
 
 Turn on:
 ```lua
-gpio.write(GPIOHUMID,0)
+gpio.write(GPIOHUMID,1)
 ```
 
 Turn off:
 ```lua
-gpio.write(GPIOHUMID,1)
+gpio.write(GPIOHUMID,0)
 ```
