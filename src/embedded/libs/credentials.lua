@@ -22,6 +22,9 @@ GPIOREEDS_DOWN = 34
 --outputs resistor can be 14, or 27
 GPIORESISTOR=14
 GPIOHUMID = 17
+-- humidificador por puente H: activo en alto (pulso positivo)
+HUMID_ON  = 1
+HUMID_OFF = 0
 
 GPIOVOLTEO_UP = 2
 GPIOVOLTEO_DOWN = 15
@@ -52,6 +55,6 @@ gpio.write(GPIOVOLTEO_UP, 0)
 -- humidifier must be turned off
 gpio.config( { gpio={GPIOHUMID}, dir=gpio.OUT })
 gpio.set_drive(GPIOHUMID, gpio.DRIVE_3)
-gpio.write(GPIOHUMID, 1)
+gpio.write(GPIOHUMID, HUMID_OFF)
 
 gpio.config({ gpio = { GPIOREEDS_DOWN, GPIOREEDS_UP }, dir = gpio.IN, pull = gpio.PULL_UP })
