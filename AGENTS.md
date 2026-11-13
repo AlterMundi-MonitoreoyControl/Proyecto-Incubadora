@@ -13,5 +13,5 @@
   Python de FreeCAD (importar `FreeCAD` antes de `Part`). Esta prueba usa grupos
   anidados y transformados y no modifica los modelos del proyecto.
 - Mantener sincronizados los STEP, sus SHA-256 en
-  `fuentes/cad-exportacion.json` y los enlaces de `docs/index.md`. Regenerar el
+  `fuentes/cad-exportacion.json` y los enlaces de `docs/vista-3d.md`. Regenerar el
   PDF si cambian el texto o las imágenes que utiliza.

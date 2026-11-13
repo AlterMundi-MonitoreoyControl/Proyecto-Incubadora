@@ -1,6 +1,6 @@
 # Fuentes del manual
 
-El manual publicado está en `docs/index.md`.
+El manual publicado está en `docs/`, una página por etapa (orden en `mkdocs.yml`).
 
 ## Texto y fotografías
 
