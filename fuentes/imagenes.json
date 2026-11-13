@@ -88,5 +88,10 @@
     "archivo": "docs/img/manual/deflector-chapa-impacto-agua.jpg",
     "url_original": "https://hackmd.io/_uploads/BkWMDjqpGg.jpg",
     "sha256": "4fa73dcd4a0b0bdade8e7a4724bada9b393bfd81bc9285f0c9aa89ef8608b783"
+  },
+  {
+    "archivo": "docs/img/manual/chapa-impacto-plano-inti.png",
+    "url_original": "HardWare/Mecanica/ALT-INC001-12-02.pdf (pdftoppm -r 110)",
+    "sha256": "e502d7e13fd6831e5f89a3efb7f90adf684141ffc9c080b1a2da96b77a6e3010"
   }
 ]

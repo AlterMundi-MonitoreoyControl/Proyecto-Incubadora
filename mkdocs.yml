@@ -1,5 +1,5 @@
 site_name: LibreIncu-150
-site_description: Manual de Montaje - Incubadora Libreincu 150 v1
+site_description: Manual de fabricación y montaje - LibreIncu 150 v3
 site_url: https://pablomonte.github.io/LibreIncu-150/
 docs_dir: docs
 
@@ -30,7 +30,16 @@ theme:
     - search.suggest
 
 nav:
-  - Manual de montaje: index.md
+  - Inicio: index.md
+  - Antes de fabricar: antes-de-fabricar.md
+  - Compra y corte: compra-y-corte.md
+  - Inventario: inventario.md
+  - Montaje mecánico: montaje-mecanico.md
+  - Instalación eléctrica: instalacion-electrica.md
+  - Puesta en marcha: puesta-en-marcha.md
+  - Solución de problemas: troubleshooting.md
+  - Vista 3D: vista-3d.md
+  - Anexos: anexos.md
   - Descargar PDF: manual_libreincu_150.pdf
 
 markdown_extensions:
