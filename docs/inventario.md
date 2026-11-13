@@ -17,12 +17,12 @@ Antes de empezar el montaje, contar las piezas de cada tabla y marcar la columna
 |---|---:|
 | [Carcasa](#carcasa) | 20 |
 | [Estructura y bandejas](#estructura-y-bandejas) | 10 |
-| [Rotación](#rotacion) | 13 |
+| [Rotación](#rotacion) | 15 |
 | [Aire](#aire) | 4 |
 | [Calor y humedad](#calor-y-humedad) | 20 |
 | [Tablero eléctrico](#tablero-electrico) | 22 |
 | [Tornillería](#tornilleria) | 12 |
-| **Total** | **101** (9 a definir) |
+| **Total** | **103** (9 a definir) |
 
 ## Carcasa
 
@@ -59,8 +59,8 @@ Antes de empezar el montaje, contar las piezas de cada tabla y marcar la columna
 |   | 3 u | Malla de bandeja | Malla electrosoldada galvanizada 25 x 25 x Ø2, a medida de bandeja |
 |   | 6 u | Maple plástico 30 huevos | Se cortan a medida: 1 bandeja de 50 + 2 de 58 = 166 huevos |
 |   | 3 u | Fleje une cunas | Ver fleje-une-cunas.stl |
-|   | 3 conj | Cuna / brazos de bandeja | Perfil L 10 x 10 x 3,2; brazos 400 mm nominal |
-|   | 3 u | Eje de bandeja | Barra de acero Ø8, ≈ 490 mm [S] |
+|   | 3 conj | Cuna / brazos de bandeja | Perfil L 10 x 10 x 3,2; brazos 400 mm nominal; agujeros Ø8 a 4,5 mm del borde inferior del ala (muñones y perno de la varilla) |
+|   | 6 u | Muñón del eje de bandeja | Barra de acero Ø8: 3 de 28,2 mm (lado opuesto) y 3 de 38,2 mm (lado del husillo), soldados al ala de la cuna; terminan dentro del KFL08 |
 |   | 6 u | Soporte ovalado con rulemán KFL08 8 mm | 2 por eje |
 |   | **a definir** | Sunchos |  |
 
@@ -74,12 +74,14 @@ Antes de empezar el montaje, contar las piezas de cada tabla y marcar la columna
 |   | 2 u | Tuerca THSL 8 mm antijuego |  |
 |   | 2 u | Soporte KP08 8 mm | Superior e inferior del husillo |
 |   | 2 u | Final de carrera V-156-1C25 con rodillo (seguridad) | De plano contra el lateral, detrás del husillo; cortan el giro en los extremos |
-|   | 2 u | Sensor magnético reed cableado (posición) | 27 x 14 x 9, con imán |
+|   | 2 u | Sensor magnético reed cableado (posición) | 27 x 14 x 9, con imán; reed sobre taco de 10 mm, imán pegado a la cuna superior |
 |   | 1 u | Carro portatuercas / corredera | Chapa de acero 3,2 mm; DXF carro_portatuercas_corredera-Body.dxf; cuellos torcidos 90° y orejas plegadas |
-|   | 1 u | Perno del carro | Acero Ø8 (ranura de 8 mm) |
+|   | 2 u | Taco de los reed | Madera o plástico, 27 x 14 x 10 [S] |
+|   | 1 u | Perno del carro | Acero Ø8 (ranura de 8 mm), 22,4 mm, soldado a la planchuela |
+|   | 1 u | Planchuela del perno del carro | Planchuela 10 x 3,2 [S], 49,5 mm con punta redondeada; soldada al brazo del husillo de la cuna superior, con el perno 40 mm sobre el eje |
 |   | 1 u | Varilla de vínculo | Planchuela 20 x 3,2, 260 mm [S]; 3 agujeros Ø8 |
 |   | 3 u | Buje de la varilla | Ø8 nominal |
-|   | 3 u | Perno de la varilla | Ø8 nominal |
+|   | 3 u | Perno de la varilla | Barra de acero Ø8, 33,2 mm, soldada al ala del brazo del husillo; sale 30 mm |
 |   | 1 u | Riel DIN 35 mm / chapa soporte motor | Riel DIN 1 m |
 
 ## Aire
@@ -87,7 +89,7 @@ Antes de empezar el montaje, contar las piezas de cada tabla y marcar la columna
 | ✓ | Cant. | Pieza | Medida / detalle |
 |:-:|--:|---|---|
 |   | 1 u | Turbina / ventilador 6" 220 V con rulemán |  |
-|   | 1 u | Chapa soporte del ventilador (plenum superior) | Chapa 0,5 mm, 464 x 227, inclinada 41° |
+|   | 1 u | Chapa soporte del ventilador (plenum superior) | Chapa 0,5 mm, 500 x 227 [S]: 470 de ancho más pestañas de 15 mm plegadas hacia arriba; inclinada 41° |
 |   | 1 u | Deflector inferior de bandejas | Aluminio 0,5 mm; desarrollo 500 x 225 (paños 115 / 60 / 50, lengüetas de 15); pliegues 50° y 20°; DXF Deflector_Aire.dxf |
 |   | **a definir** | L para el ventilador |  |
 
@@ -147,7 +149,7 @@ Antes de empezar el montaje, contar las piezas de cada tabla y marcar la columna
 
 | ✓ | Cant. | Pieza | Medida / detalle |
 |:-:|--:|---|---|
-|   | 84 u | Autoperforante 4,2 x 13 | 52 cuerpo + 30 conjunto + 2 bandeja piso |
+|   | 102 u | Autoperforante 4,2 x 13 | 52 cuerpo + 30 conjunto + 2 bandeja piso + 18 de las plantillas (soportes de la nacedora, deflector y chapa del ventilador) |
 |   | 3 u | Autoperforante 4,2 x 19 |  |
 |   | 4 u | Autoperforante avellanado 3,2 x 13 |  |
 |   | 2 u | Tornillo cabeza en cruz M6 x 60 |  |
