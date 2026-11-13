@@ -219,6 +219,10 @@ def postprocess_html(body: str) -> str:
             with Image.open(image_path) as img:
                 width, height = img.size
             scale = min(600 / width, 500 / height, 1)
+            # Ancho fijo en px (miniaturas): respetarlo.
+            fixed = re.search(r'style="[^"]*\bwidth:\s*(\d+)px', tag)
+            if fixed:
+                scale = min(scale, int(fixed.group(1)) * 0.75 / width)
             width, height = round(width * scale), round(height * scale)
             tag = re.sub(r'\s+(?:width|height|style)="[^"]*"', '', tag)
             return tag.replace('<img', f'<img width="{width}" height="{height}"', 1)
