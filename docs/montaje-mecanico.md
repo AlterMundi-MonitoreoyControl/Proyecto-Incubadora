@@ -16,12 +16,14 @@ Armar el cuerpo según el plano ALT-INC001-01-00 y la puerta según el ALT-INC00
 
 ## Bandejas
 
-1. Fijar los seis soportes KFL08 a los laterales, dos por eje, con el centro del eje a **260 mm del fondo** y a **255, 375 y 495 mm del techo**.
-2. Pasar los ejes de 8 mm por los soportes y las cunas.
-3. Colocar la varilla de vínculo que une las tres cunas.
+Cada cuna lleva soldados dos muñones de barra Ø8, uno en el centro de cada brazo, casi en el borde inferior del ala. Cada muñón termina dentro de su KFL08, sin sobresalir hacia el lateral. Como los muñones no se pueden pasar con los soportes ya fijos, los KFL08 se colocan en la cuna antes de atornillarlos.
+
+1. Colocar un KFL08 en cada muñón de la cuna.
+2. Presentar la cuna y atornillar los dos soportes a los laterales, con el centro del eje a **260 mm del fondo** y a **255, 375 y 495 mm del techo**.
+3. Colocar la varilla de vínculo en los pernos Ø8 de las tres cunas, soldados en el brazo del lado del husillo a 100 mm del eje, hacia el fondo.
 
 !!! note "Plantilla"
-    El perforado de los laterales se marca con una plantilla, para que los seis soportes queden alineados.
+    Los agujeros de los laterales se marcan con las plantillas de perforación, para que los seis soportes queden alineados. Cada lateral tiene una plantilla superior, que se apoya contra el techo y el fondo, y una inferior, que se apoya contra el piso y el fondo.
 
 <div style="display:flex; justify-content:center; align-items:flex-start; gap:12px; flex-wrap:wrap;">
   <img src="img/manual/kp08-dimensiones.png" alt="Plano del soporte KP08 para el tornillo, extraído de la fuente original" style="width:40%; height:auto;">
@@ -51,25 +53,27 @@ Armar el cuerpo según el plano ALT-INC001-01-00 y la puerta según el ALT-INC00
 
 ### Carro
 
-![Vista CAD del husillo con el carro plegado, los dos soportes KP08 y los dos finales de carrera](img/cad/carro-y-finales-de-carrera.png){ width=145 }
+![Vista CAD del husillo con el carro plegado, los dos soportes KP08, los dos finales de carrera y los dos reed](img/cad/carro-y-finales-de-carrera.png){ width=180 }
 
-*Figura 11. Carro y finales de carrera en el modelo.*
+*Figura 11. Carro, finales de carrera y reed en el modelo.*
 
-El alma del carro queda paralela al lateral, en el plano del husillo. La ranura queda horizontal y el perno de la cuna de la bandeja superior corre por ella: al subir y bajar el carro, las bandejas giran.
+El alma del carro queda paralela al lateral, en el plano del husillo, con la ranura horizontal. El perno del carro va soldado a una planchuela de 10 mm, en el brazo del lado del husillo de la cuna superior, 40 mm sobre el eje y 180 mm hacia el fondo. El perno corre por la ranura: al subir y bajar el carro, las bandejas giran.
 
 1. Verificar que el carro suba y baje sin rozar el lateral.
-2. Colocar el perno de la cuna de la bandeja superior en la ranura.
+2. Colocar el perno de la planchuela de la cuna superior en la ranura.
 
 ### Sensores y finales de carrera
 
 | Elemento | Función | Ubicación |
 |---|---|---|
-| Reed A | Posición superior: el firmware detiene el motor. | Según la figura 10. |
-| Reed B | Posición inferior: el firmware detiene el motor. | Según la figura 10. |
+| Reed A | Posición superior: el firmware detiene el motor. | Centro a 210 mm del fondo y 210 mm del techo, inclinado 30° bajando hacia la puerta. |
+| Reed B | Posición inferior: el firmware detiene el motor. | Centro a 210 mm del fondo y 305 mm del techo, en línea con el eje de la bandeja superior. |
 | Final de carrera A (superior) V-156-1C25 | Seguridad: corta el giro a la derecha si falla el reed A. | Rodillo a 40 mm del fondo y 110 mm del techo. |
 | Final de carrera B (inferior) V-156-1C25 | Seguridad: corta el giro a la izquierda si falla el reed B. | Rodillo a 40 mm del fondo y 350 mm del techo. |
 
-Los finales de carrera van de plano contra el lateral, detrás del husillo, y los pisan las orejas del carro. Verificar recorrido del carro y evaluar ajuste si la plantilla no contempla las perforaciones del microswitch.
+Los reed van contra el lateral del husillo, sobre tacos de 10 mm, del lado del fondo del eje de la bandeja superior. Su imán va pegado a la cara exterior del brazo del lado del husillo de la cuna superior, a 55 mm del eje hacia el fondo y con el canto en el borde superior del brazo.
+
+Los finales de carrera van de plano contra el lateral, detrás del husillo, y los pisan las orejas del carro. En el modelo, el final A conmuta con la bandeja inclinada unos 24° y el B unos 32°. La plantilla marca el contorno de cada final de carrera, de cada reed y el centro del rodillo; sus agujeros se marcan con la pieza apoyada.
 
 ## Deflector
 
@@ -86,7 +90,7 @@ El deflector se fabrica según [Compra y corte](compra-y-corte.md#deflector).
 1. Ubicar el paño de 50 mm vertical, paralelo al fondo, a **60 mm del fondo**.
 2. El paño de 115 mm baja 20° hacia la puerta. Su borde más bajo queda a **300 mm del piso**, justo por encima de la chapa de impacto del agua. El borde superior del paño vertical queda a 446 mm del piso.
 3. Fijar las pestañas laterales a las paredes.
-4. Girar las bandejas en todo su recorrido y verificar que la inferior no toque el deflector: en el modelo queda a 9,4 mm como mínimo.
+4. Girar las bandejas en todo su recorrido y verificar que la inferior no toque el deflector.
 
 ## Fuente de calor
 
