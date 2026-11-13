@@ -33,3 +33,24 @@ icon: material/clipboard-check-outline
 | 6. Humidificación | Chapa de impacto, aspersor, bomba y electroválvula. |
 | 7. Tablero eléctrico | Protecciones, fuente, placa Olivia y conexiones. |
 | 8. Puesta en marcha | Pruebas sin carga y ensayo térmico. |
+
+## Tiempos estimados
+
+Horas de trabajo para armar **una** incubadora con todos los materiales a mano. No incluyen los plazos de entrega de las compras ni del corte de MDF por servicio, que suelen ser de varios días. La columna *Medido* se completa en el armado piloto.
+
+| Etapa | Horas | Personas | Herramientas principales | Medido |
+|---|--:|:-:|---|---|
+| 1. Compra y corte | 3–4 | 1 | Tijera o guillotina, sierra para metal, regla y escuadra | |
+| 2. Plegado | 3–4 | 1 | Plegadora o morsa, transportador, taladro | |
+| 3. Mueble | 5–6 | 2 | Taladro, destornilladores, escuadra, plegadora para los perfiles U y L | |
+| 4. Mecánica de rotación | 6–8 | 1–2 | Taladro, plantilla de perforado, llaves Allen de 1,5 y 2 mm, calibre | |
+| 5. Fuente de calor | 2–3 | 1 | Taladro, remachadora pop | |
+| 6. Humidificación | 2–3 | 1 | Taladro, destornilladores, llaves fijas | |
+| 7. Tablero eléctrico | 5–6 | 1 | Soldador, pinzas, pelacables, multímetro | |
+| 8. Puesta en marcha | 2–3 + 3–4 de ensayo | 1 | Multímetro, 7 sensores de temperatura | |
+| **Total, sin el ensayo** | **28–37** | | | |
+
+El total equivale a unas cuatro o cinco jornadas de trabajo. En la etapa 8 la persona trabaja 2 o 3 horas; el ensayo térmico corre aparte y solo hay que supervisarlo.
+
+!!! note "De dónde salen los tiempos"
+    Están estimados a partir de las horas registradas en el prototipo.
