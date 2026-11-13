@@ -30,7 +30,7 @@ Montar la placa Olivia Control en el gabinete acoplado al tablero eléctrico, re
 
 ## Resistencia
 
-La salida TRIAC de la placa (**GPIO 14**) alimenta la resistencia de 200 W.
+La salida TRIAC **OUT_B** de la placa (**GPIO 14**) alimenta la resistencia de 200 W.
 
 - El fusible térmico KSD301 va **en serie** con la resistencia, en la misma budinera. Corta a 175 °C sin depender del firmware.
 - La resistencia se conecta con un conector interlock macho a una toma de chasis en la carcasa, para poder sacar la budinera.
