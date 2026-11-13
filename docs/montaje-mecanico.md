@@ -4,7 +4,7 @@ icon: material/wrench-outline
 
 # Montaje mecánico
 
-Las cotas de esta página se toman con el interior de la cámara como referencia: ancho desde un lateral, profundidad desde el fondo y altura desde el piso. El husillo va contra uno de los laterales; «del lado del husillo» indica ese lateral.
+Las cotas de esta página se toman con el interior de la cámara como referencia: ancho desde un lateral, profundidad desde el fondo y altura desde el piso. El husillo va contra el lateral izquierdo; «del lado del husillo» indica ese lateral.
 
 ## Mueble
 
@@ -43,7 +43,7 @@ Armar el cuerpo según el plano ALT-INC001-01-00 y la puerta según el ALT-INC00
     - Enhebrar el carro sobre el husillo.
     - Ajustar la altura inicial, de la mitad del husillo hacia abajo.
 2. **Montar los soportes KP08 y el motor.**
-    - El husillo va a **15 mm del lateral** y a **40 mm del fondo**, desde **10 mm del techo** hacia abajo.
+    - El husillo va a **15 mm del lateral izquierdo** y a **40 mm del fondo**, desde **10 mm del techo** hacia abajo.
     - Anclar el soporte KP08 superior al mueble y ajustar el husillo con los prisioneros del soporte, con una llave Allen de 1,5 mm. Dejar que sobresalga hacia arriba unos 12 mm.
     - Colocar y anclar el otro soporte KP08 al mueble.
     - Ajustar el acople de 8 mm al motor y al husillo.
