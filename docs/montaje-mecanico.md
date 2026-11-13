@@ -73,7 +73,7 @@ El alma del carro queda paralela al lateral, en el plano del husillo. La ranura 
 | Final de carrera A (superior) V-156-1C25 | Seguridad: corta el giro a la derecha si falla el reed A. | Rodillo a 40 mm del fondo y 110 mm del techo. |
 | Final de carrera B (inferior) V-156-1C25 | Seguridad: corta el giro a la izquierda si falla el reed B. | Rodillo a 40 mm del fondo y 350 mm del techo. |
 
-Los finales de carrera van de plano contra el lateral, detrás del husillo, y los pisan las orejas del carro. En el modelo conmutan a +19,6° y −37,8° de giro de las bandejas.
+Los finales de carrera van de plano contra el lateral, detrás del husillo, y los pisan las orejas del carro. Verificar recorrido del carro y evaluar ajuste si la plantilla no contempla las perforaciones del microswitch.
 
 ## Deflector
 
