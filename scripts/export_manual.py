@@ -12,7 +12,10 @@ import Part
 
 
 def summary(shape):
-    box = shape.BoundBox
+    # BoundBox usa la malla de visualización si la hay (FCStd guardado desde la
+    # interfaz) y las B-spline reimportadas dan cajas holgadas: el límite óptimo
+    # es exacto en los dos casos.
+    box = shape.optimalBoundingBox(False, False)
     return {
         'solidos': len(shape.Solids),
         'volumen_mm3': shape.Volume,
@@ -32,13 +35,43 @@ def world_shape(obj):
     return shape
 
 
+# El volumen de las caras B-spline se integra distinto al reimportar el STEP:
+# la budinera (loft) pierde 2,7 de 97.540 mm3 aunque su intersección con el
+# original da el volumen completo y los límites no cambian. Las posiciones se
+# siguen controlando con los límites, a 1e-5 mm.
+VOLUME_RTOL = 1e-4
+
+
 def check_same_geometry(before, after, name):
     if before['solidos'] != after['solidos']:
         raise RuntimeError('Cambió el número de sólidos: ' + name)
-    if abs(before['volumen_mm3'] - after['volumen_mm3']) > max(1e-3, abs(before['volumen_mm3']) * 1e-8):
+    if abs(before['volumen_mm3'] - after['volumen_mm3']) > max(1e-3, abs(before['volumen_mm3']) * VOLUME_RTOL):
         raise RuntimeError('Cambió el volumen: ' + name)
     if any(abs(a - b) > 1e-5 for a, b in zip(before['limites_mm'], after['limites_mm'])):
         raise RuntimeError('Cambiaron las posiciones o dimensiones: ' + name)
+
+
+def group_leaves(doc, names, exclude=()):
+    """Part::Feature contenidos (a cualquier profundidad) en los grupos nombrados."""
+    found = set()
+    stack = [doc.getObject(n) for n in names]
+    while stack:
+        obj = stack.pop()
+        if obj is None:
+            continue
+        if obj.TypeId == 'Part::Feature':
+            found.add(obj.Name)
+        else:
+            stack.extend(getattr(obj, 'Group', []))
+    return [o for o in doc.Objects if o.Name in found and o.Name not in exclude]
+
+
+# Selecciones de la v3: se exportan solo si el documento tiene esos grupos.
+OPTIONAL_TARGETS = {
+    'deflector': (['deflector_inferior_bandejas_0p5mm'], ()),
+    'fuente-de-calor': (['fuente_calor'], ('fc_agua_referencia',)),
+    'carro-y-finales-de-carrera': (['carro_plegado_corredera_perno', 'dos_finales_de_carrera'], ()),
+}
 
 
 def export_document(doc, source, output):
@@ -59,6 +92,9 @@ def export_document(doc, source, output):
         'husillo-kp08-acople': [o for o in features if any(
             o.Name.startswith(g + '_pieza_') for g in screw_groups)],
     }
+    for name, (groups, exclude) in OPTIONAL_TARGETS.items():
+        if all(doc.getObject(g) is not None for g in groups):
+            targets[name] = group_leaves(doc, groups, exclude)
     manifest = {
         'fuente': Path(source).name,
         'sha256_fuente': hashlib.sha256(Path(source).read_bytes()).hexdigest(),
