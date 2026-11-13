@@ -4,9 +4,6 @@ Este manual describe cómo fabricar y montar la incubadora LibreIncu 150 v3, un 
 
 [Descargar manual PDF](manual_libreincu_150.pdf){ .md-button .md-button--primary }
 
-!!! warning "Versión en preparación"
-    El PDF todavía corresponde a la v1. Se regenera con el texto de la v3 cuando el manual esté completo.
-
 ![Interior de la incubadora real: ventilador superior, bandejas y deflector inferior](img/manual/incubadora-interior.png){ width=300 }
 
 *Figura 1. Interior del equipo.*

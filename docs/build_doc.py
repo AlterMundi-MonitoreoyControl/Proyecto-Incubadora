@@ -332,7 +332,7 @@ def main():
         metavar="FMT",
         help="Formatos a generar: pdf docx html (default: pdf)",
     )
-    parser.add_argument("--title", default="Manual de Montaje - Incubadora Libreincu 150 v1", help="Título del documento")
+    parser.add_argument("--title", default="Manual de fabricación y montaje - LibreIncu 150 v3", help="Título del documento")
     parser.add_argument(
         "--no-break", dest="page_breaks", action="store_false",
         help="No insertar saltos de página entre archivos",
