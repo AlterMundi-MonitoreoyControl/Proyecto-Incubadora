@@ -1,6 +1,6 @@
 {
   "fuente": "LibreIncu_Rediseno_Despiece.FCStd",
-  "sha256_fuente": "b8745aab64a58fa09d1361d72321c3716ae5ed0f9981f368650367e2248d012b",
+  "sha256_fuente": "497dc19aff6be35a06758810fee3e101a145e313287a78e18de612bf860fbbcf",
   "unidades": "mm",
   "freecad": [
     "1",
@@ -237,7 +237,7 @@
       ],
       "original": {
         "solidos": 225,
-        "volumen_mm3": 7127124.424582677,
+        "volumen_mm3": 7126974.670859149,
         "limites_mm": [
           -8.881784197001252e-16,
           -3.0,
@@ -249,7 +249,7 @@
       },
       "step_reimportado": {
         "solidos": 225,
-        "volumen_mm3": 7127121.55525511,
+        "volumen_mm3": 7126971.804131718,
         "limites_mm": [
           -8.881784197e-16,
           -3.0,
@@ -5314,25 +5314,25 @@
           "objeto": "carro_plegado_corredera_perno_pieza_001",
           "global": {
             "solidos": 1,
-            "volumen_mm3": 6456.317272838372,
+            "volumen_mm3": 6306.564800662151,
             "limites_mm": [
-              443.9977857354152,
-              23.253973303891193,
+              443.99778573541465,
+              23.253903986720147,
               680.7999999,
               466.0106063496017,
-              126.30000000037012,
+              126.30000000000064,
               749.2000001
             ]
           },
           "step_reimportado": {
             "solidos": 1,
-            "volumen_mm3": 6456.317277339102,
+            "volumen_mm3": 6306.564805210747,
             "limites_mm": [
               443.997785735415,
-              23.253973303890998,
+              23.253903986719997,
               680.7999999,
               466.01060634960004,
-              126.30000000037,
+              126.30000000000099,
               749.2000001
             ]
           }
@@ -6346,7 +6346,7 @@
           }
         }
       ],
-      "sha256_step": "d2801ddeb78dca56bfae772b6ab2fde5cb07e63842f16bfd3bb1d47c03324e23"
+      "sha256_step": "5913aa2d45d9f4c6eee2473041b22e28e71ee91dcbde245f81161afa92268b65"
     },
     {
       "archivo": "bandejas-y-soportes.step",
@@ -8563,7 +8563,7 @@
           }
         }
       ],
-      "sha256_step": "4c088cb340731622dffbc062d54e2a1b9b8b54a387a0bed8e5a3db384fdb69b2"
+      "sha256_step": "4a5fa3a345e9f202c97730e17594080d108583cfa74847d480d6bc086b28a52e"
     },
     {
       "archivo": "husillo-kp08-acople.step",
@@ -11536,7 +11536,7 @@
           }
         }
       ],
-      "sha256_step": "b113b88bee22f3f8fd774de7aff35e1f455114d2abcdcf9a376198d3d275c7aa"
+      "sha256_step": "0dbaefbc80b2c3d8660919666e338442129cad111e02fe89b64d488d8cdcf72d"
     },
     {
       "archivo": "deflector.step",
@@ -11830,7 +11830,7 @@
           "diferencia_volumen_interseccion_mm3": -5.684341886080802e-14
         }
       ],
-      "sha256_step": "be600e01223fcf71e0341e7d71932841ccbbbfb195b81247cd53ad9669340ad7"
+      "sha256_step": "67cd98bc8d2bbc53be961ffb457ed93accfdf3038eff49b2f6611c53575b122e"
     },
     {
       "archivo": "fuente-de-calor.step",
@@ -12225,7 +12225,7 @@
           }
         }
       ],
-      "sha256_step": "7b1c0942bff1abfd9104bb2cf278b14808f96e52098d30e002f7a882cde7d48b"
+      "sha256_step": "bfe0af4761fdaee5f60e56cd6bf0234e22284e7b53d8cefcd18ebd0b69b8ae04"
     },
     {
       "archivo": "carro-y-finales-de-carrera.step",
@@ -12239,25 +12239,25 @@
       ],
       "original": {
         "solidos": 6,
-        "volumen_mm3": 20440.870476436008,
+        "volumen_mm3": 20291.11800426953,
         "limites_mm": [
           428.0,
           0.5,
           612.5,
           470.0,
-          126.30000000037012,
+          126.30000000000064,
           873.9
         ]
       },
       "step_reimportado": {
         "solidos": 6,
-        "volumen_mm3": 20440.870480901624,
+        "volumen_mm3": 20291.118008775396,
         "limites_mm": [
           428.0,
           0.5,
           612.5,
           470.0,
-          126.30000000037,
+          126.30000000000099,
           873.9
         ]
       },
@@ -12267,25 +12267,25 @@
           "objeto": "carro_plegado_corredera_perno_pieza_001",
           "global": {
             "solidos": 1,
-            "volumen_mm3": 6456.317272838372,
+            "volumen_mm3": 6306.564800662151,
             "limites_mm": [
-              443.9977857354152,
-              23.253973303891193,
+              443.99778573541465,
+              23.253903986720147,
               680.7999999,
               466.0106063496017,
-              126.30000000037012,
+              126.30000000000064,
               749.2000001
             ]
           },
           "step_reimportado": {
             "solidos": 1,
-            "volumen_mm3": 6456.31727733908,
+            "volumen_mm3": 6306.564805210724,
             "limites_mm": [
               443.997785735415,
-              23.253973303890998,
+              23.253903986719997,
               680.7999999,
               466.01060634960004,
-              126.30000000037,
+              126.30000000000099,
               749.2000001
             ]
           }
@@ -12426,7 +12426,7 @@
           }
         }
       ],
-      "sha256_step": "35fe48cc06088c87ffe2cc4b072ee669e696bc3b0025b31d7009f920fd551b87"
+      "sha256_step": "49e4b2b56467be6176a1af10d19303c503d9902dc3b35496042198f0731369c8"
     }
   ]
 }

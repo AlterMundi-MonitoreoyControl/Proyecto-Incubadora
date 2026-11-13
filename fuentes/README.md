@@ -9,7 +9,7 @@ El manual publicado está en `docs/`, una página por etapa (orden en `mkdocs.ym
 ## CAD utilizado para ilustraciones
 
 Fuente congelada de la v3: `fuentes/LibreIncu_Rediseno_Despiece.FCStd`, copia sin cambios de `Rediseno/LibreIncu_Rediseno_Despiece.FCStd` (salida de `LibreIncu_Rediseno_Despiece.py` y `fuente_calor.py`).
-SHA-256: `b8745aab64a58fa09d1361d72321c3716ae5ed0f9981f368650367e2248d012b`.
+SHA-256: `497dc19aff6be35a06758810fee3e101a145e313287a78e18de612bf860fbbcf` (carro con agujeros de Ø3 para los tornillos de 2,9 mm de la brida).
 
 El archivo se abre para lectura y no se guarda ni modifica. Las vistas muestran componentes existentes, sin reconstruir piezas. Se ajustan la cámara y los colores para facilitar su lectura y se extrae el área visible de cada captura, quitando los márgenes blancos sin retocar la geometría.
 

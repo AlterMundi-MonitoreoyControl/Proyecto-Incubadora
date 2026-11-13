@@ -140,7 +140,7 @@ def carro():
     dim(ax, (0, -4), (53, -4), -14, 'recorrido del perno 53', fs=8)
     finish(fig, ax, 'desarrollo-carro.png', 'Carro: desarrollo (acero 3,2 mm)',
            'Zona de torsión y plegado según el modelo 3D (largo de torsión 14 mm). '
-           'Agujeros Ø10,5 para la tuerca antijuego\ny 4 agujeros Ø2 para su brida en cada oreja. Cotas en mm.')
+           'Agujeros Ø10,5 para la tuerca antijuego\ny 4 agujeros Ø3 para los tornillos de 2,9 mm de su brida en cada oreja. Cotas en mm.')
 
 
 if __name__ == '__main__':

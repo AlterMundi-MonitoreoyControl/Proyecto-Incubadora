@@ -21,7 +21,7 @@
     "excluidos": [],
     "camara": "iso",
     "fuente": "LibreIncu_Rediseno_Despiece.FCStd",
-    "sha256_fuente": "b8745aab64a58fa09d1361d72321c3716ae5ed0f9981f368650367e2248d012b"
+    "sha256_fuente": "497dc19aff6be35a06758810fee3e101a145e313287a78e18de612bf860fbbcf"
   },
   {
     "archivo": "husillo-kp08-acople.png",
@@ -34,7 +34,7 @@
     "excluidos": [],
     "camara": "iso",
     "fuente": "LibreIncu_Rediseno_Despiece.FCStd",
-    "sha256_fuente": "b8745aab64a58fa09d1361d72321c3716ae5ed0f9981f368650367e2248d012b"
+    "sha256_fuente": "497dc19aff6be35a06758810fee3e101a145e313287a78e18de612bf860fbbcf"
   },
   {
     "archivo": "corte-lateral.png",
@@ -62,7 +62,7 @@
     ],
     "camara": "side",
     "fuente": "LibreIncu_Rediseno_Despiece.FCStd",
-    "sha256_fuente": "b8745aab64a58fa09d1361d72321c3716ae5ed0f9981f368650367e2248d012b"
+    "sha256_fuente": "497dc19aff6be35a06758810fee3e101a145e313287a78e18de612bf860fbbcf"
   },
   {
     "archivo": "fuente-de-calor.png",
@@ -74,7 +74,7 @@
     ],
     "camara": "iso",
     "fuente": "LibreIncu_Rediseno_Despiece.FCStd",
-    "sha256_fuente": "b8745aab64a58fa09d1361d72321c3716ae5ed0f9981f368650367e2248d012b"
+    "sha256_fuente": "497dc19aff6be35a06758810fee3e101a145e313287a78e18de612bf860fbbcf"
   },
   {
     "archivo": "fuente-de-calor-inferior.png",
@@ -86,7 +86,7 @@
     ],
     "camara": "iso-below",
     "fuente": "LibreIncu_Rediseno_Despiece.FCStd",
-    "sha256_fuente": "b8745aab64a58fa09d1361d72321c3716ae5ed0f9981f368650367e2248d012b"
+    "sha256_fuente": "497dc19aff6be35a06758810fee3e101a145e313287a78e18de612bf860fbbcf"
   },
   {
     "archivo": "carro-y-finales-de-carrera.png",
@@ -100,6 +100,6 @@
     "excluidos": [],
     "camara": "iso",
     "fuente": "LibreIncu_Rediseno_Despiece.FCStd",
-    "sha256_fuente": "b8745aab64a58fa09d1361d72321c3716ae5ed0f9981f368650367e2248d012b"
+    "sha256_fuente": "497dc19aff6be35a06758810fee3e101a145e313287a78e18de612bf860fbbcf"
   }
 ]
