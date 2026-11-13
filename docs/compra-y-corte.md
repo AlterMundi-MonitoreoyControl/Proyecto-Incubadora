@@ -97,7 +97,7 @@ La contraplaca aprieta la resistencia contra el fondo de la budinera. Es una U c
 
 ## Carro
 
-El carro usa la chapa original de 3,2 mm, sin cambiar sus medidas ([`carro_portatuercas_corredera-Body.dxf`](cad/carro_portatuercas_corredera-Body.dxf)). Lleva una ranura horizontal para el perno de la bandeja y dos orejas para las mitades de la tuerca antijuego.
+El carro usa la chapa original de 3,2 mm, sin cambiar sus medidas ([`carro_portatuercas_corredera-Body.dxf`](cad/carro_portatuercas_corredera-Body.dxf)). Lleva una ranura horizontal para el perno de la bandeja y dos orejas para las mitades de la tuerca antijuego: cada oreja tiene un agujero de Ø10,5 mm para el cuerpo de la tuerca y cuatro de Ø3 mm para los tornillos de 2,9 mm de su brida.
 
 ![Desarrollo del carro con la ranura del perno, las orejas de la tuerca y las zonas de torsión y plegado](img/cad/desarrollo-carro.png){ width=420 }
 

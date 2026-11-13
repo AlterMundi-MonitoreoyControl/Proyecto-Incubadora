@@ -35,7 +35,7 @@ Armar el cuerpo según el plano ALT-INC001-01-00 y la puerta según el ALT-INC00
 ### Husillo y motor
 
 1. **Montar el carro en el husillo.**
-    - Colocar las dos mitades de la tuerca antijuego, una en cada oreja del carro.
+    - Colocar las dos mitades de la tuerca antijuego, una en cada oreja del carro, y fijar cada brida con cuatro tornillos autorroscantes de 2,9 mm.
     - Enhebrar el carro sobre el husillo.
     - Ajustar la altura inicial, de la mitad del husillo hacia abajo.
 2. **Montar los soportes KP08 y el motor.**
