@@ -123,5 +123,5 @@ La resistencia va debajo de la budinera, apretada contra su fondo por la contrap
 
 1. **Chapa de impacto.** Colocarla en la punta de la budinera del lado del husillo, con el respaldo hacia esa punta y las alas hacia el centro. Su borde superior queda a 298 mm del piso, debajo del deflector. Fijarla a la budinera con tornillos autoperforantes de 4,2 × 13 mm o con remaches pop.
 2. **Aspersor.** Fijar la ménsula a la carcasa y montar la boquilla de 6 mm, apuntando a la chapa de impacto.
-3. **Bomba y electroválvula.** Montarlas fuera de la cámara y unirlas con manguera de 10 mm. Usar el acople rápido de 10 a 6 mm para la boquilla.
+3. **Bomba y electroválvula.** Conectarlas entre sí y montarlas fuera de la cámara, dentro de una caja estanca con un desagote en el punto más bajo para las pérdidas ocasionales. Unirlas a la boquilla con manguera de 10 mm y el acople rápido de 10 a 6 mm.
 4. **Desagüe.** Instalar el kit de desagüe en el piso de la cámara.

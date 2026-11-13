@@ -48,6 +48,7 @@ Controlar que estén todas las piezas de cada sistema antes de empezar el montaj
 |---|---|
 | Electroválvula | Control del suministro de agua. |
 | Bomba de agua | Impulsión de agua al aspersor. |
+| Caja estanca hidráulica | Aloja la bomba y la electroválvula conectadas entre sí, con desagote para pérdidas. |
 | Manguera y conector | Manguera de 10 mm y acople rápido de 10 a 6 mm. |
 | Aspersor | Boquilla de niebla de 6 mm. |
 | Ménsula del aspersor | Fijada a la carcasa. |
