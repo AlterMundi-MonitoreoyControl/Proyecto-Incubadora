@@ -18,9 +18,10 @@
       "soporte_KL08_3_izquierda",
       "soporte_KL08_3_derecha"
     ],
+    "excluidos": [],
     "camara": "iso",
     "fuente": "LibreIncu_Rediseno_Despiece.FCStd",
-    "sha256_fuente": "5ab180d757550a3b983e3bd64d6d23e9dcaabd0f47e3b2760ac321a8220ceab8"
+    "sha256_fuente": "b8745aab64a58fa09d1361d72321c3716ae5ed0f9981f368650367e2248d012b"
   },
   {
     "archivo": "husillo-kp08-acople.png",
@@ -30,8 +31,75 @@
       "soporte_KP08_inferior",
       "acople_8x8_motor"
     ],
+    "excluidos": [],
     "camara": "iso",
     "fuente": "LibreIncu_Rediseno_Despiece.FCStd",
-    "sha256_fuente": "5ab180d757550a3b983e3bd64d6d23e9dcaabd0f47e3b2760ac321a8220ceab8"
+    "sha256_fuente": "b8745aab64a58fa09d1361d72321c3716ae5ed0f9981f368650367e2248d012b"
+  },
+  {
+    "archivo": "corte-lateral.png",
+    "componentes": [
+      "deflector_inferior_bandejas_0p5mm",
+      "fuente_calor",
+      "plenum_superior_ventilador",
+      "eje_bandeja_1",
+      "bandeja_1",
+      "cuna_brazo_bandeja_1",
+      "soporte_KL08_1_derecha",
+      "eje_bandeja_2",
+      "bandeja_2",
+      "cuna_brazo_bandeja_2",
+      "soporte_KL08_2_derecha",
+      "eje_bandeja_3",
+      "bandeja_3",
+      "cuna_brazo_bandeja_3",
+      "soporte_KL08_3_derecha",
+      "camara_referencia_pieza_001",
+      "camara_referencia_pieza_004"
+    ],
+    "excluidos": [
+      "fc_agua_referencia"
+    ],
+    "camara": "side",
+    "fuente": "LibreIncu_Rediseno_Despiece.FCStd",
+    "sha256_fuente": "b8745aab64a58fa09d1361d72321c3716ae5ed0f9981f368650367e2248d012b"
+  },
+  {
+    "archivo": "fuente-de-calor.png",
+    "componentes": [
+      "fuente_calor"
+    ],
+    "excluidos": [
+      "fc_agua_referencia"
+    ],
+    "camara": "iso",
+    "fuente": "LibreIncu_Rediseno_Despiece.FCStd",
+    "sha256_fuente": "b8745aab64a58fa09d1361d72321c3716ae5ed0f9981f368650367e2248d012b"
+  },
+  {
+    "archivo": "fuente-de-calor-inferior.png",
+    "componentes": [
+      "fuente_calor"
+    ],
+    "excluidos": [
+      "fc_agua_referencia"
+    ],
+    "camara": "iso-below",
+    "fuente": "LibreIncu_Rediseno_Despiece.FCStd",
+    "sha256_fuente": "b8745aab64a58fa09d1361d72321c3716ae5ed0f9981f368650367e2248d012b"
+  },
+  {
+    "archivo": "carro-y-finales-de-carrera.png",
+    "componentes": [
+      "carro_plegado_corredera_perno",
+      "dos_finales_de_carrera",
+      "husillo_8mm_400mm",
+      "soporte_KP08_superior",
+      "soporte_KP08_inferior"
+    ],
+    "excluidos": [],
+    "camara": "iso",
+    "fuente": "LibreIncu_Rediseno_Despiece.FCStd",
+    "sha256_fuente": "b8745aab64a58fa09d1361d72321c3716ae5ed0f9981f368650367e2248d012b"
   }
 ]
