@@ -290,6 +290,8 @@ def build_html(files: list[Path], title: str, page_breaks: bool, exclude_invento
         if exclude_inventory:
             raw = strip_inventory_snippets(raw)
         body = md.convert(raw)
+        # Bloques solo para el sitio (visor 3D en un iframe): no van al PDF.
+        body = re.sub(r'<div class="solo-web[^"]*">.*?</div>', "", body, flags=re.S)
         body = postprocess_html(body)
         if page_breaks and i < len(files) - 1:
             body += '\n<div class="page-break"></div>\n'

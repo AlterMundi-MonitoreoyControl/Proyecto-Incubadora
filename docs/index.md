@@ -8,7 +8,13 @@ Este manual describe cómo fabricar y montar la incubadora LibreIncu 150 v3, un 
 
 [Empezar](antes-de-fabricar.md){ .md-button .md-button--primary } [Descargar PDF](manual_libreincu_150.pdf){ .md-button }
 
-![Interior de la incubadora real: ventilador superior, bandejas y deflector inferior](img/manual/incubadora-interior.png){ width=300 }
+<div class="solo-web visor-3d" markdown>
+<iframe src="animacion/rotacion_bandejas.html?embebido" title="Volteo de bandejas en el modelo 3D de la LibreIncu 150 v3" loading="lazy"></iframe>
+
+*Volteo de bandejas en el modelo 3D: arrastrar para girar la vista y Ctrl + rueda para acercar.*
+</div>
+
+![Interior de la incubadora real: ventilador superior, bandejas y deflector inferior](img/manual/incubadora-interior.png){ width=220 }
 
 *Figura 1. Interior del equipo.*
 

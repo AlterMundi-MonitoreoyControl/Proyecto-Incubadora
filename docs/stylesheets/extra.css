@@ -45,3 +45,15 @@
   background-color: #fff;
   padding: 0.4rem;
 }
+
+/* Visor 3D del volteo (iframe con animacion/rotacion_bandejas.html?embebido). */
+.md-typeset .visor-3d iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  min-height: 360px;
+  max-height: 560px;
+  border: 0;
+  border-radius: 0.3rem;
+  box-shadow: var(--md-shadow-z1);
+}

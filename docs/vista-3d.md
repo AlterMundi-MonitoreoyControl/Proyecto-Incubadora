@@ -6,6 +6,12 @@ icon: material/cube-outline
 
 Vistas y archivos del modelo 3D de la v3 (`LibreIncu_Rediseno_Despiece.FCStd`).
 
+<div class="solo-web visor-3d" markdown>
+<iframe src="animacion/rotacion_bandejas.html?embebido" title="Volteo de bandejas en el modelo 3D de la LibreIncu 150 v3" loading="lazy"></iframe>
+
+*Volteo de bandejas en el modelo 3D: arrastrar para girar la vista y Ctrl + rueda para acercar.*
+</div>
+
 ![Vista CAD de las bandejas con sus ejes y soportes](img/cad/bandejas-y-soportes.png){ width=640 }
 
 *Bandejas, cunas, ejes y soportes KFL08.*
