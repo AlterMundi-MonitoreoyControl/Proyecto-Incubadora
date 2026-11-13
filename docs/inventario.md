@@ -53,7 +53,7 @@ Controlar que estén todas las piezas de cada sistema antes de empezar el montaj
 | Aspersor | Boquilla de niebla de 6 mm. |
 | Ménsula del aspersor | Fijada a la carcasa. |
 | Chapa de impacto | Aluminio 2 mm plegado. |
-| Desagüe | Kit de desagüe de aire acondicionado. |
+| Desagüe | Kit de desagüe de aire acondicionado, para el desagote de la caja estanca. |
 
 ## Control
 
