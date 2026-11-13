@@ -4,7 +4,7 @@ icon: material/content-cut
 
 # Compra y corte
 
-La lista completa de materiales, con cantidades por incubadora, precios y enlaces, está en el [inventario](inventario.md). Esta página reúne las piezas que hay que cortar o plegar.
+Esta página reúne las piezas que hay que cortar o plegar. La lista completa de materiales, con cantidades por incubadora, precios y enlaces, está en el [inventario](inventario.md).
 
 !!! note "Compras"
     Elegir el tamaño de cada pack según la cantidad total a fabricar. Comprar con tiempo los componentes importados (sensor BME280, PCB Olivia).
