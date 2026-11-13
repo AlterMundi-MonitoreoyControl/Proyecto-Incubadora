@@ -24,13 +24,13 @@ Armar el cuerpo según el plano ALT-INC001-01-00 y la puerta según el ALT-INC00
   <img src="img/manual/kl08-dimensiones.png" alt="Plano del soporte de bandejas KFL08" style="width:40%; height:auto;">
 </div>
 
-*Figuras 5 y 6. Soportes KP08 (husillo) y KFL08 (bandejas).*
+*Figuras 8 y 9. Soportes KP08 (husillo) y KFL08 (bandejas).*
 
 ## Rotación
 
 ![Mecanismo real rotulado: acople, KP08, tornillo THSL, carro, reed y finales de carrera](img/manual/rotacion-equipo-real.png){ width=380 }
 
-*Figura 7. Disposición del mecanismo de rotación.*
+*Figura 10. Disposición del mecanismo de rotación.*
 
 ### Husillo y motor
 
@@ -51,6 +51,10 @@ Armar el cuerpo según el plano ALT-INC001-01-00 y la puerta según el ALT-INC00
 
 ### Carro
 
+![Vista CAD del husillo con el carro plegado, los dos soportes KP08 y los dos finales de carrera](img/cad/carro-y-finales-de-carrera.png){ width=200 }
+
+*Figura 11. Carro y finales de carrera en el modelo.*
+
 El alma del carro queda paralela al lateral, en el plano del husillo. La ranura queda horizontal y el perno de la cuna de la bandeja superior corre por ella: al subir y bajar el carro, las bandejas giran.
 
 1. Verificar que el carro suba y baje sin rozar el lateral.
@@ -60,8 +64,8 @@ El alma del carro queda paralela al lateral, en el plano del husillo. La ranura 
 
 | Elemento | Función | Ubicación |
 |---|---|---|
-| Reed A | Posición superior: el firmware detiene el motor. | Según la figura 7. |
-| Reed B | Posición inferior: el firmware detiene el motor. | Según la figura 7. |
+| Reed A | Posición superior: el firmware detiene el motor. | Según la figura 10. |
+| Reed B | Posición inferior: el firmware detiene el motor. | Según la figura 10. |
 | Final de carrera A (superior) V-156-1C25 | Seguridad: corta el giro a la derecha si falla el reed A. | Rodillo a 40 mm del fondo y 110 mm del techo. |
 | Final de carrera B (inferior) V-156-1C25 | Seguridad: corta el giro a la izquierda si falla el reed B. | Rodillo a 40 mm del fondo y 350 mm del techo. |
 
@@ -71,7 +75,11 @@ Los finales de carrera van de plano contra el lateral, detrás del husillo, y lo
 
 ![Deflector instalado debajo de las bandejas](img/manual/deflector-instalado.png){ width=320 }
 
-*Figura 8. Deflector instalado debajo de las bandejas.*
+*Figura 12. Deflector instalado debajo de las bandejas.*
+
+![Corte lateral del modelo: ventilador, tres bandejas, deflector y fuente de calor, con el fondo a la derecha y el piso abajo](img/cad/corte-lateral.png){ width=300 }
+
+*Figura 13. Corte lateral del modelo, con el fondo a la derecha. El paño vertical del deflector queda a 60 mm del fondo y su borde más bajo a 300 mm del piso, sobre la chapa de impacto.*
 
 El deflector se fabrica según [Compra y corte](compra-y-corte.md#deflector).
 
@@ -83,6 +91,13 @@ El deflector se fabrica según [Compra y corte](compra-y-corte.md#deflector).
 ## Fuente de calor
 
 La resistencia va debajo de la budinera, apretada contra su fondo por la contraplaca. La budinera se remacha a dos perfiles L que cruzan la cámara a lo ancho y apoyan en los soportes de la bandeja nacedora. Para limpiar la budinera se saca junto con los perfiles L.
+
+<div style="display:flex; justify-content:center; align-items:flex-start; gap:12px; flex-wrap:wrap;">
+  <img src="img/cad/fuente-de-calor.png" alt="Fuente de calor vista desde arriba: budinera sobre los perfiles L, soportes de la nacedora, chapa de impacto y fusible" style="width:48%; height:auto;">
+  <img src="img/cad/fuente-de-calor-inferior.png" alt="Fuente de calor vista desde abajo: contraplaca bajo la budinera y fusible en la punta" style="width:48%; height:auto;">
+</div>
+
+*Figuras 14 y 15. Fuente de calor vista desde arriba y desde abajo: budinera, perfiles L, soportes de la nacedora, contraplaca (gris oscuro), fusible (amarillo) y chapa de impacto.*
 
 | Altura desde el piso | Elemento |
 |---|---|

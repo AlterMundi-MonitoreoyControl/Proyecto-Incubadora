@@ -17,8 +17,10 @@ Relevamiento de la unidad original (OT 216-7256, junio de 2025). Están en la [c
 
 | Archivo | Pieza |
 |---|---|
-| `Deflector_Aire.dxf` | Desarrollo del deflector |
-| `fuente_calor/contraplaca_desarrollo.dxf` | Desarrollo de la contraplaca |
-| `carro_portatuercas_corredera-Body.dxf` | Desarrollo del carro |
-| `chapa_ranurada_bandeja.dxf` | Chapa ranurada de la bandeja |
-| `LibreIncu_Rediseno_Despiece.FCStd` | Modelo 3D de referencia de la v3 |
+| [Deflector_Aire.dxf](cad/Deflector_Aire.dxf) | Desarrollo del deflector |
+| [contraplaca_desarrollo.dxf](cad/contraplaca_desarrollo.dxf) | Desarrollo de la contraplaca |
+| [carro_portatuercas_corredera-Body.dxf](cad/carro_portatuercas_corredera-Body.dxf) | Desarrollo del carro |
+| [chapa_ranurada_bandeja.dxf](cad/chapa_ranurada_bandeja.dxf) | Chapa ranurada de la bandeja |
+| [LibreIncu_Rediseno_Despiece.FCStd](https://github.com/Pablomonte/LibreIncu-150/blob/LibreIncu-150/fuentes/LibreIncu_Rediseno_Despiece.FCStd) | Modelo 3D de referencia de la v3 (FreeCAD) |
+
+Los STEP del modelo están en [Vista 3D](vista-3d.md#descargas).

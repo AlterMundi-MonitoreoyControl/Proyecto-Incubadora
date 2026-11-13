@@ -6,7 +6,7 @@ Trabajar siempre sin tensión. El equipo se conecta a la red recién en la [pues
 
 ![Tablero eléctrico del equipo real con protecciones, fuente, placa y módulos](img/manual/tablero-electrico.jpg){ width=500 }
 
-*Figura 9. Tablero eléctrico del equipo.*
+*Figura 16. Tablero eléctrico del equipo.*
 
 | Componente | Descripción |
 |---|---|
@@ -18,7 +18,7 @@ Trabajar siempre sin tensión. El equipo se conecta a la red recién en la [pues
 
 ![Placa Olivia y conexiones de potencia rotuladas en la fuente original](img/manual/placa-olivia-potencia.png){ width=440 }
 
-*Figura 10. Placa Olivia Control V2.*
+*Figura 17. Placa Olivia Control V2.*
 
 ## Placa Olivia
 
@@ -41,7 +41,7 @@ La salida TRIAC de la placa (**GPIO 14**) alimenta la resistencia de 200 W.
   <img src="img/manual/sensor-bme280.png" alt="Sensor BME280 con los terminales VIN, GND, SCL y SDA visibles" style="width:30%; height:auto;">
 </div>
 
-*Figuras 11 y 12. J11 y sensor BME280.*
+*Figuras 18 y 19. J11 y sensor BME280.*
 
 | Señal de J11 | PinOut ESP32|
 |---|---|
@@ -60,7 +60,7 @@ La salida TRIAC de la placa (**GPIO 14**) alimenta la resistencia de 200 W.
   <img src="img/manual/step-down.png" alt="Step-down utilizado para la alimentación del módulo de relés" style="width:19%; height:auto;">
 </div>
 
-*Figuras 13–15. J6, módulo de relés y step-down. La alimentación JVCC de los relés es de 5 V; Hum/GPIO 17 debe accionar el mismo canal cuya salida normalmente abierta conmuta la bomba.*
+*Figuras 20–22. J6, módulo de relés y step-down. La alimentación JVCC de los relés es de 5 V; Hum/GPIO 17 debe accionar el mismo canal cuya salida normalmente abierta conmuta la bomba.*
 
 | Señal de J6 | PinOut ESP32 |
 |---|---|
@@ -83,7 +83,7 @@ Conectar GND y VCC del módulo a las señales correspondientes de J6, conservand
   <img src="img/manual/modulo-puente-h.png" alt="Módulo puente H con alimentación, entradas IN1 e IN2 y ENA rotuladas" style="width:50%; height:auto;">
 </div>
 
-*Figuras 16 y 17. Señales de J9 y conexiones rotuladas del puente H; los asteriscos indican la interrupción mediante finales de carrera.*
+*Figuras 23 y 24. Señales de J9 y conexiones rotuladas del puente H; los asteriscos indican la interrupción mediante finales de carrera.*
 
 | Señal de J9 | Conexión al puente H |
 |---|---|
@@ -101,7 +101,7 @@ Conectar GND y VCC del módulo a las señales correspondientes de J6, conservand
 
 ![Sensores reed A y B del mecanismo real](img/manual/sensores-reed.png){ width=280 }
 
-*Figura 18. Sensores magnéticos de posición superior e inferior.*
+*Figura 25. Sensores magnéticos de posición superior e inferior.*
 
 ## Finales de carrera
 
