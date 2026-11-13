@@ -42,6 +42,7 @@ COLORS=[  # prefijo del nombre de la pieza: color
     ('deflector_',(0.62,0.66,0.70)),
     ('carro_',(0.45,0.46,0.50)),
     ('dos_finales_',(0.15,0.15,0.18)),
+    ('dos_reed',(0.16,0.55,0.55)),
     ('fc_bandeja_agua',(0.82,0.84,0.87)),
     ('fc_contraplaca',(0.33,0.35,0.38)),
     ('fc_resistencia',(0.78,0.32,0.22)),
@@ -176,8 +177,9 @@ capture('corte-lateral',['deflector_inferior_bandejas_0p5mm','fuente_calor','ple
         +[g for g in tray_groups if not g.endswith('_izquierda')],angle='side',extra=(floor,back),exclude=water)
 capture('fuente-de-calor',['fuente_calor'],exclude=water)
 capture('fuente-de-calor-inferior',['fuente_calor'],angle='iso-below',exclude=water)
+reeds=['dos_reed'] if doc.getObject('dos_reed') is not None else []
 capture('carro-y-finales-de-carrera',['carro_plegado_corredera_perno','dos_finales_de_carrera','husillo_8mm_400mm',
-        'soporte_KP08_superior','soporte_KP08_inferior'],size=(800,1400))
+        'soporte_KP08_superior','soporte_KP08_inferior']+reeds,size=(800,1400))
 (output/'vistas.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
 view.setAnimationEnabled(animated)
 App.closeDocument(doc.Name)

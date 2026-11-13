@@ -95,6 +95,9 @@ def export_document(doc, source, output):
     for name, (groups, exclude) in OPTIONAL_TARGETS.items():
         if all(doc.getObject(g) is not None for g in groups):
             targets[name] = group_leaves(doc, groups, exclude)
+    # Los reed van con el carro y los finales de carrera, si el documento los tiene.
+    if 'carro-y-finales-de-carrera' in targets and doc.getObject('dos_reed') is not None:
+        targets['carro-y-finales-de-carrera'] += group_leaves(doc, ['dos_reed'])
     manifest = {
         'fuente': Path(source).name,
         'sha256_fuente': hashlib.sha256(Path(source).read_bytes()).hexdigest(),
