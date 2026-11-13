@@ -4,7 +4,7 @@ icon: material/content-cut
 
 # Compra y corte
 
-Esta página reúne las piezas que hay que cortar o plegar. La lista completa de materiales, con cantidades por incubadora, precios y enlaces, está en el [inventario](inventario.md).
+Esta página reúne las piezas que hay que cortar o plegar. La lista completa de materiales, con cantidades por incubadora, está en el [inventario](inventario.md).
 
 ## Mueble
 
