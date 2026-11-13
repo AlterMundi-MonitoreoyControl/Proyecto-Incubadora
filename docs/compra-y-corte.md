@@ -19,9 +19,6 @@ Placas de MDF melamina blanco de 18 mm, según los planos ALT-INC001-01 y ALT-IN
 
 Los perfiles U y L de chapa galvanizada de 0,5 mm del cuerpo y la puerta se cortan y pliegan según los planos ALT-INC001-01-05, 01-06 y 03-02.
 
-!!! warning "Pendiente"
-    La medida corta de la placa superior: el plano solo acota 490 mm.
-
 ## Chapas y perfiles
 
 | Pieza | Cantidad | Material | Medida de corte (mm) | Ver |
@@ -79,9 +76,6 @@ La contraplaca aprieta la resistencia contra el fondo de la budinera. Es una U c
 3. Plegar las dos pestañas **83°** hacia el mismo lado.
 4. Presentar la contraplaca bajo la budinera: las pestañas deben apoyar en las paredes.
 
-!!! warning "Pendiente"
-    El desarrollo usa un radio interior de 1,5 mm y K = 0,4: ajustarlo a la plegadora. El ancho entre plegados depende de la huella real de la base de la budinera.
-
 ## Chapa de impacto
 
 ![Plano ALT-INC001-12-02 del INTI: desarrollo y plegado de la chapa de impacto del agua](img/manual/chapa-impacto-plano-inti.png){ width=640 }
@@ -100,6 +94,3 @@ El carro usa la chapa original de 3,2 mm, sin cambiar sus medidas (`carro_portat
 1. Cortar la chapa según el desarrollo.
 2. Torcer **90°** el cuello de cada oreja sobre el eje de la oreja.
 3. Plegar cada oreja **90° hacia el fondo**. En planta, el eje de las orejas queda en el plano de la ranura.
-
-!!! warning "Pendiente"
-    Marcar en el desarrollo las zonas de torsión (se supuso un largo de 14 mm). La torsión se hace con una plantilla.

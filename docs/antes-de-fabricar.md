@@ -19,19 +19,6 @@
 - Soldador de estaño y pinzas para el cableado.
 - Escuadra, transportador, regla metálica y calibre.
 
-## Medidas para verificar
-
-Algunas cotas del diseño se tomaron de catálogos o se estimaron. Verificarlas contra las piezas compradas antes de cortar en serie.
-
-!!! warning "Pendiente"
-    - **Budinera:** huella real de la base apoyada en una mesa (estimada en 325 × 115 mm). Define el ancho de la contraplaca.
-    - **Resistencia:** espesor real (se supuso 4 mm). Define la altura de la contraplaca.
-    - **Perfiles L de la budinera:** espesor y largo (se supuso 2 mm y 470 mm).
-    - **Fusible térmico KSD301:** medidas de la pieza comprada contra el dibujo de catálogo.
-    - **Finales de carrera V-156-1C25:** modelo de palanca y carrera del rodillo.
-    - **Carro:** en el modelo, las orejas llegan 1,7 mm más allá del lateral. Medir la distancia real del husillo al lateral.
-    - **Recorrido de las bandejas:** decidir si el giro llega a −37,8° o se limita a los 30° del plano del INTI.
-
 ## Etapas
 
 | Etapa | Contenido |

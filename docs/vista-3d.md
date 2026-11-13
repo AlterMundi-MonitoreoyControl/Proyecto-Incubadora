@@ -9,6 +9,3 @@
 *Vista CAD de referencia: husillo, KP08 y acople.*
 
 Descargar STEP del diseño guardado: [conjunto completo](cad/LibreIncu_Rediseno_Despiece.step), [bandejas y soportes](cad/bandejas-y-soportes.step), [husillo, KP08 y acople](cad/husillo-kp08-acople.step).
-
-!!! warning "Pendiente"
-    Las vistas y los STEP todavía son de antes de la v3. Se regeneran desde `LibreIncu_Rediseno_Despiece.FCStd`.

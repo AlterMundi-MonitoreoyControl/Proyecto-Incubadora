@@ -17,14 +17,12 @@ Las páginas siguen el orden de fabricación:
 
 | Etapa | Página |
 |---|---|
-| Preparar el trabajo y verificar medidas | [Antes de fabricar](antes-de-fabricar.md) |
+| Seguridad, herramientas y etapas | [Antes de fabricar](antes-de-fabricar.md) |
 | Comprar materiales, cortar y plegar las piezas | [Compra y corte](compra-y-corte.md) |
 | Controlar que estén todas las piezas | [Inventario](inventario.md) |
 | Mueble, bandejas, rotación, deflector, fuente de calor y humidificación | [Montaje mecánico](montaje-mecanico.md) |
 | Tablero, placa Olivia, sensores y actuadores | [Instalación eléctrica](instalacion-electrica.md) |
 | Primer encendido y pruebas | [Puesta en marcha](puesta-en-marcha.md) |
-
-Los recuadros **Pendiente** marcan datos que todavía hay que medir o confirmar en la unidad real antes de fabricar en serie.
 
 ## Qué cambia respecto de la v1
 

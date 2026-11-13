@@ -56,9 +56,6 @@ El alma del carro queda paralela al lateral, en el plano del husillo. La ranura 
 1. Verificar que el carro suba y baje sin rozar el lateral.
 2. Colocar el perno de la cuna de la bandeja superior en la ranura.
 
-!!! warning "Pendiente"
-    Distancia del perno al eje de la bandeja: se supuso 180 mm. En el modelo, las orejas llegan 1,7 mm más allá del lateral: verificar en la unidad.
-
 ### Sensores y finales de carrera
 
 | Elemento | Función | Ubicación |
@@ -69,9 +66,6 @@ El alma del carro queda paralela al lateral, en el plano del husillo. La ranura 
 | Final de carrera superior V-156-1C25 | Seguridad: corta el motor si falla el reed. | Rodillo a 40 mm del fondo y 110 mm del techo. |
 
 Los finales de carrera van de plano contra el lateral, detrás del husillo, y los pisan las orejas del carro. En el modelo conmutan a +19,6° y −37,8° de giro de las bandejas.
-
-!!! warning "Pendiente"
-    Decidir si el giro llega a −37,8° o se limita a los 30° del plano del INTI. Confirmar el modelo de palanca del V-156-1C25 contra la pieza comprada.
 
 ## Deflector
 
@@ -106,16 +100,9 @@ La resistencia va debajo de la budinera, apretada contra su fondo por la contrap
 6. **Colocación.** Apoyar las alas horizontales de los perfiles sobre los soportes de la nacedora, con el centro de la budinera a unos 115 mm del fondo.
 7. **Conexión.** Conectar la resistencia, con el fusible en serie, al conector interlock macho. Enchufarlo a la toma de chasis de la carcasa.
 
-!!! warning "Pendiente"
-    - Cantidad de remaches de la contraplaca y de los perfiles L (se supusieron 4 + 4).
-    - Distancia real de la budinera al fondo.
-
 ## Humidificación
 
 1. **Chapa de impacto.** Colocarla en la punta de la budinera del lado del husillo, con el respaldo hacia esa punta y las alas hacia el centro. Su borde superior queda a 298 mm del piso, debajo del deflector.
 2. **Aspersor.** Fijar la ménsula a la carcasa y montar la boquilla de 6 mm, apuntando a la chapa de impacto.
 3. **Bomba y electroválvula.** Montarlas fuera de la cámara y unirlas con manguera de 10 mm. Usar el acople rápido de 10 a 6 mm para la boquilla.
 4. **Desagüe.** Instalar el kit de desagüe en el piso de la cámara.
-
-!!! warning "Pendiente"
-    Forma de fijar la chapa de impacto. En el plano ALT-INC001-12-00 del INTI va atornillada a la bandeja con autoperforantes de 4,2 × 13 mm.

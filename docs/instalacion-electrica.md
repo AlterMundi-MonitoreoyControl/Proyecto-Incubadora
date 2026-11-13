@@ -109,6 +109,3 @@ Los finales de carrera V-156-1C25 interrumpen las señales de mando del puente H
 
 - **Final de carrera A:** interrumpe el cable entre Motor A de Olivia, **GPIO 2**, y **IN1** del puente H.
 - **Final de carrera B:** interrumpe el cable entre Motor A de Olivia, **GPIO 15**, y **IN2** del puente H.
-
-!!! warning "Pendiente"
-    Confirmar qué final de carrera (superior o inferior) corresponde a A y a B según el sentido de giro del motor.

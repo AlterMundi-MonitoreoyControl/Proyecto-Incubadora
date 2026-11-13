@@ -15,9 +15,6 @@ Relevamiento de la unidad original (OT 216-7256, junio de 2025). Están en la [c
 
 ## Archivos de fabricación
 
-!!! warning "Pendiente"
-    Estos archivos están en la carpeta `Rediseno` del diseño y todavía no están publicados.
-
 | Archivo | Pieza |
 |---|---|
 | `Deflector_Aire.dxf` | Desarrollo del deflector |
