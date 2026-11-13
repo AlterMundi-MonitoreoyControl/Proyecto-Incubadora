@@ -2,6 +2,7 @@ site_name: LibreIncu 150
 site_description: Manual de fabricación y montaje - LibreIncu 150 v3
 site_url: https://pablomonte.github.io/LibreIncu-150/
 docs_dir: docs
+use_directory_urls: false
 repo_url: https://github.com/Pablomonte/LibreIncu-150
 repo_name: Pablomonte/LibreIncu-150
 edit_uri: ''
