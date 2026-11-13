@@ -19,6 +19,7 @@ Requisitos:
 from __future__ import annotations
 
 import argparse
+import re
 import shutil
 import subprocess
 import sys
@@ -267,6 +268,7 @@ def build_html(files: list[Path], title: str, page_breaks: bool, exclude_invento
             "fenced_code",
             "sane_lists",
             "attr_list",
+            "md_in_html",
             "admonition",
             "pymdownx.snippets",
             "pymdownx.superfences",
@@ -283,6 +285,8 @@ def build_html(files: list[Path], title: str, page_breaks: bool, exclude_invento
     for i, path in enumerate(files):
         md.reset()
         raw = path.read_text(encoding="utf-8")
+        # Front matter de MkDocs (íconos de la navegación): no va al PDF.
+        raw = re.sub(r"\A---\n.*?\n---\n", "", raw, flags=re.S)
         if exclude_inventory:
             raw = strip_inventory_snippets(raw)
         body = md.convert(raw)

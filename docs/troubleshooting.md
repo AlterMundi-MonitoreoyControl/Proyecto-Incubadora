@@ -1,3 +1,7 @@
+---
+icon: material/lifebuoy
+---
+
 # Solución de problemas
 
 !!! note "En preparación"

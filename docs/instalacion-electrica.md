@@ -1,3 +1,7 @@
+---
+icon: material/flash-outline
+---
+
 # Instalación eléctrica
 
 Trabajar siempre sin tensión. El equipo se conecta a la red recién en la [puesta en marcha](puesta-en-marcha.md).

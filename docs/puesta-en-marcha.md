@@ -1,3 +1,7 @@
+---
+icon: material/power
+---
+
 # Puesta en marcha
 
 !!! note "En preparación"

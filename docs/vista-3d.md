@@ -1,3 +1,7 @@
+---
+icon: material/cube-outline
+---
+
 # Vista 3D
 
 Vistas y archivos del modelo 3D de la v3 (`LibreIncu_Rediseno_Despiece.FCStd`).

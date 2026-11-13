@@ -1,3 +1,7 @@
+---
+icon: material/format-list-checks
+---
+
 # Inventario
 
 Controlar que estén todas las piezas de cada sistema antes de empezar el montaje.

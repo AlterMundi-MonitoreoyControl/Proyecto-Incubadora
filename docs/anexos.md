@@ -1,3 +1,7 @@
+---
+icon: material/paperclip
+---
+
 # Anexos
 
 ## Planos del INTI

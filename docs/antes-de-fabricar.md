@@ -1,3 +1,7 @@
+---
+icon: material/clipboard-check-outline
+---
+
 # Antes de fabricar
 
 ## Seguridad
