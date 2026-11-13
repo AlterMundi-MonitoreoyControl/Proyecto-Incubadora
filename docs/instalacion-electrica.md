@@ -88,8 +88,8 @@ Conectar GND y VCC del módulo a las señales correspondientes de J6, conservand
 | Señal de J9 | Conexión al puente H |
 |---|---|
 | GND | GND |
-| GPIO 2 | IN1, pasando por el final de carrera A |
-| GPIO 15 | IN2, pasando por el final de carrera B |
+| GPIO 2 | IN1 (giro a la derecha), pasando por el final de carrera A |
+| GPIO 15 | IN2 (giro a la izquierda), pasando por el final de carrera B |
 | GPIO 13 | ENA |
 
 ## Sensores reed
@@ -107,5 +107,5 @@ Conectar GND y VCC del módulo a las señales correspondientes de J6, conservand
 
 Los finales de carrera V-156-1C25 interrumpen las señales de mando del puente H:
 
-- **Final de carrera A:** interrumpe el cable entre Motor A de Olivia, **GPIO 2**, y **IN1** del puente H.
-- **Final de carrera B:** interrumpe el cable entre Motor A de Olivia, **GPIO 15**, y **IN2** del puente H.
+- **Final de carrera A, superior:** interrumpe el cable entre Motor A de Olivia, **GPIO 2**, y **IN1** del puente H. Corta el giro a la derecha.
+- **Final de carrera B, inferior:** interrumpe el cable entre Motor A de Olivia, **GPIO 15**, y **IN2** del puente H. Corta el giro a la izquierda.
