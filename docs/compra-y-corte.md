@@ -6,9 +6,6 @@ icon: material/content-cut
 
 Esta página reúne las piezas que hay que cortar o plegar. La lista completa de materiales, con cantidades por incubadora, precios y enlaces, está en el [inventario](inventario.md).
 
-!!! note "Compras"
-    Elegir el tamaño de cada pack según la cantidad total a fabricar. Comprar con tiempo los componentes importados (sensor BME280, PCB Olivia).
-
 ## Mueble
 
 Placas de MDF melamina blanco de 18 mm, según los planos ALT-INC001-01 y ALT-INC001-03 del INTI ([carpeta de planos](https://github.com/Pablomonte/LibreIncu-150/tree/LibreIncu-150/HardWare/Mecanica)).
