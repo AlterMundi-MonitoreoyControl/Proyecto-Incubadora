@@ -1,0 +1,72 @@
+site_name: LibreIncu 150
+site_description: Manual de fabricación y montaje - LibreIncu 150 v3
+site_url: https://pablomonte.github.io/LibreIncu-150/
+docs_dir: docs
+use_directory_urls: false
+repo_url: https://github.com/Pablomonte/LibreIncu-150
+repo_name: Pablomonte/LibreIncu-150
+edit_uri: ''
+
+theme:
+  name: material
+  language: es
+  icon:
+    logo: material/egg
+  palette:
+    - scheme: default
+      primary: green
+      accent: light green
+      toggle:
+        icon: material/weather-night
+        name: Modo oscuro
+    - scheme: slate
+      primary: green
+      accent: light green
+      toggle:
+        icon: material/weather-sunny
+        name: Modo claro
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - navigation.tracking
+    - toc.follow
+    - content.code.copy
+    - search.suggest
+    - search.highlight
+
+nav:
+  - Inicio: index.md
+  - Fabricación:
+      - Antes de fabricar: antes-de-fabricar.md
+      - Compra y corte: compra-y-corte.md
+      - Inventario: inventario.md
+  - Montaje:
+      - Montaje mecánico: montaje-mecanico.md
+      - Instalación eléctrica: instalacion-electrica.md
+  - Operación:
+      - Puesta en marcha: puesta-en-marcha.md
+      - Solución de problemas: troubleshooting.md
+  - Referencia:
+      - Vista 3D: vista-3d.md
+      - Anexos: anexos.md
+      - Descargar PDF: manual_libreincu_150.pdf
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.tasklist
+  - pymdownx.highlight
+  - pymdownx.superfences
+
+plugins:
+  - search

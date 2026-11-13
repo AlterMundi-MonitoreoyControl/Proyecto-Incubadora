@@ -1,0 +1,40 @@
+name: Publicar manual en GitHub Pages
+
+on:
+  push:
+    branches:
+      - LibreIncu-150
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtener el repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Instalar MkDocs y extensiones
+        run: python -m pip install --upgrade mkdocs-material pymdown-extensions pyyaml
+
+      - name: Construir el sitio
+        run: mkdocs build --strict --site-dir site
+
+      - name: Publicar en la rama gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: site
+          force_orphan: true

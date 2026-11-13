@@ -1,0 +1,13 @@
+Rediseno/*.3dm
+Rediseno/*.stp
+Rediseno/*.igs
+
+# Render de piezas
+.venv-render/
+Rediseno/*.stl
+Rediseno/*.msh
+Rediseno/*.brep
+
+# MkDocs build
+site/
+.cache/
