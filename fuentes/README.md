@@ -8,31 +8,42 @@ El manual publicado está en `docs/`, una página por etapa (orden en `mkdocs.ym
 
 ## CAD utilizado para ilustraciones
 
-Archivo fuente: `/home/pablo/repos/2Incubadora/Rediseno/LibreIncu_Rediseno_Despiece.FCStd`.
-SHA-256: `5ab180d757550a3b983e3bd64d6d23e9dcaabd0f47e3b2760ac321a8220ceab8`.
+Fuente congelada de la v3: `fuentes/LibreIncu_Rediseno_Despiece.FCStd`, copia sin cambios de `Rediseno/LibreIncu_Rediseno_Despiece.FCStd` (salida de `LibreIncu_Rediseno_Despiece.py` y `fuente_calor.py`).
+SHA-256: `b8745aab64a58fa09d1361d72321c3716ae5ed0f9981f368650367e2248d012b`.
 
-El archivo original se abrió para lectura y no se guardó ni modificó. Las vistas muestran componentes existentes, sin reconstruir piezas. Se ajustaron la cámara y los colores para facilitar su lectura y se extrajo el área visible de cada captura, quitando los márgenes blancos sin retocar la geometría.
+El archivo se abre para lectura y no se guarda ni modifica. Las vistas muestran componentes existentes, sin reconstruir piezas. Se ajustan la cámara y los colores para facilitar su lectura y se extrae el área visible de cada captura, quitando los márgenes blancos sin retocar la geometría.
 
-Brief de exportación y vistas: se utiliza el FCStd guardado como fuente, sin ejecutar los generadores anteriores ni reconstruir piezas. Unidades en mm; X es ancho, Y profundidad, Z altura. Se conservan dimensiones y posiciones del documento. Salidas STEP en `docs/cad/`: conjunto completo (213 sólidos), bandejas con ejes, cunas y soportes (78 sólidos), y husillo con KP08 y acople (105 sólidos). Las dos selecciones parciales coinciden con las del macro de capturas. La cámara y los colores solo afectan las capturas.
+Unidades en mm; X es ancho, Y profundidad desde el fondo, Z altura desde el piso. Salidas STEP en `docs/cad/`:
 
-`scripts/export_manual.py` exporta copias con posiciones globales, incluyendo los giros y desplazamientos de todos los grupos `App::Part`. Esto es necesario para conservar la posición del deflector: exportar directamente las piezas sueltas omite la transformación de su grupo. Se reimporta cada STEP para comprobar geometría válida, sólidos cerrados de volumen positivo, número de sólidos, volumen y límites XYZ de cada pieza contra la fuente en coordenadas globales. Para las nueve piezas del deflector se comprueba además la coincidencia geométrica mediante el volumen de intersección. `cad-exportacion.json` registra los resultados y los SHA-256 de fuente y salidas. `docs/img/cad/vistas.json` registra el SHA-256 del mismo FCStd para las imágenes.
+| STEP | Sólidos | Contenido |
+|---|---|---|
+| `LibreIncu_Rediseno_Despiece.step` | 225 | Conjunto completo, con paredes de referencia |
+| `bandejas-y-soportes.step` | 78 | Bandejas, ejes, cunas y soportes KFL08 |
+| `husillo-kp08-acople.step` | 105 | Husillo, KP08 y acople |
+| `deflector.step` | 9 | Deflector |
+| `fuente-de-calor.step` | 13 | Fuente de calor y chapa de impacto, sin el agua de referencia |
+| `carro-y-finales-de-carrera.step` | 6 | Carro plegado y finales de carrera |
 
-El conjunto completo también se sincronizó con `LibreIncu_Rediseno_Layout_Preciso.step` en la carpeta del modelo original. Los STEP de otros generadores se conservan como versiones independientes.
+`scripts/export_manual.py` exporta copias con posiciones globales, incluyendo los giros y desplazamientos de todos los grupos `App::Part`. Se reimporta cada STEP para comprobar geometría válida, sólidos cerrados de volumen positivo, número de sólidos, volumen y límites XYZ de cada pieza contra la fuente en coordenadas globales. Los límites se calculan con `optimalBoundingBox`: el `BoundBox` de un FCStd guardado desde la interfaz sale de la malla de visualización. El volumen se compara con tolerancia relativa de 1e-4, porque las caras B-spline (la budinera) se integran distinto al reimportar aunque la geometría coincide. Para las piezas del deflector se comprueba además la coincidencia por volumen de intersección. `cad-exportacion.json` registra los resultados y los SHA-256 de fuente y salidas; `docs/img/cad/vistas.json` registra el SHA-256 del FCStd usado para las capturas.
 
-El FCStd contiene dimensiones y posiciones provisionales del carro, finales de carrera, cunas y vínculo. No se trasladan esas cotas al manual como medidas de fabricación. Para los detalles del mecanismo se conserva la fotografía del equipo real. El deflector se documenta con las fotografías originales y las medidas confirmadas, sin utilizar la posición guardada del deflector en el CAD como instrucción de montaje.
+Desde la v3, las cotas confirmadas del deflector, la fuente de calor, el carro y los finales de carrera se toman del FCStd. Las fotografías del equipo real se conservan para los detalles que el modelo no muestra (tablero, sensores reed).
+
+Los desarrollos de chapa (`docs/cad/*.dxf`) se copian sin cambios de `Rediseno/`: el deflector y la contraplaca los escriben los generadores, y el carro y la chapa ranurada son dibujos propios. `scripts/render_desarrollos.py` los dibuja acotados en `docs/img/cad/desarrollo-*.png` (requiere matplotlib, no FreeCAD).
 
 Para regenerar las capturas con FreeCAD y su interfaz gráfica:
 
 ```bash
-LIBREINCU_FCSTD="/home/pablo/repos/2Incubadora/Rediseno/LibreIncu_Rediseno_Despiece.FCStd" \
+LIBREINCU_FCSTD="$PWD/fuentes/LibreIncu_Rediseno_Despiece.FCStd" \
 LIBREINCU_RENDER_DIR="$PWD/docs/img/cad" \
 FreeCAD scripts/render_manual.FCMacro
 ```
 
+Si el macro se ejecuta dentro de una sesión de FreeCAD que debe seguir abierta (por ejemplo, desde el bridge MCP), definir `LIBREINCU_KEEP_OPEN=1` para que no cierre la ventana principal.
+
 Para regenerar los STEP, ejecutar desde la raíz del repositorio con un Python que pueda importar `FreeCAD` y `Part`:
 
 ```bash
-python scripts/export_manual.py /home/pablo/repos/2Incubadora/Rediseno/LibreIncu_Rediseno_Despiece.FCStd \
+python scripts/export_manual.py fuentes/LibreIncu_Rediseno_Despiece.FCStd \
   docs/cad --manifest fuentes/cad-exportacion.json
 ```
 
@@ -42,8 +53,8 @@ Antes de publicar cambios del exportador, ejecutar `python scripts/test_export_m
 
 ## Aclaraciones confirmadas por el usuario
 
-- Deflector: desarrollo de 225 mm; 470 mm de ancho útil; pestañas de 15 mm por lado; 500 mm de ancho total.
-- Utilizar vistas CAD para la disposición general y fotos reales para los detalles que permanecen provisionales en el CAD.
+- Deflector: desarrollo de 225 mm; 470 mm de ancho útil; pestañas de 15 mm por lado; 500 mm de ancho total; pliegues de 50° y 20°; paño vertical a 60 mm del fondo y punto más bajo a 300 mm del piso.
+- Utilizar vistas CAD para la disposición general y fotos reales para los detalles que el CAD no muestra.
 - Relé de la bomba: puede elegirse IN1 o IN2; la entrada controlada por Hum/GPIO17 y la salida NO utilizada por la bomba deben pertenecer al mismo canal.
 
 ## Criterios de corrección
@@ -52,4 +63,4 @@ Antes de publicar cambios del exportador, ejecutar `python scripts/test_export_m
 - Se eliminó la segunda aparición de la misma foto del step-down.
 - Se reemplazaron los títulos genéricos de las imágenes por descripciones y pies de figura. La fotografía del mecanismo se identifica como conjunto; los planos KP08 y KFL08/KL08 se identifican por separado.
 - Los ángulos del deflector se expresan como inclinación principal y pliegues, siguiendo la tabla original, sin atribuir todos los ángulos a planos absolutos respecto de la horizontal.
-- Se retiraron del sitio los renders, modelos y manifiestos de la mecánica anterior. Las fotografías de referencia y las nuevas capturas quedan como únicos recursos gráficos del manual.
+- Se retiraron del sitio los renders, modelos y manifiestos de la mecánica anterior. Los recursos gráficos del manual son las fotografías de referencia, las capturas del FCStd congelado, los desarrollos acotados de los DXF y el plano 12-02 del INTI.
