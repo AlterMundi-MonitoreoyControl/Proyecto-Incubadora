@@ -20,12 +20,9 @@ Vistas y archivos del modelo 3D de la v3 (`LibreIncu_Rediseno_Despiece.FCStd`).
 
 *Corte lateral: ventilador, bandejas, deflector y fuente de calor.*
 
-<div style="display:flex; justify-content:center; align-items:flex-start; gap:12px; flex-wrap:wrap;">
-  <img src="img/cad/husillo-kp08-acople.png" alt="Vista CAD del husillo vertical, los dos soportes KP08 y el acople superior" style="width:14%; height:auto;">
-  <img src="img/cad/carro-y-finales-de-carrera.png" alt="Vista CAD del husillo con el carro plegado y los finales de carrera" style="width:26%; height:auto;">
-</div>
+![Vista CAD del husillo con el carro plegado y los finales de carrera](img/cad/carro-y-finales-de-carrera.png){ width=180 }
 
-*Husillo, KP08 y acople; carro y finales de carrera.*
+*Carro y finales de carrera.*
 
 <div style="display:flex; justify-content:center; align-items:flex-start; gap:12px; flex-wrap:wrap;">
   <img src="img/cad/fuente-de-calor.png" alt="Fuente de calor vista desde arriba" style="width:48%; height:auto;">

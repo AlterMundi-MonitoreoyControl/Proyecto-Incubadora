@@ -49,10 +49,6 @@ Armar el cuerpo según el plano ALT-INC001-01-00 y la puerta según el ALT-INC00
     - Ajustar el acople de 8 mm al motor y al husillo.
     - Colocar el soporte del motor, cuidando que la separación entre los extremos de los ejes en el acople no supere 1 mm y que no queden apretados.
 
-![Vista CAD del husillo vertical, los dos soportes KP08 y el acople superior](img/cad/husillo-kp08-acople.png){ width=75 }
-
-*Vista CAD de referencia: husillo, KP08 y acople.*
-
 ### Carro
 
 ![Vista CAD del husillo con el carro plegado, los dos soportes KP08 y los dos finales de carrera](img/cad/carro-y-finales-de-carrera.png){ width=145 }
