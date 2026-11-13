@@ -10,8 +10,6 @@ icon: material/clipboard-check-outline
 - Usar anteojos y guantes al cortar, plegar y remachar chapa.
 - Desbarbar todos los cortes de chapa antes de manipular las piezas.
 - Asegurar espacio y ventilación adecuados.
-- No usar siliconas acéticas ni grasas siliconadas cerca de la fuente de calor: liberan vapores dañinos para los embriones.
-- No apoyar chapa galvanizada contra superficies calientes.
 
 ## Herramientas
 
