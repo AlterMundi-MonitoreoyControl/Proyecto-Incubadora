@@ -29,7 +29,7 @@ Los perfiles U y L de chapa galvanizada de 0,5 mm del cuerpo y la puerta se cort
 | Chapa de impacto del agua | 1 | Aluminio 2 mm | 435 × 275 | [Chapa de impacto](#chapa-de-impacto) |
 | Carro del husillo | 1 | Acero 3,2 mm | 74,6 × 123,5, según el [desarrollo](cad/carro_portatuercas_corredera-Body.dxf) | [Carro](#carro) |
 | Chapa soporte del ventilador | 1 | Chapa 0,5 mm | 464 × 227 | — |
-| Soportes de la bandeja nacedora | 2 | Perfil L 20 × 20 × 3,2 | 420 | ALT-INC001-02-02, partido en dos |
+| Soportes de la bandeja nacedora | 2 | Perfil L 20 × 20 × 3,2 | 420 | [Fuente de calor](montaje-mecanico.md#fuente-de-calor) |
 | Perfiles L de la budinera | 2 | Perfil L 20 × 20 × 2 | 470 | [Fuente de calor](montaje-mecanico.md#fuente-de-calor) |
 | Ejes de bandeja | 3 | Barra de acero Ø8 | ≈ 490 | Medir en la unidad |
 | Varilla de vínculo | 1 | Planchuela 20 × 3,2 | 260 | 3 agujeros Ø8 |

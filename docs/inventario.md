@@ -53,7 +53,7 @@ Antes de empezar el montaje, contar las piezas de cada tabla y marcar la columna
 
 | ✓ | Cant. | Pieza | Medida / detalle |
 |:-:|--:|---|---|
-|   | 2 u | Soporte de bandeja nacedora | Perfil L 20 x 20 x 3,2, 420 mm (ALT-INC001-02-02 partido en dos); a 55 mm del piso |
+|   | 2 u | Soporte de bandeja nacedora | Perfil L 20 x 20 x 3,2, 420 mm; a 55 mm del piso |
 |   | 1 u | Bandeja nacedora (piso) | Chapa galvanizada: lateral 0,9 mm + fondo 0,3 mm |
 |   | 3 u | Chapa ranurada de bandeja | Chapa galvanizada 0,3 mm; DXF chapa_ranurada_bandeja.dxf |
 |   | 3 u | Malla de bandeja | Malla electrosoldada galvanizada 25 x 25 x Ø2, a medida de bandeja |
