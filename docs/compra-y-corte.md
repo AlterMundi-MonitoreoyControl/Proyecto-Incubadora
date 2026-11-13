@@ -58,7 +58,7 @@ Los perfiles U y L de chapa galvanizada de 0,5 mm del cuerpo y la puerta se cort
 | Líneas de pliegue desde un extremo | 115 y 175 mm |
 | Pliegues | 50° y 20°, en el mismo sentido |
 
-1. Cortar chapa de aluminio de 0,5 mm de **500 × 225 mm**: deja **470 mm de ancho útil** y pestañas laterales de **15 mm por lado**. El desarrollo está en [`Deflector_Aire.dxf`](cad/Deflector_Aire.dxf).
+1. Cortar chapa de aluminio de 0,5 mm de **500 × 225 mm**: quedarán **470 mm de ancho útil** y pestañas laterales de **15 mm por lado**. El desarrollo está en [`Deflector_Aire.dxf`](cad/Deflector_Aire.dxf).
 2. Marcar los pliegues a **115 mm** y **175 mm** desde un extremo: forman paños de 115, 60 y 50 mm.
 3. Cortar en V las pestañas sobre las líneas de pliegue.
 4. Plegar **50°** en la línea de 115 mm y **20°** en la de 175 mm, en el mismo sentido. Con el paño de 115 mm inclinado 20° hacia abajo, el paño de 50 mm queda vertical.
