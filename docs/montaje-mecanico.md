@@ -62,8 +62,8 @@ El alma del carro queda paralela al lateral, en el plano del husillo. La ranura 
 |---|---|---|
 | Reed A | Posición superior: el firmware detiene el motor. | Según la figura 7. |
 | Reed B | Posición inferior: el firmware detiene el motor. | Según la figura 7. |
-| Final de carrera inferior V-156-1C25 | Seguridad: corta el motor si falla el reed. | Rodillo a 40 mm del fondo y 350 mm del techo. |
-| Final de carrera superior V-156-1C25 | Seguridad: corta el motor si falla el reed. | Rodillo a 40 mm del fondo y 110 mm del techo. |
+| Final de carrera A (superior) V-156-1C25 | Seguridad: corta el giro a la derecha si falla el reed A. | Rodillo a 40 mm del fondo y 110 mm del techo. |
+| Final de carrera B (inferior) V-156-1C25 | Seguridad: corta el giro a la izquierda si falla el reed B. | Rodillo a 40 mm del fondo y 350 mm del techo. |
 
 Los finales de carrera van de plano contra el lateral, detrás del husillo, y los pisan las orejas del carro. En el modelo conmutan a +19,6° y −37,8° de giro de las bandejas.
 
@@ -102,7 +102,7 @@ La resistencia va debajo de la budinera, apretada contra su fondo por la contrap
 
 ## Humidificación
 
-1. **Chapa de impacto.** Colocarla en la punta de la budinera del lado del husillo, con el respaldo hacia esa punta y las alas hacia el centro. Su borde superior queda a 298 mm del piso, debajo del deflector.
+1. **Chapa de impacto.** Colocarla en la punta de la budinera del lado del husillo, con el respaldo hacia esa punta y las alas hacia el centro. Su borde superior queda a 298 mm del piso, debajo del deflector. Fijarla a la budinera con tornillos autoperforantes de 4,2 × 13 mm o con remaches pop.
 2. **Aspersor.** Fijar la ménsula a la carcasa y montar la boquilla de 6 mm, apuntando a la chapa de impacto.
 3. **Bomba y electroválvula.** Montarlas fuera de la cámara y unirlas con manguera de 10 mm. Usar el acople rápido de 10 a 6 mm para la boquilla.
 4. **Desagüe.** Instalar el kit de desagüe en el piso de la cámara.
