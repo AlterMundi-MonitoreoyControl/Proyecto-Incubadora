@@ -115,10 +115,15 @@ function configurator:write_config_file(cfg)
 end
 
 -------------------------------------------------------------------------------------
--- @method configurator:encode_config_file	encode the new config.json
+-- @method configurator:encode_config_file	combina los valores recibidos con la config
+-- actual y la guarda; un POST parcial no borra las demás claves
 -------------------------------------------------------------------------------------
 function configurator:encode_config_file(new_config_table)
-  return configurator:write_config_file(new_config_table)
+  local cfg = configurator:read_config_file()
+  for k, v in pairs(new_config_table) do
+    cfg[k] = v
+  end
+  return configurator:write_config_file(cfg)
 end
 
 -------------------------------------------------------------------------------------
