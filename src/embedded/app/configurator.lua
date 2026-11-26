@@ -26,59 +26,136 @@ end
 
 
 -------------------------------------------------------------------------------------
--- @method configurator:encode_config_file	encode the new config.json
+-- Valores por defecto: única fuente. Lo que falte en config.json se completa con estos.
+-------------------------------------------------------------------------------------
+configurator.DEFAULTS = {
+  rotation_duration   = 190000,
+  rotation_period     = 3600000,
+  min_temperature     = 37.5,
+  max_temperature     = 37.7,
+  min_hum             = 55,
+  max_hum             = 65,
+  humidifier_min_temp = 35.0,
+  incubation_period   = 18,
+  tray_one_date       = 0,
+  tray_two_date       = 0,
+  tray_three_date     = 0,
+}
+
+-------------------------------------------------------------------------------------
+-- Migraciones: cada una cambia valores por defecto. Solo pisa el valor guardado si
+-- sigue siendo el default anterior, es decir, si el usuario no lo cambió.
+-- Para cambiar un default: actualizarlo en DEFAULTS y agregar una migración al final.
+-- config.json guarda en config_version cuántas migraciones ya se aplicaron.
+-------------------------------------------------------------------------------------
+configurator.MIGRACIONES = {
+  [1] = { rotation_duration = { de = 50000, a = 190000 } },
+}
+
+configurator.path = "config.json"
+
+local function mac_id()
+  return "incu-" .. string.gsub(wifi.sta.getmac(), ":", "")
+end
+
+-- io:read("*a") falla con archivos grandes en NodeMCU-ESP32: leer por partes
+local function read_all(f)
+  local parts = {}
+  while true do
+    local chunk = f:read(256)
+    if not chunk then break end
+    parts[#parts + 1] = chunk
+  end
+  return table.concat(parts)
+end
+
+-------------------------------------------------------------------------------------
+-- @method configurator:complete_config	completa valores faltantes y aplica migraciones
+-- @return true si cambió algo y hay que guardar
+-------------------------------------------------------------------------------------
+function configurator:complete_config(cfg)
+  local changed = false
+  for k, v in pairs(configurator.DEFAULTS) do
+    if cfg[k] == nil then
+      cfg[k] = v
+      changed = true
+    end
+  end
+  if cfg.hash == nil then cfg.hash = mac_id(); changed = true end
+  if cfg.incubator_name == nil then cfg.incubator_name = mac_id(); changed = true end
+
+  local version = tonumber(cfg.config_version) or 0
+  local latest = #configurator.MIGRACIONES
+  for v = version + 1, latest do
+    for k, m in pairs(configurator.MIGRACIONES[v]) do
+      if cfg[k] == m.de then
+        log.trace("[CFG] migracion " .. v .. ": " .. k .. " " .. tostring(m.de) .. " -> " .. tostring(m.a))
+        cfg[k] = m.a
+      end
+    end
+  end
+  if version < latest then
+    cfg.config_version = latest
+    changed = true
+  end
+  return changed
+end
+
+-------------------------------------------------------------------------------------
+-- @method configurator:write_config_file	guarda la tabla completa en config.json
+-------------------------------------------------------------------------------------
+function configurator:write_config_file(cfg)
+  local f = io.open(configurator.path, "w")
+  if not f then
+    return false
+  end
+  f:write(sjson.encode(cfg))
+  f:close()
+  return true
+end
+
+-------------------------------------------------------------------------------------
+-- @method configurator:encode_config_file	combina los valores recibidos con la config
+-- actual y la guarda; un POST parcial no borra las demás claves
 -------------------------------------------------------------------------------------
 function configurator:encode_config_file(new_config_table)
-  local table_to_json = sjson.encode(new_config_table)
-  local new_config_file = io.open("config.json", "w")
-  if not new_config_file then
-    return false
-  else
-    new_config_file:write(table_to_json)
-    new_config_file:close()
-    return true
-  end -- if else end
+  local cfg = configurator:read_config_file()
+  for k, v in pairs(new_config_table) do
+    cfg[k] = v
+  end
+  return configurator:write_config_file(cfg)
 end
 
 -------------------------------------------------------------------------------------
 -- @method configurator:create_config_file	create a new one config.json
 -------------------------------------------------------------------------------------
-
 function configurator:create_config_file()
-	log.trace("Creating a new config file")
-	local new_file = io.open("config.json", "w")
-			local config = {
-					rotation_duration = 190000,
-					rotation_period = 3600000,
-					min_temperature = 37.5,
-					max_temperature = 37.7,
-					tray_one_date = 0,
-					tray_two_date = 0,
-					tray_three_date = 0,
-					incubation_period = 18,
-					hash = "incu-"..string.gsub(wifi.sta.getmac(),":",""),
-					incubator_name = string.format("incu-"..string.gsub(wifi.sta.getmac(),":","")),
-					max_hum = 65,
-					min_hum = 55
-			}
-			new_file:write(sjson.encode(config))
-			new_file:close()
+  log.trace("Creating a new config file")
+  local cfg = { config_version = #configurator.MIGRACIONES }
+  configurator:complete_config(cfg)
+  configurator:write_config_file(cfg)
+  return cfg
 end
 
 -------------------------------------------------------------------------------------
--- @method configurator.read_config_file	read the current config.json in the file
+-- @method configurator.read_config_file	lee config.json, completa defaults y migra
 -------------------------------------------------------------------------------------
-
 function configurator:read_config_file()
-  local file = io.open("config.json", "r")
-  if not file then
-    configurator:create_config_file()
-    file = io.open("config.json", "r")
+  local f = io.open(configurator.path, "r")
+  if not f then
+    return configurator:create_config_file()
   end
-    local config_json = file:read("*a")
-    file:close()
-    local config_table = sjson.decode(config_json)
-    return config_table
+  local content = read_all(f)
+  f:close()
+  local ok, cfg = pcall(sjson.decode, content)
+  if not ok or type(cfg) ~= "table" then
+    log.warn("[CFG] config.json ilegible, se regenera con valores por defecto")
+    return configurator:create_config_file()
+  end
+  if configurator:complete_config(cfg) then
+    configurator:write_config_file(cfg)
+  end
+  return cfg
 end
 
 -----------------------------------------------------------------------------------

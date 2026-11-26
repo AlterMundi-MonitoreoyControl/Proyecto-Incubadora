@@ -26,7 +26,7 @@ local M = {
 	is_sensorok                     = false,
 	is_simulate_temp_local          = false,
 	rotation_switch_deactivate_time = 10000, -- max amount of time the sensor is down when the incubator is moving in ms
-	rotation_duration               = 180000, -- max amount of time the rotation should last in ms
+	rotation_duration               = 190000, -- ms; el valor efectivo viene de configurator.DEFAULTS / config.json
 	rotation_period                 = 3600000, -- time in ms
 	-- NodeMCU timer maximum limit: 6,844,835 ms (~1.9 hours)
 	-- Use safe maximum of 6,000,000 ms (~1.67 hours) to account for variations
