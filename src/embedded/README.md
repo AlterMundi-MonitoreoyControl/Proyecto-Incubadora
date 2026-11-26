@@ -154,12 +154,17 @@ after giving it permissions, run the installer:
 * [Files and photos](https://nube.altermundi.net/s/3arPqaHxs763pmB?path=%2F)
 
 
-## files we need to send to the ESP32
+## Files we need to send to the ESP32
 
-1. bmw280.lua located in the libs folder 
-2. credentials.lua located in the libs folder (in lines 5 and 6 you have to write your SSID and password)
-3. wifiinit.lua located in the app folder 
-4. SendToGrafana.lua located in the app folder  
+`tools/subir_placa.py` finds them by following `require`/`dofile` from `app/init.lua`, backs up the board to `respaldos/<mac>-<date>/` and uploads only what changed, checking each file:
+
+```bash
+sudo apt install python3-serial
+tools/subir_placa.py --lista                 # list the files, no board needed
+tools/subir_placa.py --puerto /dev/ttyUSB0   # upload
+```
+
+`config.json` and other files on the board are left untouched. WiFi is configured through the API, not in `credentials.lua`.
 
 
 
