@@ -156,15 +156,46 @@ after giving it permissions, run the installer:
 
 ## Files we need to send to the ESP32
 
-`tools/subir_placa.py` finds them by following `require`/`dofile` from `app/init.lua`, backs up the board to `respaldos/<mac>-<date>/` and uploads only what changed, checking each file:
+| File | Folder |
+|---|---|
+| `init.lua` | `app/` |
+| `incubatorController.lua` | `app/` |
+| `incubator.lua` | `app/` |
+| `configurator.lua` | `app/` |
+| `restapi.lua` | `app/` |
+| `wifiinit.lua` | `app/` |
+| `SendToGrafana.lua` | `app/` |
+| `credentials.lua` | `libs/` |
+| `bme280.lua` | `libs/` |
+| `deque.lua` | `libs/` |
+| `log.lua` | `libs/` |
 
-```bash
-sudo apt install python3-serial
-tools/subir_placa.py --lista                 # list the files, no board needed
-tools/subir_placa.py --puerto /dev/ttyUSB0   # upload
-```
+`credentials.lua` holds the pinout and no secrets: the same file goes to every board. WiFi is configured through the API and saved in `config.json` on the board, which must not be overwritten. To check the list against the code, run `tools/subir_placa.py --lista`: it follows `require`/`dofile` from `app/init.lua`.
 
-`config.json` and other files on the board are left untouched. WiFi is configured through the API, not in `credentials.lua`.
+## Upload the files with `tools/subir_placa.py`
+
+1. Install pyserial (once): `sudo apt install python3-serial`. Your user must be in the `dialout` group (see the notes at the top).
+2. Check out the branch with the firmware you want: the script uploads the files of the current checkout.
+3. Connect the board by USB and find its port with `ls /dev/ttyUSB*`. Close ESPlorer or any serial monitor that is using it.
+4. From `src/embedded`, run:
+
+   ```bash
+   tools/subir_placa.py --puerto /dev/ttyUSB0
+   ```
+
+   The script:
+   - backs up every file on the board to `respaldos/<mac>-<date>/` (`--sin-respaldo` skips it; the folder is ignored by git);
+   - stops the app by renaming `init.lua` to `init_off.lua` and restarting the board;
+   - uploads `credentials.lua` first and runs it, so the outputs stay in a safe state;
+   - uploads the rest and checks each file with a checksum; files that are already identical are skipped;
+   - uploads `init.lua` last, restarts the board and looks for Lua errors in the boot log.
+5. It must end with `Arranque: OK`. Errors about the BME280 sensor or Grafana are expected on a bench board without a sensor or WiFi.
+
+If the upload is interrupted, the board stays without `init.lua` and does not start the app: run the script again. To go back to a previous version, upload the files from the backup folder with ESPlorer, leaving `init.lua` for last.
+
+### Uploading by hand (ESPlorer)
+
+Upload the files of the table above, `credentials.lua` first and `init.lua` last. Do not upload `config.json`.
 
 
 
